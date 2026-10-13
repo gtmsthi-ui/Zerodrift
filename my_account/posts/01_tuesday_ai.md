@@ -4,7 +4,8 @@ title: "Why most LLM prototypes fail in staging"
 day: "Tuesday 8:15 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#1 Contrarian Take"
-status: "queued"
+status: "published"
+published_at: "2026-10-13T11:43:17.382436Z"
 ---
 
 Most engineering teams don't have an AI problem.

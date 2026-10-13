@@ -24,6 +24,12 @@ import urllib.parse
 import urllib.request
 from playwright.async_api import async_playwright
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(HERE)
@@ -36,7 +42,9 @@ TECH_KEYWORDS = [
     "cloud", "aws", "gcp", "azure", "kubernetes", "k8s", "docker", "latency",
     "database", "postgres", "sql", "nosql", "redis", "kafka", "queue", "cache",
     "llm", "ai agent", "production", "engineering leadership", "staff engineer",
-    "principal engineer", "cto", "tech debt", "scalab", "devops", "observab"
+    "principal engineer", "cto", "tech debt", "scalab", "devops", "observab",
+    "software", "engineer", "developer", "coding", "career", "management",
+    "team", "leader", "performance", "api", "tech", "product", "hiring"
 ]
 
 
@@ -176,14 +184,21 @@ async def run_autonomous_feed_session(dry_run=False):
             await browser.close()
             return
 
+        # Wait for feed content to load
+        print("[*] Waiting for feed stream to load...")
+        try:
+            await page.wait_for_selector("div[data-urn*='urn:li:activity'], .feed-shared-update-v2, .scaffold-finite-scroll", timeout=12000)
+        except Exception:
+            pass
+
         # Natural initial scroll
         print("[*] Scanning feed naturally...")
-        for _ in range(3):
-            await page.mouse.wheel(0, random.randint(400, 700))
-            await asyncio.sleep(random.uniform(1.8, 3.2))
+        for _ in range(4):
+            await page.mouse.wheel(0, random.randint(500, 900))
+            await asyncio.sleep(random.uniform(2.0, 3.5))
 
         # Query visible post cards
-        posts = await page.query_selector_all(".feed-shared-update-v2")
+        posts = await page.query_selector_all("div[data-urn*='urn:li:activity'], .feed-shared-update-v2, div[data-view-name*='feed-full-update'], .scaffold-finite-scroll__content > div")
         print(f"[*] Found {len(posts)} posts in feed view.")
 
         successful_comments = 0
@@ -193,23 +208,26 @@ async def run_autonomous_feed_session(dry_run=False):
                 break
 
             try:
-                # Extract text
-                text_elem = await post_elem.query_selector(".feed-shared-update-v2__description, .update-components-text")
+                text_elem = await post_elem.query_selector("span.break-words, .feed-shared-update-v2__description, .update-components-text, .feed-shared-inline-show-more-text, div.update-components-text")
                 if not text_elem:
-                    continue
-                post_text = await text_elem.inner_text()
+                    # Fallback to post_elem inner_text
+                    post_text = await post_elem.inner_text()
+                else:
+                    post_text = await text_elem.inner_text()
 
                 # Extract author
-                author_elem = await post_elem.query_selector(".update-components-actor__name, .feed-shared-actor__name")
+                author_elem = await post_elem.query_selector(".update-components-actor__name, .feed-shared-actor__name, span.update-components-actor__title")
                 author_name = await author_elem.inner_text() if author_elem else "Tech Leader"
                 author_clean = author_name.split("\n")[0].strip()
+
+                print(f"[DEBUG] Post text len: {len(post_text)} | Author: {author_clean}")
 
                 # Check relevance
                 lower_text = post_text.lower()
                 is_relevant = any(kw in lower_text for kw in TECH_KEYWORDS)
                 is_promoted = "promoted" in lower_text or "sponsored" in lower_text
 
-                if not is_relevant or is_promoted or len(post_text) < 150:
+                if not is_relevant or is_promoted or len(post_text) < 70:
                     continue
 
                 if author_clean.lower() in commented_authors:
@@ -226,31 +244,59 @@ async def run_autonomous_feed_session(dry_run=False):
                 comment = generate_architect_comment(post_text, author_clean)
                 print(f"[*] Generated Comment: \"{comment}\"")
 
-                # Click Comment button
-                comment_btn = await post_elem.query_selector("button[aria-label*='Comment'], button:has-text('Comment')")
-                if not comment_btn:
-                    continue
+                # Try to get post permalink via data-urn or data-id
+                urn = await post_elem.get_attribute("data-urn") or await post_elem.get_attribute("data-id")
+                
+                # First try in-feed comment button
+                comment_btn = await post_elem.query_selector("button.comment-button, button:has-text('Comment'), button[aria-label*='comment' i]")
+                if comment_btn:
+                    await comment_btn.scroll_into_view_if_needed()
+                    await asyncio.sleep(1)
+                    await comment_btn.click()
+                    await asyncio.sleep(2)
 
-                await comment_btn.click()
-                await asyncio.sleep(random.uniform(1.5, 2.5))
+                # Look for comment input box in feed
+                editor = await post_elem.query_selector("div[role='textbox'], div.ql-editor, div[contenteditable='true'], .comments-comment-box__editor p, div.editor-content p")
+                
+                # If in-feed comment box didn't open and we have urn, navigate to post page directly!
+                if not editor and urn and "urn:li:activity" in urn:
+                    post_url = f"https://www.linkedin.com/feed/update/{urn}/"
+                    print(f"[*] Navigating directly to post permalink: {post_url}...")
+                    post_page = await browser.new_page()
+                    await post_page.goto(post_url, wait_until="domcontentloaded")
+                    await asyncio.sleep(3)
+                    editor = await post_page.query_selector("div[role='textbox'], div.ql-editor, div[contenteditable='true'], .comments-comment-box__editor p, div.editor-content p")
+                    target_page = post_page
+                else:
+                    target_page = page
 
-                # Find comment input
-                editor = await post_elem.query_selector(".comments-comment-box__editor p, .editor-content p, div[role='textbox']")
                 if not editor:
+                    print(f"[-] Could not open comment box for {author_clean}. Skipping.")
+                    if target_page != page:
+                        await target_page.close()
                     continue
 
+                print(f"[*] Focusing editor and typing with real keyboard events...")
+                await editor.scroll_into_view_if_needed()
                 await editor.click()
                 await asyncio.sleep(1)
 
-                print(f"[*] Typing comment with human keystroke cadence...")
-                await human_type(editor, comment)
-                await asyncio.sleep(random.uniform(2.0, 4.0))
+                # Real keyboard input so LinkedIn's Draft.js/Lexical editor enables the Post button!
+                for char in comment:
+                    await page.keyboard.type(char, delay=random.randint(30, 80))
+                    if char in ".!?,":
+                        await asyncio.sleep(random.uniform(0.2, 0.4))
+
+                await asyncio.sleep(random.uniform(1.5, 3.0))
 
                 if not dry_run:
-                    submit_btn = await post_elem.query_selector(".comments-comment-box__submit-button, button:has-text('Post')")
+                    submit_btn = await post_elem.query_selector("button.comments-comment-box__submit-button, button:has-text('Post')")
+                    if not submit_btn:
+                        submit_btn = await page.query_selector("button.comments-comment-box__submit-button, button:has-text('Post')")
+
                     if submit_btn:
-                        await submit_btn.click()
-                        print(f"[+] Submitted comment on post by {author_clean}!")
+                        await submit_btn.click(timeout=8000)
+                        print(f"[+] Successfully posted comment on post by {author_clean}!")
                         log_engagement(author_clean, comment, post_text)
                         commented_authors.add(author_clean.lower())
                         successful_comments += 1
@@ -265,15 +311,21 @@ async def run_autonomous_feed_session(dry_run=False):
                             f"<i>Progress today: {today_count + successful_comments}/2 comments</i>"
                         )
                         send_telegram(tg_alert)
+                    else:
+                        print("[-] Submit button not found or disabled.")
 
-                        # Safety cooldown between comments (25-45 seconds)
-                        if successful_comments < remaining:
-                            cooldown = random.randint(25, 45)
-                            print(f"[*] Safety cooldown: waiting {cooldown}s before next interaction...")
-                            await asyncio.sleep(cooldown)
+                    if target_page != page:
+                        await target_page.close()
+
+                    if successful_comments < remaining:
+                        cooldown = random.randint(25, 45)
+                        print(f"[*] Safety cooldown: waiting {cooldown}s before next interaction...")
+                        await asyncio.sleep(cooldown)
                 else:
                     print(f"[*] [Dry-Run] Comment typed but not submitted.")
                     successful_comments += 1
+                    if target_page != page:
+                        await target_page.close()
 
             except Exception as e:
                 print(f"[-] Error processing post: {e}")

@@ -24,6 +24,13 @@ import urllib.parse
 import urllib.request
 from playwright.async_api import async_playwright
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(HERE)
 USER_DATA_DIR = os.path.join(PROJECT_ROOT, "my_account", "browser_session")

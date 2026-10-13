@@ -20,8 +20,16 @@ import argparse
 import subprocess
 import sys
 
+if sys.platform == "win32":
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
 
 def run_feed():
+
     print("\n" + "=" * 60)
     print("🚀 [Step 1] Running Autonomous Feed Engagement (2 Comments/Day)...")
     print("=" * 60)
@@ -42,12 +50,17 @@ def run_publish():
     subprocess.run([sys.executable, "scripts/cloud_autopilot.py"])
 
 
+def run_status():
+    subprocess.run([sys.executable, "scripts/db_tracker.py", "--summary"])
+
+
 def main():
     parser = argparse.ArgumentParser(description="Master Autonomous LinkedIn Manager.")
     parser.add_argument("--all", action="store_true", help="Run full daily engagement routine (Feed + Replies)")
     parser.add_argument("--feed", action="store_true", help="Run autonomous feed commenting only")
     parser.add_argument("--replies", action="store_true", help="Run autonomous reply/thread monitor only")
     parser.add_argument("--publish", action="store_true", help="Publish next queued post")
+    parser.add_argument("--status", action="store_true", help="Display Central Database status dashboard")
 
     args = parser.parse_args()
 
@@ -60,8 +73,10 @@ def main():
         run_replies()
     elif args.publish:
         run_publish()
+    elif args.status:
+        run_status()
     else:
-        parser.print_help()
+        run_status()
 
 
 if __name__ == "__main__":

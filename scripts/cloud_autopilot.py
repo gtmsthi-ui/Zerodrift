@@ -69,13 +69,18 @@ def send_telegram(bot_token, chat_id, text):
         return False
 
 
-def post_to_buffer(access_token, channel_id, text, as_draft=True):
+def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=None):
     if not access_token or not channel_id:
         return None
     url = "https://api.buffer.com/graphql"
     escaped_text = json.dumps(text)
     save_draft = "true" if as_draft else "false"
     mode = "addToQueue"
+
+    assets_field = ""
+    if image_url:
+        assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
+
     mutation = f"""
     mutation {{
       createPost(input: {{
@@ -84,7 +89,8 @@ def post_to_buffer(access_token, channel_id, text, as_draft=True):
         mode: {mode},
         schedulingType: automatic,
         saveToDraft: {save_draft},
-        needsApproval: false
+        needsApproval: false,
+        {assets_field}
       }}) {{
         ... on PostActionSuccess {{
           post {{
@@ -251,12 +257,22 @@ def main():
         print("[*] Sending pre-post notification to Telegram...")
         send_telegram(tg_token, tg_chat, alert_text)
 
+    # Check for attached personalized visual summary card
+    post_key = target_meta.get("id", os.path.splitext(os.path.basename(target_file))[0])
+    image_file = os.path.join(PROJECT_ROOT, "my_account", "assets", f"{post_key}_card.png")
+    image_url = None
+    if os.path.exists(image_file):
+        image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_card.png"
+        print(f"[*] Found attached summary card: {image_url}")
+
     # Step 3: Publish to Buffer if credentials exist
+    buf_post_id = None
     if buf_token and buf_profile and not is_dry_run:
         print("[*] Publishing to LinkedIn via Buffer API...")
-        res = post_to_buffer(buf_token, buf_profile, target_body)
+        res = post_to_buffer(buf_token, buf_profile, target_body, as_draft=False, image_url=image_url)
         if res and ("post" in res or res.get("success")):
-            print("[+] Successfully published to Buffer!")
+            buf_post_id = res.get("post", {}).get("id")
+            print(f"[+] Successfully published to Buffer! (Post ID: {buf_post_id})")
         else:
             print(f"[-] Buffer publishing returned: {res}")
 
@@ -264,6 +280,15 @@ def main():
     update_post_file(target_file, target_meta, target_body, "published")
     append_to_log(title, pillar, score, target_file)
     print(f"[+] Post marked as published in {target_file}")
+
+    # Record in Central Database
+    try:
+        sys.path.insert(0, HERE)
+        from db_tracker import update_post_status, record_log
+        update_post_status(post_key, "published", buffer_id=buf_post_id)
+        record_log("POST_PUBLISHED", f"Published '{title}' via Cloud Autopilot", f"File: {os.path.basename(target_file)} | Image: {image_url}")
+    except Exception as e:
+        print(f"[-] Could not update Central DB: {e}")
 
 
 if __name__ == "__main__":

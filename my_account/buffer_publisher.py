@@ -94,11 +94,13 @@ def get_profiles(access_token=None):
     return res.get("data", {}).get("channels", []) if res else []
 
 
-def schedule_buffer_post(post_text, channel_id=None, as_draft=True, share_now=False, access_token=None):
+def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=False, image_url=None, due_at=None, access_token=None):
     """
-    Creates a post or draft on the specified LinkedIn channel.
-    as_draft=True saves it into Buffer as a draft for review/scheduling.
-    share_now=True publishes immediately.
+    Creates a post or scheduled publication on the specified LinkedIn channel.
+    - as_draft=False schedules it for autonomous publishing.
+    - share_now=True publishes immediately.
+    - image_url=... attaches a personalized summary infographic / diagram.
+    - due_at=... specifies an exact ISO datetime (e.g. '2026-10-15T08:30:00Z').
     """
     cfg = load_config()
     if not channel_id and cfg and "buffer" in cfg:
@@ -110,11 +112,26 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=True, share_now=Fa
         print("[-] Error: Buffer profile_id/channel_id not configured in config.json", file=sys.stderr)
         return None
 
-    mode = "shareNow" if share_now else "addToQueue"
+    if share_now:
+        mode = "shareNow"
+        scheduling_type = "automatic"
+    elif due_at:
+        mode = "customScheduled"
+        scheduling_type = "scheduled"
+    else:
+        mode = "addToQueue"
+        scheduling_type = "automatic"
+
     save_draft = "true" if as_draft else "false"
 
     # Escape JSON text cleanly
     escaped_text = json.dumps(post_text)
+
+    assets_field = ""
+    if image_url:
+        assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
+
+    due_at_field = f'dueAt: "{due_at}",' if due_at else ""
 
     mutation = f"""
     mutation {{
@@ -122,9 +139,11 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=True, share_now=Fa
         channelId: "{channel_id}",
         text: {escaped_text},
         mode: {mode},
-        schedulingType: automatic,
+        {due_at_field}
+        schedulingType: {scheduling_type},
         saveToDraft: {save_draft},
-        needsApproval: false
+        needsApproval: false,
+        {assets_field}
       }}) {{
         ... on PostActionSuccess {{
           post {{
@@ -144,8 +163,8 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=True, share_now=Fa
     if res and "data" in res:
         post_data = res["data"].get("createPost", {})
         if "post" in post_data:
-            state = post_data["post"].get("state", "draft/queued")
-            print(f"[+] Successfully pushed post to Buffer! (State: {state})")
+            state = post_data["post"].get("status", "queued")
+            print(f"[+] Successfully pushed post to Buffer! (Status: {state})")
             return post_data["post"]
         elif "message" in post_data:
             print(f"[-] Buffer mutation error: {post_data['message']}", file=sys.stderr)

@@ -73,14 +73,38 @@ async def handle_login():
         page = await browser.new_page()
         print("[*] Opening LinkedIn login page...")
         await page.goto("https://www.linkedin.com/login")
-        print("[*] Complete your login in the browser window. Waiting 2 minutes...")
-        try:
-            await page.wait_for_url("**/feed/**", timeout=120000)
-            print("[+] Successfully logged in and session saved in my_account/browser_session!")
-        except Exception:
-            print("[*] Closing browser session.")
-        await asyncio.sleep(3)
+        print("[*] Please log into your LinkedIn account in the opened browser window...")
+        print("[*] Keep the window open until your feed loads...")
+
+        logged_in = False
+        for _ in range(150): # up to 5 minutes
+            await asyncio.sleep(2)
+            try:
+                cookies = await browser.cookies()
+                has_li_at = any(c.get("name") == "li_at" for c in cookies)
+                if has_li_at and ("feed" in page.url or "mynetwork" in page.url or "messaging" in page.url or page.url == "https://www.linkedin.com/"):
+                    print("[+] SUCCESS: LinkedIn authentication verified!")
+                    print("[+] 'li_at' session cookie successfully saved in my_account/browser_session.")
+                    logged_in = True
+                    break
+            except Exception:
+                break
+
+        if not logged_in:
+            print("[!] Still waiting for login... If you have finished logging in, press Enter in the terminal to save session:")
+            try:
+                # Give a 15-second grace period
+                await asyncio.sleep(15)
+                cookies = await browser.cookies()
+                if any(c.get("name") == "li_at" for c in cookies):
+                    print("[+] 'li_at' cookie found! Session saved.")
+            except Exception:
+                pass
+
+        print("[*] Flushing session to disk (waiting 5 seconds)...")
+        await asyncio.sleep(5)
         await browser.close()
+
 
 
 async def comment_on_post(post_url, auto_submit=False):
