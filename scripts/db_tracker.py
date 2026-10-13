@@ -77,6 +77,21 @@ def init_db():
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
+
+        conn.execute("""
+        CREATE TABLE IF NOT EXISTS newsletter_editions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            edition_number INTEGER UNIQUE NOT NULL,
+            title TEXT NOT NULL,
+            slug TEXT NOT NULL,
+            summary TEXT NOT NULL,
+            file_path TEXT NOT NULL,
+            published_date TEXT,
+            linkedin_article_url TEXT,
+            status TEXT NOT NULL DEFAULT 'draft', -- draft, ready, published
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        """)
     conn.close()
 
 
