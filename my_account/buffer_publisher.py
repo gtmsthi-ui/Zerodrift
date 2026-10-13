@@ -94,7 +94,7 @@ def get_profiles(access_token=None):
     return res.get("data", {}).get("channels", []) if res else []
 
 
-def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=False, image_url=None, document_url=None, document_title=None, due_at=None, access_token=None):
+def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=False, image_url=None, document_url=None, document_title=None, thumbnail_url=None, due_at=None, access_token=None):
     """
     Creates a post or scheduled publication on the specified LinkedIn channel.
     - as_draft=False schedules it for autonomous publishing.
@@ -131,7 +131,8 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=F
     assets_field = ""
     if document_url:
         doc_title = json.dumps(document_title or "Executive Architecture Guide")
-        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title} }} }}],'
+        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
+        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title}, thumbnailUrl: "{thumb}" }} }}],'
     elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
 
