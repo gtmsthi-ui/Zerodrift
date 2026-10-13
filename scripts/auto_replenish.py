@@ -3,7 +3,7 @@
 auto_replenish.py - Autonomous Content Replenishment Engine for LinkedIn
 Monitors the pending LinkedIn post queue. Whenever remaining posts drop below 3,
 it automatically synthesizes, humanizer-validates (75+ PASS), generates visual assets,
-and queues the next week's batch in Varun Pratap editorial style.
+and queues the next week's batch with high-signal architecture frameworks.
 Zero human intervention required.
 """
 
@@ -30,7 +30,7 @@ from generate_post_card import create_custom_card
 from db_tracker import get_db, init_db, record_log, update_post_image
 from cloud_autopilot import send_telegram, get_env_or_config, run_detect
 
-# Curated Varun Pratap Editorial Curriculum
+# Curated AI Architecture & Reliability Curriculum
 TOPIC_CATALOG = [
     {
         "id": "post_05",
@@ -339,7 +339,7 @@ def check_and_replenish(min_threshold=2, force=False):
             # Check if this file was already published or exists
             continue
 
-        print(f"[*] Synthesizing Varun-style post: {item['title']} ({item['id']})...")
+        print(f"[*] Synthesizing architecture post: {item['title']} ({item['id']})...")
 
         # Validate with detect.py
         passed, score, _ = run_detect(item["body"])
@@ -422,7 +422,7 @@ score: {score:.1f}
             summary_lines = "\n".join([f"• <b>{t}</b> ({d}) — <code>{s:.1f} PASS</code>" for t, d, s in newly_added])
             msg = (
                 f"🔄 <b>Autonomous Queue Replenished</b>\n\n"
-                f"Generated and queued {len(newly_added)} new Varun Pratap-style posts with 1200x675 visual cards:\n\n"
+                f"Generated and queued {len(newly_added)} new architecture framework posts with 1200x675 visual cards:\n\n"
                 f"{summary_lines}\n\n"
                 f"<i>Next week's schedule is fully loaded and ready to post automatically via Buffer.</i>"
             )
