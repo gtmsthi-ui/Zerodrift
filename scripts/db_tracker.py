@@ -108,7 +108,7 @@ def seed_posts_from_disk():
             "pillar": "Practical AI & System Architecture",
             "day": "Tuesday 8:30 AM",
             "score": 72.8,
-            "status": "buffer_scheduled", # Handled for Tuesday
+            "status": "draft", # Moved to draft by user
             "buffer_id": "6ace135e06d8b03d5e0272bc"
         },
         {
