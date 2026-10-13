@@ -94,12 +94,13 @@ def get_profiles(access_token=None):
     return res.get("data", {}).get("channels", []) if res else []
 
 
-def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=False, image_url=None, due_at=None, access_token=None):
+def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=False, image_url=None, document_url=None, document_title=None, due_at=None, access_token=None):
     """
     Creates a post or scheduled publication on the specified LinkedIn channel.
     - as_draft=False schedules it for autonomous publishing.
     - share_now=True publishes immediately.
     - image_url=... attaches a personalized summary infographic / diagram.
+    - document_url=... attaches a PDF Document Carousel (e.g. senior_vs_architect_carousel.pdf).
     - due_at=... specifies an exact ISO datetime (e.g. '2026-10-15T08:30:00Z').
     """
     cfg = load_config()
@@ -128,7 +129,10 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=F
     escaped_text = json.dumps(post_text)
 
     assets_field = ""
-    if image_url:
+    if document_url:
+        doc_title = json.dumps(document_title or "Executive Architecture Guide")
+        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title} }} }}],'
+    elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
 
     due_at_field = f'dueAt: "{due_at}",' if due_at else ""

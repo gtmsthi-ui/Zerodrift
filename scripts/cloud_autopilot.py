@@ -69,7 +69,7 @@ def send_telegram(bot_token, chat_id, text):
         return False
 
 
-def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=None):
+def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=None, document_url=None, document_title=None):
     if not access_token or not channel_id:
         return None
     url = "https://api.buffer.com/graphql"
@@ -78,7 +78,10 @@ def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=Non
     mode = "addToQueue"
 
     assets_field = ""
-    if image_url:
+    if document_url:
+        doc_title = json.dumps(document_title or "Executive Architecture Guide")
+        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title} }} }}],'
+    elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
 
     mutation = f"""
@@ -257,11 +260,20 @@ def main():
         print("[*] Sending pre-post notification to Telegram...")
         send_telegram(tg_token, tg_chat, alert_text)
 
-    # Check for attached personalized visual summary card
+    # Check for attached PDF document carousel or visual summary card
     post_key = target_meta.get("id", os.path.splitext(os.path.basename(target_file))[0])
+    pdf_file = os.path.join(PROJECT_ROOT, "my_account", "assets", "senior_vs_architect_carousel.pdf") if post_key == "post_02" else os.path.join(PROJECT_ROOT, "my_account", "assets", f"{post_key}_carousel.pdf")
     image_file = os.path.join(PROJECT_ROOT, "my_account", "assets", f"{post_key}_card.png")
+
+    doc_url = None
+    doc_title = None
     image_url = None
-    if os.path.exists(image_file):
+
+    if os.path.exists(pdf_file):
+        doc_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{os.path.basename(pdf_file)}"
+        doc_title = title
+        print(f"[*] Found attached PDF document carousel: {doc_url}")
+    elif os.path.exists(image_file):
         image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_card.png"
         print(f"[*] Found attached summary card: {image_url}")
 
@@ -269,7 +281,15 @@ def main():
     buf_post_id = None
     if buf_token and buf_profile and not is_dry_run:
         print("[*] Publishing to LinkedIn via Buffer API...")
-        res = post_to_buffer(buf_token, buf_profile, target_body, as_draft=False, image_url=image_url)
+        res = post_to_buffer(
+            buf_token,
+            buf_profile,
+            target_body,
+            as_draft=False,
+            image_url=image_url,
+            document_url=doc_url,
+            document_title=doc_title
+        )
         if res and ("post" in res or res.get("success")):
             buf_post_id = res.get("post", {}).get("id")
             print(f"[+] Successfully published to Buffer! (Post ID: {buf_post_id})")
