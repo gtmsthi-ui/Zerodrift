@@ -139,7 +139,7 @@ def build_site():
             <div class="article-body">
               <span class="card-num">EDITION #{num:02d} · THE PRAGMATIC ARCHITECT</span>
               <h1 style="margin-top: 0.5rem;">{title}</h1>
-              <div class="article-meta">By Gautam Sethi · Senior Software Architect · {date}</div>
+              <div class="article-meta">By Gautam Sethi · AI Enthusiast · {date}</div>
               {ed["body_html"]}
             </div>
           </div>

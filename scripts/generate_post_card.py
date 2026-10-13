@@ -104,7 +104,7 @@ def create_post_02_card():
     f_footer = get_font("segoeuib.ttf", 16)
     draw.text((60, 605), "Gautam Sethi", fill=COLOR_TEXT_PRIMARY, font=f_footer)
     f_footer_sub = get_font("segoeui.ttf", 15)
-    draw.text((170, 606), "|  Senior Software Architect  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
+    draw.text((170, 606), "|  AI Enthusiast  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
 
     os.makedirs(ASSETS_DIR, exist_ok=True)
     out_path = os.path.join(ASSETS_DIR, "post_02_card.png")
@@ -220,7 +220,7 @@ def create_post_03_card():
     f_footer = get_font("segoeuib.ttf", 16)
     draw.text((60, 605), "Gautam Sethi", fill=COLOR_TEXT_PRIMARY, font=f_footer)
     f_footer_sub = get_font("segoeui.ttf", 15)
-    draw.text((170, 606), "|  Senior Software Architect  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
+    draw.text((170, 606), "|  AI Enthusiast  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
 
     os.makedirs(ASSETS_DIR, exist_ok=True)
     out_path = os.path.join(ASSETS_DIR, "post_03_card.png")
@@ -293,7 +293,7 @@ def create_post_04_card():
     f_footer = get_font("segoeuib.ttf", 16)
     draw.text((60, 605), "Gautam Sethi", fill=COLOR_TEXT_PRIMARY, font=f_footer)
     f_footer_sub = get_font("segoeui.ttf", 15)
-    draw.text((170, 606), "|  Senior Software Architect  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
+    draw.text((170, 606), "|  AI Enthusiast  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
 
     os.makedirs(ASSETS_DIR, exist_ok=True)
     out_path = os.path.join(ASSETS_DIR, "post_04_card.png")

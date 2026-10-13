@@ -3,7 +3,7 @@ The Model Race Is Over. The Enterprise Harness Race Just Began.
 
 SUBTITLE / BYLINE:
 A Senior Architect's Guide to Building Deterministic, SRE-Grade AI Workflows Without Token Bloat
-By Gautam Sethi · Senior Software Architect
+By Gautam Sethi · AI Enthusiast
 
 ======================================================================
 ARTICLE BODY (COPY BELOW THIS LINE)
@@ -104,6 +104,6 @@ The next decade belongs to software architects who treat intelligence as an untr
 Make your models fast. But make your harness unbreakable.
 
 ---
-Gautam Sethi is a Senior Software Architect writing on enterprise system design, SRE for AI agents, and Staff+ engineering leadership. Connect with Gautam on LinkedIn: https://www.linkedin.com/in/gautam-sethi-1b944324
+Gautam Sethi is an AI Enthusiast writing on enterprise system design, SRE for AI agents, and Staff+ engineering leadership. Connect with Gautam on LinkedIn: https://www.linkedin.com/in/gautam-sethi-1b944324
 
 #SoftwareArchitecture #AIReliability #SystemsEngineering #StaffPlus #EnterpriseAI

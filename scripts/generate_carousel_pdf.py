@@ -56,7 +56,7 @@ def draw_slide_chrome(draw, slide_num, total_slides, category="STAFF+ CAREER & L
     f_brand = get_font("segoeuib.ttf", 18)
     draw.text((60, H - 75), "Gautam Sethi", fill=COLOR_TEXT_PRIMARY, font=f_brand)
     f_brand_sub = get_font("segoeui.ttf", 16)
-    draw.text((180, H - 74), "| Senior Software Architect · The Pragmatic Architect", fill=COLOR_TEXT_MUTED, font=f_brand_sub)
+    draw.text((180, H - 74), "| AI Enthusiast · The Pragmatic Architect", fill=COLOR_TEXT_MUTED, font=f_brand_sub)
 
 
 def create_slide_1(total=6):

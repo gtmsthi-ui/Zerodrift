@@ -69,7 +69,7 @@ def send_telegram(bot_token, chat_id, text):
         return False
 
 
-def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=None, document_url=None, document_title=None):
+def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=None, document_url=None, document_title=None, thumbnail_url=None):
     if not access_token or not channel_id:
         return None
     url = "https://api.buffer.com/graphql"
@@ -80,7 +80,8 @@ def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=Non
     assets_field = ""
     if document_url:
         doc_title = json.dumps(document_title or "Executive Architecture Guide")
-        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title} }} }}],'
+        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
+        assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title}, thumbnailUrl: "{thumb}" }} }}],'
     elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
 
@@ -229,7 +230,7 @@ def main():
         sys.exit(0)
 
     title = target_meta.get("title", os.path.basename(target_file))
-    pillar = target_meta.get("pillar", "Senior Software Architecture")
+    pillar = target_meta.get("pillar", "AI Enthusiast & System Architecture")
     day = target_meta.get("day", "Today")
 
     print(f"[*] Processing queue item: {target_file} ({title})...")
@@ -269,9 +270,15 @@ def main():
     doc_title = None
     image_url = None
 
+    thumb_url = None
     if os.path.exists(pdf_file):
         doc_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{os.path.basename(pdf_file)}"
         doc_title = title
+        thumb_file = os.path.join(PROJECT_ROOT, "my_account", "assets", f"{post_key}_slide_1.png")
+        if os.path.exists(thumb_file):
+            thumb_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_slide_1.png"
+        else:
+            thumb_url = "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
         print(f"[*] Found attached PDF document carousel: {doc_url}")
     elif os.path.exists(image_file):
         image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_card.png"
@@ -288,7 +295,8 @@ def main():
             as_draft=False,
             image_url=image_url,
             document_url=doc_url,
-            document_title=doc_title
+            document_title=doc_title,
+            thumbnail_url=thumb_url
         )
         if res and ("post" in res or res.get("success")):
             buf_post_id = res.get("post", {}).get("id")

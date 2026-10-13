@@ -1,4 +1,4 @@
-# LinkedIn Content & Growth Plan: Senior Software Architect
+# LinkedIn Content & Growth Plan: AI Enthusiast
 
 ## Weekly Rhythm: 4 Posts / Week (Alternating Pillars)
 

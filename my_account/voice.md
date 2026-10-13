@@ -1,7 +1,7 @@
-# Senior Software Architect Voice Profile
+# AI Enthusiast Voice Profile
 
 ## Who I am
-- **Role:** Senior Software Architect
+- **Role:** AI Enthusiast
 - **Domain:** Distributed systems, cloud architecture, backend engineering, pragmatic AI integration
 - **Target Audience:** Engineering Managers, Staff/Principal Engineers, Senior Developers, CTOs, and Tech Founders
 - **Goal:** Build authority, share hard-won architectural lessons, grow a high-caliber peer network, and open senior consulting/leadership advisory opportunities.

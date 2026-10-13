@@ -118,26 +118,26 @@ def seed_posts_from_disk():
             "pillar": "Staff+ Career & Technical Leadership",
             "day": "Thursday 8:30 AM",
             "score": 87.1,
-            "status": "queued",
-            "buffer_id": None
+            "status": "buffer_scheduled",
+            "buffer_id": "6ace363e1077be9dba26a4e8"
         },
         {
             "key": "post_03",
             "file": "03_friday_ai.md",
-            "title": "Why your RAG pipeline is hallucinating in production",
+            "title": "The 3 Silent Production RAG Failure Modes",
             "pillar": "Practical AI & System Architecture",
             "day": "Friday 8:30 AM",
-            "score": 73.2,
+            "score": 78.1,
             "status": "queued",
             "buffer_id": None
         },
         {
             "key": "post_04",
             "file": "04_sunday_career.md",
-            "title": "How to write an ADR that executives actually approve",
+            "title": "The $42k Cloud Mistake That Changed How I Talk to CFOs",
             "pillar": "Staff+ Career & Technical Leadership",
-            "day": "Sunday 8:30 AM",
-            "score": 81.6,
+            "day": "Sunday 4:30 PM",
+            "score": 76.7,
             "status": "queued",
             "buffer_id": None
         }
