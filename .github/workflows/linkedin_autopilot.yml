@@ -2,8 +2,8 @@ name: LinkedIn Cloud Autopilot
 
 on:
   schedule:
-    # Runs Tuesday, Thursday, Friday at 02:45 UTC (8:15 AM IST) and Sunday at 11:00 UTC (4:30 PM IST)
-    - cron: '45 2 * * 2,4,5'
+    # Runs Tuesday, Thursday, Friday, Saturday at 02:45 UTC (8:15 AM IST) and Sunday at 11:00 UTC (4:30 PM IST)
+    - cron: '45 2 * * 2,4,5,6'
     - cron: '0 11 * * 0'
   workflow_dispatch:
     inputs:

@@ -302,6 +302,70 @@ def create_post_04_card():
     return out_path
 
 
+def create_custom_card(post_key, category_badge, headline, subtitle, box1_title, box1_lines, box2_title, box2_lines, out_name=None):
+    """Generates a modular, high-res 1200x675 architecture card for any auto-replenished post."""
+    width, height = 1200, 675
+    img = Image.new("RGB", (width, height), COLOR_BG)
+    draw = ImageDraw.Draw(img)
+
+    # Top Category Badge
+    badge_w = min(500, max(260, len(category_badge) * 11 + 40))
+    draw.rounded_rectangle([60, 45, 60 + badge_w, 80], radius=8, fill=(15, 45, 75), outline=COLOR_CYAN, width=1)
+    f_badge = get_font("segoeuib.ttf", 15)
+    draw.text((80, 52), category_badge.upper(), fill=COLOR_CYAN, font=f_badge)
+
+    # Main Headline
+    f_title = get_font("segoeuib.ttf", 34)
+    draw.text((60, 102), headline, fill=COLOR_TEXT_PRIMARY, font=f_title)
+    f_subtitle = get_font("segoeui.ttf", 20)
+    draw.text((60, 155), subtitle, fill=COLOR_TEXT_MUTED, font=f_subtitle)
+
+    # Two Comparison / Breakdown Cards
+    card_y = 205
+    card_h = 360
+    card_w = 515
+
+    # Box 1
+    c1_x = 60
+    draw.rounded_rectangle([c1_x, card_y, c1_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    draw.line([(c1_x + 25, card_y + 65), (c1_x + card_w - 25, card_y + 65)], fill=COLOR_CARD_BORDER, width=1)
+    f_card_hdr = get_font("segoeuib.ttf", 20)
+    draw.text((c1_x + 30, card_y + 25), box1_title, fill=COLOR_AMBER, font=f_card_hdr)
+
+    f_pt = get_font("segoeui.ttf", 16)
+    y_pt = card_y + 85
+    for pt in box1_lines[:5]:
+        draw.ellipse([c1_x + 30, y_pt + 6, c1_x + 40, y_pt + 16], fill=COLOR_AMBER)
+        draw.text((c1_x + 55, y_pt), pt, fill=COLOR_TEXT_PRIMARY, font=f_pt)
+        y_pt += 52
+
+    # Box 2
+    c2_x = 625
+    draw.rounded_rectangle([c2_x, card_y, c2_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CYAN, width=1)
+    draw.line([(c2_x + 25, card_y + 65), (c2_x + card_w - 25, card_y + 65)], fill=COLOR_CARD_BORDER, width=1)
+    draw.text((c2_x + 30, card_y + 25), box2_title, fill=COLOR_CYAN, font=f_card_hdr)
+
+    y_pt = card_y + 85
+    for pt in box2_lines[:5]:
+        draw.ellipse([c2_x + 30, y_pt + 6, c2_x + 40, y_pt + 16], fill=COLOR_CYAN)
+        draw.text((c2_x + 55, y_pt), pt, fill=COLOR_TEXT_PRIMARY, font=f_pt)
+        y_pt += 52
+
+    # Footer Branding
+    draw.line([(60, 585), (width - 60, 585)], fill=COLOR_CARD_BORDER, width=1)
+    f_footer = get_font("segoeuib.ttf", 16)
+    draw.text((60, 605), "Gautam Sethi", fill=COLOR_TEXT_PRIMARY, font=f_footer)
+    f_footer_sub = get_font("segoeui.ttf", 15)
+    draw.text((170, 606), "|  AI Enthusiast  •  Practical Architecture Insights", fill=COLOR_TEXT_MUTED, font=f_footer_sub)
+
+    os.makedirs(ASSETS_DIR, exist_ok=True)
+    filename = out_name or f"{post_key}_card.png"
+    out_path = os.path.join(ASSETS_DIR, filename)
+    img.save(out_path, "PNG", quality=95)
+    print(f"[+] Generated custom card for {post_key}: {out_path}")
+    return out_path
+
+
 def generate_all_cards():
     import sys
     sys.path.insert(0, HERE)

@@ -4,7 +4,8 @@ title: "The real difference between Senior and Architect"
 day: "Thursday 8:30 AM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#17 Time Anchor"
-status: "queued"
+status: "buffer_scheduled"
+buffer_post_id: "6ace363e1077be9dba26a4e8"
 ---
 
 Five years ago, I thought getting promoted to Architect meant writing the most clever code in the building.
