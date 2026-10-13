@@ -3,3 +3,8 @@ __pycache__/
 *.pyc
 .venv/
 *.tmp
+my_account/config.json
+my_account/browser_session/
+.env
+
+
