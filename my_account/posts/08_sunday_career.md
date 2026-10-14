@@ -39,7 +39,7 @@ Respect the code that kept the business alive while you were getting hired.
 
 I've outlined our 3-step legacy modernization framework in the visual guide below.
 
-You can also read our full architectural governance playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+You can also read our full architectural governance playbook at ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 What's the most misunderstood piece of legacy code you've encountered in your career?
 

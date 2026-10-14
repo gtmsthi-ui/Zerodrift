@@ -37,7 +37,7 @@ Probabilistic systems require statistical verification, not binary assertions.
 
 I put together the complete CI/CD eval pipeline workflow in the visual summary below.
 
-You can also read the breakdown in The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+You can also read the breakdown in ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 How is your engineering team testing LLM prompt changes before merging PRs?
 

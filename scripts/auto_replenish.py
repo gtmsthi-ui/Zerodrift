@@ -76,7 +76,7 @@ Autonomous swarms belong in research labs. In production systems, deterministic 
 
 I broke down the exact FSM transition diagram in the visual card below.
 
-Read our full reliability blueprint in The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+Read our full reliability blueprint in The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
 
 How is your engineering team constraining agent loops in production right now?
 
@@ -141,7 +141,7 @@ Our feature passed CFO review in 15 minutes, and our unit margins stayed above 7
 
 I've mapped out the full FinOps unit-economics equation in the visual card below.
 
-Read our complete architectural leadership playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+Read our complete architectural leadership playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
 
 How does your team calculate AI unit economics before shipping to customers?
 
@@ -207,7 +207,7 @@ Probabilistic systems require statistical verification, not binary assertions.
 
 I put together the complete CI/CD eval pipeline workflow in the visual summary below.
 
-Read the full deep dive in The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+Read the full deep dive in The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
 
 How is your engineering team testing LLM prompt changes before merging PRs?
 
@@ -272,7 +272,7 @@ Respect the code that kept the business alive while you were getting hired.
 
 I've outlined our 3-step legacy modernization framework in the visual guide below.
 
-You can also read our full architectural governance playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+You can also read our full architectural governance playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
 
 What's the most misunderstood piece of legacy code you've encountered in your career?
 
@@ -402,7 +402,7 @@ score: {score:.1f}
                     item["body"].strip(),
                     score,
                     out_card,
-                    f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{item['id']}_card.png"
+                    f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{item['id']}_card.png"
                 ))
             conn.close()
             record_log("AUTO_REPLENISH", f"Synthesized and queued {item['title']}", f"Score: {score:.1f} | Card: {out_card}")

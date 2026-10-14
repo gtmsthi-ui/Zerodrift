@@ -39,7 +39,7 @@ Our feature passed CFO review in 15 minutes, and our unit margins stayed above 7
 
 I've mapped out the full FinOps unit-economics equation in the visual card below.
 
-Read our complete architectural leadership playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+Read our complete architectural leadership playbook at ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 How does your team calculate AI unit economics before shipping to customers?
 

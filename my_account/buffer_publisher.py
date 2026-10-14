@@ -131,7 +131,7 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=F
     assets_field = ""
     if document_url:
         doc_title = json.dumps(document_title or "Executive Architecture Guide")
-        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
+        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/carousel_slide_1.png"
         assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title}, thumbnailUrl: "{thumb}" }} }}],'
     elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'

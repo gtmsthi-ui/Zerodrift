@@ -50,7 +50,7 @@ The result? Our ADR approvals went from three weeks of debate to 20-minute sign-
 
 I've packaged this exact 4-part ADR template into a clean visual guide below.
 
-You can also read our full architectural governance playbook at The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+You can also read our full architectural governance playbook at ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 How does your team evaluate cost and rollback risk before approving a major architecture change?
 

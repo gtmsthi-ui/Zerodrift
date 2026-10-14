@@ -5,12 +5,12 @@
 ### *Deterministic Architecture, Differential Code Migration & Forensics Suite for Autonomous Software*
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/Release-v0.9.4--alpha-cyan.svg)](https://github.com/gtmsthi-ui/linkedin)
-[![Differential Parity](https://img.shields.io/badge/Parity_Rate-99.94%25-brightgreen.svg)](https://gtmsthi-ui.github.io/linkedin/)
-[![eBPF Sandbox](https://img.shields.io/badge/eBPF-Enforced-indigo.svg)](https://gtmsthi-ui.github.io/linkedin/)
+[![Version](https://img.shields.io/badge/Release-v0.9.4--alpha-cyan.svg)](https://github.com/gtmsthi-ui/Zerodrift)
+[![Differential Parity](https://img.shields.io/badge/Parity_Rate-99.94%25-brightgreen.svg)](https://gtmsthi-ui.github.io/Zerodrift/)
+[![eBPF Sandbox](https://img.shields.io/badge/eBPF-Enforced-indigo.svg)](https://gtmsthi-ui.github.io/Zerodrift/)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg)](https://python.org)
 
-**[Explore Interactive Live Workbench](https://gtmsthi-ui.github.io/linkedin/)** · **[Read Whitepaper #01](https://gtmsthi-ui.github.io/linkedin/#whitepapers)** · **[Enterprise Advisory](https://gtmsthi-ui.github.io/linkedin/#advisory)**
+**[Explore Interactive Live Workbench](https://gtmsthi-ui.github.io/Zerodrift/)** · **[Read Whitepaper #01](https://gtmsthi-ui.github.io/Zerodrift/#whitepapers)** · **[Enterprise Advisory](https://gtmsthi-ui.github.io/Zerodrift/#advisory)**
 
 ---
 
@@ -87,8 +87,8 @@ ZeroDrift has been evaluated across **14,800 production and synthetic trace repl
 Clone the repository and install the ZeroDrift suite:
 
 ```bash
-git clone https://github.com/gtmsthi-ui/linkedin.git
-cd linkedin
+git clone https://github.com/gtmsthi-ui/Zerodrift.git
+cd Zerodrift
 pip install -e .
 ```
 
@@ -136,7 +136,7 @@ is_safe = recorder.intercept_network_egress("185.220.101.4", 8080, "POST /data")
 
 Experience the live interactive tools, time-travel scrubber, and scenario simulators on our official GitHub Pages platform:
 
-👉 **[https://gtmsthi-ui.github.io/linkedin/](https://gtmsthi-ui.github.io/linkedin/)**
+👉 **[https://gtmsthi-ui.github.io/Zerodrift/](https://gtmsthi-ui.github.io/Zerodrift/)**
 
 ---
 
@@ -144,7 +144,7 @@ Experience the live interactive tools, time-travel scrubber, and scenario simula
 
 The theoretical foundations of ZeroDrift are published in our open engineering whitepaper series:
 
-1. **[Whitepaper #01: The Model Race Is Over. The Enterprise Harness Race Just Began](https://gtmsthi-ui.github.io/linkedin/#whitepapers)**  
+1. **[Whitepaper #01: The Model Race Is Over. The Enterprise Harness Race Just Began](https://gtmsthi-ui.github.io/Zerodrift/#whitepapers)**  
    *An architect's guide to building deterministic, SRE-grade execution harnesses without token bloat.*
 2. **Whitepaper #02: Differential Parity Verification**  
    *Formalizing zero-variance replay testing across legacy stored procedures and distributed microservices.*

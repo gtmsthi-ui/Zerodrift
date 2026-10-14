@@ -45,7 +45,7 @@ Autonomous swarms belong in research labs. In production systems, deterministic 
 
 I broke down the exact FSM transition diagram in the visual card below.
 
-Read our full reliability blueprint in The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+Read our full reliability blueprint in ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 How is your engineering team constraining agent loops in production right now?
 

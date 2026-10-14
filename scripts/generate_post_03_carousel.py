@@ -241,7 +241,7 @@ def create_slide_6():
     draw.text((90, promo_y + 30), "DEEP DIVE PUBLICATION", fill=COLOR_CYAN, font=get_font("segoeuib.ttf", 18))
     draw.text((90, promo_y + 65), "The Pragmatic Architect · Newsletter", fill=COLOR_TEXT_PRIMARY, font=get_font("segoeuib.ttf", 32))
     draw.text((90, promo_y + 115), "Weekly architecture blueprints, latency breakdowns & SRE benchmarks.", fill=COLOR_TEXT_MUTED, font=get_font("segoeui.ttf", 22))
-    draw.text((90, promo_y + 165), "Read live at: https://gtmsthi-ui.github.io/linkedin/", fill=COLOR_EMERALD, font=get_font("segoeuib.ttf", 22))
+    draw.text((90, promo_y + 165), "Read live at: https://gtmsthi-ui.github.io/Zerodrift/", fill=COLOR_EMERALD, font=get_font("segoeuib.ttf", 22))
 
     return img
 

@@ -80,7 +80,7 @@ def post_to_buffer(access_token, channel_id, text, as_draft=False, image_url=Non
     assets_field = ""
     if document_url:
         doc_title = json.dumps(document_title or "Executive Architecture Guide")
-        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
+        thumb = thumbnail_url or "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/carousel_slide_1.png"
         assets_field = f'assets: [{{ document: {{ url: "{document_url}", title: {doc_title}, thumbnailUrl: "{thumb}" }} }}],'
     elif image_url:
         assets_field = f'assets: [{{ image: {{ url: "{image_url}" }} }}],'
@@ -279,16 +279,16 @@ def main():
 
     thumb_url = None
     if os.path.exists(pdf_file):
-        doc_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{os.path.basename(pdf_file)}"
+        doc_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(pdf_file)}"
         doc_title = title
         thumb_file = os.path.join(PROJECT_ROOT, "my_account", "assets", f"{post_key}_slide_1.png")
         if os.path.exists(thumb_file):
-            thumb_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_slide_1.png"
+            thumb_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{post_key}_slide_1.png"
         else:
-            thumb_url = "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/carousel_slide_1.png"
+            thumb_url = "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/carousel_slide_1.png"
         print(f"[*] Found attached PDF document carousel: {doc_url}")
     elif os.path.exists(image_file):
-        image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets/{post_key}_card.png"
+        image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{post_key}_card.png"
         print(f"[*] Found attached summary card: {image_url}")
 
     # Step 3: Publish to Buffer if credentials exist

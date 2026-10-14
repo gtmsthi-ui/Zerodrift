@@ -40,7 +40,7 @@ LLMs belong in your architecture as probabilistic workers behind strict circuit 
 
 I put together a complete 6-slide system architecture diagram and fallback state machine in the carousel attached below.
 
-You can also read the breakdown in Edition #02 of The Pragmatic Architect: https://gtmsthi-ui.github.io/linkedin/
+You can also read the breakdown in Edition #02 of ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/
 
 What's the strangest failure mode your team has caught in a production RAG pipeline so far?
 

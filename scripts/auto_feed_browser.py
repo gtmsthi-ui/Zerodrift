@@ -179,8 +179,12 @@ async def run_autonomous_feed_session(dry_run=False):
         await page.goto("https://www.linkedin.com/feed/", wait_until="domcontentloaded")
         await asyncio.sleep(4)
 
-        if "login" in page.url or "checkpoint" in page.url:
-            print("[-] Not logged in. Please run 'python scripts/linkedin_engage.py --login' once first.")
+        cookies = await browser.cookies()
+        has_li_at = any(c.get("name") == "li_at" for c in cookies)
+        if not has_li_at or "login" in page.url or "checkpoint" in page.url or "authwall" in page.url:
+            print("[-] Not logged in: LinkedIn authentication cookie ('li_at') is missing.")
+            print("[!] Please run: python scripts/linkedin_engage.py --login")
+            print("[!] Log in inside the Chromium window that pops up until your feed loads.")
             await browser.close()
             return
 
@@ -276,6 +280,7 @@ async def run_autonomous_feed_session(dry_run=False):
                         await target_page.close()
                     continue
 
+                active_page = target_page if target_page else page
                 print(f"[*] Focusing editor and typing with real keyboard events...")
                 await editor.scroll_into_view_if_needed()
                 await editor.click()
@@ -283,15 +288,15 @@ async def run_autonomous_feed_session(dry_run=False):
 
                 # Real keyboard input so LinkedIn's Draft.js/Lexical editor enables the Post button!
                 for char in comment:
-                    await page.keyboard.type(char, delay=random.randint(30, 80))
+                    await active_page.keyboard.type(char, delay=random.randint(30, 80))
                     if char in ".!?,":
                         await asyncio.sleep(random.uniform(0.2, 0.4))
 
                 await asyncio.sleep(random.uniform(1.5, 3.0))
 
                 if not dry_run:
-                    submit_btn = await post_elem.query_selector("button.comments-comment-box__submit-button, button:has-text('Post')")
-                    if not submit_btn:
+                    submit_btn = await active_page.query_selector("button.comments-comment-box__submit-button, button:has-text('Post')")
+                    if not submit_btn and target_page != page:
                         submit_btn = await page.query_selector("button.comments-comment-box__submit-button, button:has-text('Post')")
 
                     if submit_btn:

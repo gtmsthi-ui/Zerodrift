@@ -371,7 +371,7 @@ def generate_all_cards():
     sys.path.insert(0, HERE)
     from db_tracker import update_post_image
 
-    repo_raw_base = "https://raw.githubusercontent.com/gtmsthi-ui/linkedin/main/my_account/assets"
+    repo_raw_base = "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets"
 
     p2 = create_post_02_card()
     update_post_image(

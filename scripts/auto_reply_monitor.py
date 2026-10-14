@@ -156,8 +156,12 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
         await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded")
         await asyncio.sleep(4)
 
-        if "login" in page.url or "checkpoint" in page.url:
-            print("[-] Not logged in. Please run 'python scripts/linkedin_engage.py --login' once first.")
+        cookies = await browser.cookies()
+        has_li_at = any(c.get("name") == "li_at" for c in cookies)
+        if not has_li_at or "login" in page.url or "checkpoint" in page.url or "authwall" in page.url:
+            print("[-] Not logged in: LinkedIn authentication cookie ('li_at') is missing.")
+            print("[!] Please run: python scripts/linkedin_engage.py --login")
+            print("[!] Log in inside the Chromium window that pops up until your feed loads.")
             await browser.close()
             return
 
