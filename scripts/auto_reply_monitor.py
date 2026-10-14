@@ -165,11 +165,98 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
             await browser.close()
             return
 
+        reply_count = 0
+
+        # --- STEP 1: Scan Recent Profile Posts for Comments Directly ---
+        profile_url = cfg.get("linkedin_profile_url", "https://www.linkedin.com/in/gautam-sethi-1b944324") + "/recent-activity/all/"
+        print(f"[*] Checking active profile posts directly for new comments: {profile_url}...")
+        try:
+            await page.goto(profile_url, wait_until="domcontentloaded")
+            await asyncio.sleep(4)
+            # Find recent update containers
+            updates = await page.query_selector_all(".feed-shared-update-v2, div[data-urn*='urn:li:activity']")
+            print(f"[*] Found {len(updates)} recent profile posts to inspect.")
+            
+            for p_idx, post_elem in enumerate(updates[:3]):
+                if reply_count >= max_replies:
+                    break
+                
+                # Expand comments if visible
+                comment_btn = await post_elem.query_selector("button[aria-label*='comment' i], button.comment-button")
+                if comment_btn:
+                    try:
+                        await comment_btn.click()
+                        await asyncio.sleep(2)
+                    except Exception:
+                        pass
+                
+                comments = await post_elem.query_selector_all(".comments-comment-item, article.comments-comment-item")
+                for c_elem in comments:
+                    if reply_count >= max_replies:
+                        break
+                    comment_text_raw = await c_elem.inner_text()
+                    c_author_elem = await c_elem.query_selector(".comments-post-meta__name-text, a.comments-post-meta__profile-link")
+                    author_name = await c_author_elem.inner_text() if c_author_elem else "Peer"
+                    author_clean = author_name.split("\n")[0].strip()
+                    
+                    # Avoid replying to self
+                    if "gautam" in author_clean.lower() or "sethi" in author_clean.lower():
+                        continue
+                    
+                    c_id = str(abs(hash(comment_text_raw[:70])))
+                    if c_id in replied_ids:
+                        continue
+                    
+                    print(f"\n[+] Detected comment on your post by @{author_clean}: \"{comment_text_raw[:80]}...\"")
+                    
+                    # Check for Reply button inside this comment item
+                    c_reply_btn = await c_elem.query_selector("button[aria-label*='Reply' i], button:has-text('Reply')")
+                    if c_reply_btn:
+                        await c_reply_btn.click()
+                        await asyncio.sleep(1.5)
+                        
+                        editor = await c_elem.query_selector(".comments-comment-box__editor p, .editor-content p, div[role='textbox']")
+                        if editor:
+                            reply_text = generate_contextual_reply(comment_text_raw, author_clean, is_reply_to_my_comment=False)
+                            print(f"[*] Generated Reply to @{author_clean}: \"{reply_text}\"")
+                            await editor.click()
+                            await asyncio.sleep(0.8)
+                            await human_type(editor, reply_text)
+                            await asyncio.sleep(random.uniform(1.5, 3.0))
+                            
+                            if not dry_run:
+                                sub_btn = await c_elem.query_selector(".comments-comment-box__submit-button, button:has-text('Post')")
+                                if sub_btn:
+                                    await sub_btn.click()
+                                    print(f"[+] Reply submitted live on your post to @{author_clean}!")
+                                    log_reply(c_id, author_clean, comment_text_raw, reply_text, "Replied directly on your post")
+                                    replied_ids.add(c_id)
+                                    reply_count += 1
+                                    
+                                    tg_msg = (
+                                        f"💬 <b>Autonomous LinkedIn Reply Posted</b>\n\n"
+                                        f"<b>On Your Post:</b> Direct Activity Scan\n"
+                                        f"<b>To:</b> @{author_clean}\n\n"
+                                        f"<b>Your Reply:</b>\n"
+                                        f"<blockquote>{reply_text}</blockquote>\n\n"
+                                        f"<i>Thread successfully handled & logged.</i>"
+                                    )
+                                    send_telegram(tg_msg)
+                                    await asyncio.sleep(random.randint(15, 25))
+                            else:
+                                print("[*] [Dry-Run] Typed but skipped submission.")
+                                reply_count += 1
+        except Exception as e:
+            print(f"[-] Profile activity scan encountered note: {e}")
+
+        # --- STEP 2: Scan Notifications for External Mentions / Replies ---
+        print("\n[*] Navigating to LinkedIn Notifications for external mentions & thread replies...")
+        await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded")
+        await asyncio.sleep(4)
+
         # Scan notifications
         notif_cards = await page.query_selector_all(".nt-card, article.nt-card")
         print(f"[*] Scanning {len(notif_cards)} notifications...")
-
-        reply_count = 0
 
         for idx, card in enumerate(notif_cards[:15]):
             if reply_count >= max_replies:
@@ -186,7 +273,6 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
             if not (is_comment_on_my_post or is_reply_to_my_comment):
                 continue
 
-            # Thread ID from hash of notification snippet
             clean_snippet = re.sub(r"\s+", " ", card_text)[:60]
             thread_id = str(abs(hash(clean_snippet)))
 
@@ -194,7 +280,7 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
                 continue
 
             event_type = "Replied to comment on your post" if is_comment_on_my_post else "Replied to comment thread"
-            print(f"\n[+] Actionable interaction detected: {clean_snippet}...")
+            print(f"\n[+] Actionable interaction detected from notifications: {clean_snippet}...")
 
             # Click notification to open thread
             await card.click()

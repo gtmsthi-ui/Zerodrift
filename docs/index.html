@@ -3,24 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZeroDrift Systems | Deterministic Architecture, Migration & Forensics</title>
-  <meta name="description" content="Research-grade systems architecture for autonomous agent reliability, differential legacy code migration, and eBPF forensic execution by Gautam Sethi & ZeroDrift Systems.">
+  <title>ZeroDrift Systems | Deterministic Reliability, Differential Migration & Forensics</title>
+  <meta name="description" content="Research-grade systems architecture for autonomous agent reliability, differential legacy code migration, and eBPF forensic execution by Gautam Sethi & ZeroDrift Systems Group.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #07090e;
-      --bg-card: rgba(14, 20, 34, 0.75);
-      --bg-card-hover: rgba(22, 32, 54, 0.85);
+      --bg-dark: #06080e;
+      --bg-panel: rgba(11, 16, 28, 0.82);
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-card-hover: rgba(24, 34, 60, 0.88);
       --border-subtle: rgba(56, 189, 248, 0.12);
-      --border-glow: rgba(56, 189, 248, 0.35);
+      --border-glow: rgba(56, 189, 248, 0.38);
       --cyan: #38bdf8;
       --cyan-bright: #00f2fe;
       --emerald: #10b981;
+      --emerald-glow: #34d399;
       --amber: #f59e0b;
       --rose: #f43f5e;
       --indigo: #6366f1;
+      --purple: #a855f7;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -33,30 +36,48 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
-        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
+        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
       color: var(--text-main);
       font-family: var(--font-sans);
       line-height: 1.6;
       min-height: 100vh;
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambient Canvas for Background Particles */
+    #ambientBgCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+    }
+
+    header, main, footer, .modal-overlay {
+      position: relative;
+      z-index: 2;
     }
 
     /* Navigation */
     header {
       border-bottom: 1px solid var(--border-subtle);
-      backdrop-filter: blur(14px);
+      backdrop-filter: blur(16px);
       position: sticky;
       top: 0;
-      z-index: 50;
-      background: rgba(7, 9, 14, 0.88);
+      z-index: 100;
+      background: rgba(6, 8, 14, 0.92);
     }
 
     .nav-container {
-      max-width: 1280px;
+      max-width: 1340px;
       margin: 0 auto;
-      padding: 1rem 2rem;
+      padding: 0.85rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -71,8 +92,8 @@
     }
 
     .brand-icon {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
       border-radius: 10px;
       display: flex;
@@ -80,8 +101,19 @@
       justify-content: center;
       font-weight: 800;
       font-size: 1.15rem;
-      color: #07090e;
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
+      color: #06080e;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+      position: relative;
+    }
+
+    .brand-icon::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan-bright), transparent);
+      z-index: -1;
+      opacity: 0.6;
     }
 
     .brand-text h1 {
@@ -98,33 +130,34 @@
       background: rgba(56, 189, 248, 0.15);
       color: var(--cyan);
       border: 1px solid var(--cyan);
-      padding: 0.1rem 0.45rem;
+      padding: 0.15rem 0.5rem;
       border-radius: 20px;
       font-family: var(--font-mono);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .brand-text span.subline {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--text-muted);
       display: block;
+      letter-spacing: 0.02em;
     }
 
     .nav-links {
       display: flex;
-      gap: 1.5rem;
+      gap: 1.4rem;
       align-items: center;
     }
 
     .nav-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 600;
       transition: color 0.2s ease;
     }
 
-    .nav-link:hover { color: var(--cyan); }
+    .nav-link:hover { color: var(--cyan-bright); }
 
     .nav-actions {
       display: flex;
@@ -132,18 +165,68 @@
       align-items: center;
     }
 
+    /* Audio HUD Control Button */
+    .btn-audio-toggle {
+      background: rgba(56, 189, 248, 0.08);
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      color: var(--cyan);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-audio-toggle:hover {
+      background: rgba(56, 189, 248, 0.18);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.3);
+    }
+
+    .audio-waves {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      height: 12px;
+    }
+
+    .audio-bar {
+      width: 2px;
+      background: var(--cyan-bright);
+      border-radius: 1px;
+      height: 4px;
+      animation: wave 1s ease-in-out infinite alternate;
+    }
+    .audio-bar:nth-child(2) { animation-delay: 0.2s; height: 10px; }
+    .audio-bar:nth-child(3) { animation-delay: 0.4s; height: 6px; }
+
+    @keyframes wave {
+      0% { height: 3px; }
+      100% { height: 12px; }
+    }
+
+    .audio-muted .audio-bar {
+      animation: none !important;
+      height: 2px !important;
+      background: var(--text-dim) !important;
+    }
+
     .btn-outline {
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--border-subtle);
       color: var(--text-main);
-      padding: 0.5rem 1rem;
+      padding: 0.48rem 0.95rem;
       border-radius: 8px;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       transition: all 0.2s ease;
     }
 
@@ -154,17 +237,17 @@
     }
 
     .btn-primary {
-      background: linear-gradient(135deg, var(--cyan), var(--indigo));
-      color: #07090e;
+      background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
+      color: #06080e;
       border: none;
       padding: 0.5rem 1.15rem;
       border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.82rem;
+      font-weight: 800;
       text-decoration: none;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
       cursor: pointer;
       box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
       transition: all 0.2s ease;
@@ -177,8 +260,8 @@
 
     /* Hero */
     .hero {
-      max-width: 1280px;
-      margin: 4rem auto 3rem;
+      max-width: 1340px;
+      margin: 3.5rem auto 2.5rem;
       padding: 0 2rem;
       text-align: center;
     }
@@ -192,7 +275,7 @@
     }
 
     .pill {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.05em;
       text-transform: uppercase;
@@ -201,36 +284,38 @@
       display: inline-flex;
       align-items: center;
       gap: 0.45rem;
+      backdrop-filter: blur(8px);
     }
 
     .pill-cyan { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--cyan); color: var(--cyan); }
-    .pill-emerald { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald); color: var(--emerald); }
-    .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+    .pill-emerald { background: rgba(16, 185, 129, 0.12); border: 1px solid var(--emerald); color: var(--emerald-glow); }
+    .pill-indigo { background: rgba(99, 102, 241, 0.12); border: 1px solid var(--indigo); color: #818cf8; }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulseDot 2s infinite; }
 
-    @keyframes pulse {
+    @keyframes pulseDot {
       0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
+      50% { opacity: 0.35; transform: scale(0.8); }
     }
 
     .hero h2 {
-      font-size: 3.5rem;
+      font-size: 3.6rem;
       font-weight: 800;
       letter-spacing: -0.035em;
-      line-height: 1.12;
+      line-height: 1.1;
       margin-bottom: 1.25rem;
       background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      max-width: 1050px;
+      max-width: 1100px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .hero p.lead {
       color: var(--text-muted);
-      font-size: 1.2rem;
-      max-width: 820px;
-      margin: 0 auto 2.5rem;
+      font-size: 1.18rem;
+      max-width: 860px;
+      margin: 0 auto 2.25rem;
       line-height: 1.65;
     }
 
@@ -248,35 +333,38 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1.25rem;
-      max-width: 1100px;
+      max-width: 1140px;
       margin: 0 auto;
-      padding: 1.5rem;
+      padding: 1.5rem 2rem;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: 16px;
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px);
     }
 
     .metric-card {
       text-align: left;
       padding: 0.5rem 1rem;
       border-right: 1px solid var(--border-subtle);
+      position: relative;
     }
     .metric-card:last-child { border-right: none; }
 
     .metric-val {
       font-family: var(--font-mono);
-      font-size: 2rem;
+      font-size: 2.1rem;
       font-weight: 800;
       color: var(--cyan-bright);
       line-height: 1;
       margin-bottom: 0.35rem;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
     }
 
     .metric-lbl {
       font-size: 0.8rem;
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
@@ -289,7 +377,7 @@
 
     /* Main Container */
     .container {
-      max-width: 1280px;
+      max-width: 1340px;
       margin: 0 auto;
       padding: 0 2rem 5rem;
     }
@@ -300,26 +388,391 @@
     }
 
     .section-title h3 {
-      font-size: 2.25rem;
+      font-size: 2.3rem;
       font-weight: 800;
       letter-spacing: -0.025em;
       margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
     }
 
     .section-title p {
       color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 600px;
+      font-size: 1.02rem;
+      max-width: 720px;
       margin: 0 auto;
     }
 
-    /* Workbench / Live Tools Section */
+    /* ==========================================================================
+       SECTION: LIVE TELEMETRY OSCILLOSCOPE (Visual Effect + Canvas)
+       ========================================================================== */
+    .telemetry-rack {
+      background: #04060b;
+      border: 1px solid var(--border-glow);
+      border-radius: 18px;
+      padding: 1.75rem;
+      margin: 3.5rem auto 0;
+      max-width: 1140px;
+      box-shadow: 0 25px 60px -20px rgba(0, 242, 254, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .rack-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+      padding-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .rack-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .rack-title h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .rec-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: var(--rose);
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 800;
+      padding: 0.15rem 0.55rem;
+      border-radius: 4px;
+    }
+
+    .rec-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--rose);
+      animation: pulseDot 1s infinite;
+    }
+
+    .rack-status-grid {
+      display: flex;
+      gap: 1.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+    }
+
+    .rack-stat-item span:first-child { color: var(--text-dim); margin-right: 0.35rem; }
+    .rack-stat-item span:last-child { color: var(--cyan-bright); font-weight: 700; }
+
+    .canvas-wrapper {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #020408;
+      border: 1px solid rgba(56, 189, 248, 0.15);
+    }
+
+    #oscilloscopeCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .oscilloscope-hud-overlay {
+      position: absolute;
+      top: 10px;
+      left: 14px;
+      right: 14px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: rgba(56, 189, 248, 0.7);
+    }
+
+    .legend-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-right: 1rem;
+    }
+
+    .legend-line-cyan { width: 14px; height: 2px; background: var(--cyan-bright); display: inline-block; box-shadow: 0 0 8px var(--cyan-bright); }
+    .legend-line-emerald { width: 14px; height: 2px; background: var(--emerald); display: inline-block; box-shadow: 0 0 8px var(--emerald); }
+
+    /* ==========================================================================
+       SECTION: INFOGRAPHICAL ARCHITECTURE PIPELINE (Animated SVG & Nodes)
+       ========================================================================== */
+    .infographic-wrapper {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 2.5rem;
+      margin-bottom: 4rem;
+      position: relative;
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.7);
+    }
+
+    .infographic-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .infographic-header h4 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .infographic-header p {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      max-width: 650px;
+    }
+
+    /* Pipeline 5-Node Interactive Grid */
+    .pipeline-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1rem;
+      position: relative;
+      margin-bottom: 2.5rem;
+    }
+
+    .pipeline-node {
+      background: rgba(14, 20, 36, 0.85);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 1.25rem 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .pipeline-node:hover, .pipeline-node.node-active {
+      transform: translateY(-4px);
+      border-color: var(--cyan-bright);
+      background: rgba(22, 34, 62, 0.95);
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+    }
+
+    .pipeline-node.node-active::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 15%; right: 15%;
+      height: 2px;
+      background: var(--cyan-bright);
+      box-shadow: 0 0 10px var(--cyan-bright);
+    }
+
+    .node-num {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .node-latency {
+      font-size: 0.65rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--emerald-glow);
+    }
+
+    .node-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.35rem;
+      line-height: 1.3;
+    }
+
+    .node-desc {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 0.75rem;
+    }
+
+    .node-badge {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 0.5rem;
+      display: block;
+    }
+
+    /* Infographic Inspector Display */
+    .infographic-inspector {
+      background: #040710;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .inspector-meta h5 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      margin-bottom: 0.4rem;
+    }
+
+    .inspector-meta p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    .inspector-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .inspector-code {
+      background: #020409;
+      border: 1px solid rgba(56, 189, 248, 0.15);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: #7dd3fc;
+      overflow-x: auto;
+      max-height: 160px;
+    }
+
+    /* ==========================================================================
+       SECTION: VISUAL ARCHITECTURAL COMPARISON (Infographical Breakdown)
+       ========================================================================== */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .compare-card {
+      border-radius: 18px;
+      padding: 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-bad {
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, rgba(14, 20, 36, 0.7) 100%);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+    }
+
+    .compare-good {
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 20, 36, 0.7) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.12);
+    }
+
+    .compare-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .badge-bad { background: rgba(244, 63, 94, 0.18); color: var(--rose); }
+    .badge-good { background: rgba(16, 185, 129, 0.18); color: var(--emerald-glow); }
+
+    .compare-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .compare-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.55;
+    }
+
+    .compare-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comp-metric-box {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .comp-metric-box .label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); }
+    .comp-metric-box .val-bad { font-size: 1.35rem; font-weight: 800; color: var(--rose); font-family: var(--font-mono); }
+    .comp-metric-box .val-good { font-size: 1.35rem; font-weight: 800; color: var(--emerald-glow); font-family: var(--font-mono); }
+
+    .compare-bullets {
+      list-style: none;
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+    .compare-bullets li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    /* ==========================================================================
+       WORKBENCH / LIVE INTERACTIVE TOOLS SECTION
+       ========================================================================== */
     .workbench {
-      background: rgba(11, 16, 28, 0.85);
+      background: rgba(11, 16, 28, 0.9);
       border: 1px solid var(--border-glow);
       border-radius: 20px;
       overflow: hidden;
-      box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.8);
+      position: relative;
     }
 
     .workbench-tabs {
@@ -351,7 +804,7 @@
     .tab-btn.active {
       color: var(--cyan-bright);
       border-bottom-color: var(--cyan-bright);
-      background: rgba(56, 189, 248, 0.05);
+      background: rgba(56, 189, 248, 0.06);
     }
 
     .tab-icon {
@@ -546,8 +999,8 @@
     }
     .step-box.active {
       border-color: var(--cyan);
-      background: rgba(56, 189, 248, 0.05);
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.06);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.18);
     }
     .step-box.alert-step {
       border-color: var(--rose);
@@ -575,14 +1028,15 @@
       font-size: 0.825rem;
       color: #94a3b8;
       line-height: 1.7;
+      min-height: 160px;
     }
 
     .term-line-red { color: var(--rose); font-weight: 700; }
-    .term-line-green { color: var(--emerald); font-weight: 700; }
+    .term-line-green { color: var(--emerald-glow); font-weight: 700; }
     .term-line-cyan { color: var(--cyan-bright); }
     .term-line-amber { color: var(--amber); }
 
-    /* Commercial Solutions / Upsell */
+    /* Commercial Solutions */
     .solutions-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -618,7 +1072,7 @@
       top: -12px;
       right: 20px;
       background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
-      color: #07090e;
+      color: #06080e;
       font-size: 0.7rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -653,10 +1107,9 @@
       gap: 0.65rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
     }
+    .sol-features li svg { color: var(--emerald-glow); flex-shrink: 0; }
 
-    .sol-features li svg { color: var(--emerald); flex-shrink: 0; }
-
-    /* Publications / Research Grid */
+    /* Publications */
     .editions-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -745,11 +1198,11 @@
       letter-spacing: 0.05em;
     }
 
-    .status-ready { color: var(--emerald); }
+    .status-ready { color: var(--emerald-glow); }
     .status-queued { color: var(--amber); }
 
     .read-btn {
-      color: var(--cyan);
+      color: var(--cyan-bright);
       font-size: 0.875rem;
       font-weight: 700;
       text-decoration: none;
@@ -762,7 +1215,7 @@
 
     .read-btn:hover { transform: translateX(3px); }
 
-    /* Modal */
+    /* Modals */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -770,7 +1223,7 @@
       width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
-      z-index: 100;
+      z-index: 200;
       justify-content: center;
       align-items: center;
       padding: 2rem;
@@ -807,7 +1260,7 @@
 
     .article-body h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; }
     .article-meta { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
-    .article-body h2 { font-size: 1.4rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--cyan); }
+    .article-body h2 { font-size: 1.4rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--cyan-bright); }
     .article-body p { margin-bottom: 1.25rem; color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
     .article-body pre { background: #050811; padding: 1.25rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-subtle); color: var(--cyan); }
 
@@ -815,13 +1268,13 @@
     footer {
       border-top: 1px solid var(--border-subtle);
       padding: 3rem 2rem;
-      background: rgba(5, 7, 12, 0.95);
+      background: rgba(4, 6, 11, 0.96);
       color: var(--text-dim);
       font-size: 0.85rem;
     }
 
     .footer-inner {
-      max-width: 1280px;
+      max-width: 1340px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -830,17 +1283,20 @@
       gap: 1.5rem;
     }
 
-    @media (max-width: 900px) {
-      .hero h2 { font-size: 2.5rem; }
+    @media (max-width: 990px) {
+      .hero h2 { font-size: 2.6rem; }
       .research-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
       .metric-card { border-right: none; }
-      .diff-grid, .solutions-grid { grid-template-columns: 1fr; }
+      .diff-grid, .solutions-grid, .comparison-grid, .pipeline-grid, .infographic-inspector { grid-template-columns: 1fr; }
       .timeline-stream { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
+
+  <!-- Background Ambient Cyber Particle Canvas -->
+  <canvas id="ambientBgCanvas"></canvas>
 
   <!-- Navigation -->
   <header>
@@ -853,15 +1309,27 @@
         </div>
       </a>
       <div class="nav-links">
-        <a href="#workbench" class="nav-link">Interactive Tools</a>
-        <a href="#research" class="nav-link">Benchmarks</a>
+        <a href="#telemetry" class="nav-link">Live Telemetry</a>
+        <a href="#pipeline" class="nav-link">Kernel Infographic</a>
+        <a href="#workbench" class="nav-link">Interactive Workbench</a>
+        <a href="#compare" class="nav-link">Architecture Matrix</a>
         <a href="#whitepapers" class="nav-link">Whitepapers</a>
-        <a href="#advisory" class="nav-link">Enterprise Solutions</a>
+        <a href="#advisory" class="nav-link">Advisory</a>
       </div>
       <div class="nav-actions">
+        <!-- Audio HUD Synthesizer Toggle -->
+        <button class="btn-audio-toggle" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD Sound Effects">
+          <span class="audio-waves" id="audioWaveVisualizer">
+            <span class="audio-bar"></span>
+            <span class="audio-bar"></span>
+            <span class="audio-bar"></span>
+          </span>
+          <span id="audioBtnText">HUD FX: ON</span>
+        </button>
+
         <a href="https://github.com/gtmsthi-ui/Zerodrift" target="_blank" class="btn-outline">
           <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub Repo
+          GitHub
         </a>
         <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary">
           Connect with Gautam
@@ -876,7 +1344,7 @@
       <div class="pill-group">
         <span class="pill pill-cyan"><span class="pill-dot"></span> Open-Source Systems Suite</span>
         <span class="pill pill-emerald"><span class="pill-dot"></span> Differential Parity Verified</span>
-        <span class="pill pill-cyan">Enterprise SRE Grade</span>
+        <span class="pill pill-indigo">Kernel eBPF Sandbox</span>
       </div>
       <h2>Deterministic Reliability, Differential Migration & Forensics for Autonomous Software</h2>
       <p class="lead">
@@ -887,8 +1355,8 @@
         <a href="#workbench" class="btn-primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
           Launch Interactive Workbench ↓
         </a>
-        <a href="#advisory" class="btn-outline" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
-          Enterprise Advisory Sprints
+        <a href="#pipeline" class="btn-outline" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+          Explore Kernel Infographic
         </a>
       </div>
 
@@ -917,11 +1385,122 @@
       </div>
     </section>
 
-    <!-- Interactive Tools Workbench -->
+    <!-- ==========================================================================
+         LIVE TELEMETRY OSCILLOSCOPE (Visual Effect + Canvas)
+         ========================================================================== -->
+    <section class="container" id="telemetry" style="padding-bottom: 2rem;">
+      <div class="telemetry-rack">
+        <div class="rack-header">
+          <div class="rack-title">
+            <span class="rec-indicator"><span class="rec-dot"></span> LIVE TELEMETRY</span>
+            <h4>ZeroDrift Differential Waveform & Parity Radar</h4>
+          </div>
+          <div class="rack-status-grid">
+            <div class="rack-stat-item"><span>SAMPLING:</span> <span>100 kHz</span></div>
+            <div class="rack-stat-item"><span>JITTER:</span> <span>&plusmn;0.018ms</span></div>
+            <div class="rack-stat-item"><span>STATE:</span> <span id="telemetryLockState" style="color: var(--emerald-glow);">PARITY LOCKED</span></div>
+          </div>
+        </div>
+
+        <div class="canvas-wrapper">
+          <canvas id="oscilloscopeCanvas"></canvas>
+          <div class="oscilloscope-hud-overlay">
+            <div>
+              <span class="legend-badge"><span class="legend-line-emerald"></span> Legacy Baseline Wave</span>
+              <span class="legend-badge"><span class="legend-line-cyan"></span> ZeroDrift Replay Output</span>
+            </div>
+            <div id="oscilloscopeVarianceReadout">VARIANCE DELTA: 0.000% (ZERO DRIFT)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE INFOGRAPHIC: THE ZERODRIFT EXECUTION KERNEL
+         ========================================================================== -->
+    <section class="container" id="pipeline">
+      <div class="section-title">
+        <h3>Architectural Kernel Infographic</h3>
+        <p>Interactive dataflow: How untrusted agent actions and legacy traffic pass through ZeroDrift's five deterministic verification stages.</p>
+      </div>
+
+      <div class="infographic-wrapper">
+        <div class="infographic-header">
+          <div>
+            <h4>ZeroDrift Execution Pipeline</h4>
+            <p>Click any pipeline node to inspect its internal kernel hooks, latency budget, and cryptographic verification mechanism.</p>
+          </div>
+          <span class="pill pill-cyan">5-Stage Deterministic Topology</span>
+        </div>
+
+        <!-- 5 Interactive Pipeline Nodes -->
+        <div class="pipeline-grid">
+          <div class="pipeline-node node-active" id="pnode-0" onclick="selectPipelineNode(0)">
+            <div class="node-num"><span>01 / INGEST</span><span class="node-latency">&lt;2ms</span></div>
+            <div class="node-title">Context Pruning Gate</div>
+            <div class="node-desc">Filters raw history, strips PII, and bounds ephemeral token window.</div>
+            <span class="node-badge">Token Compaction: -74.2%</span>
+          </div>
+
+          <div class="pipeline-node" id="pnode-1" onclick="selectPipelineNode(1)">
+            <div class="node-num"><span>02 / ROUTER</span><span class="node-latency">&lt;8ms</span></div>
+            <div class="node-title">Model Ladder Dispatch</div>
+            <div class="node-desc">Tiered router sends routine tasks to fast 8B edge; reserves heavy reasoning.</div>
+            <span class="node-badge">FinOps Cost: 30x Lower</span>
+          </div>
+
+          <div class="pipeline-node" id="pnode-2" onclick="selectPipelineNode(2)">
+            <div class="node-num"><span>03 / SANDBOX</span><span class="node-latency">&lt;4ms</span></div>
+            <div class="node-title">eBPF Syscall Guard</div>
+            <div class="node-desc">Restricts unauthorized socket egress, file writes, and infinite loops.</div>
+            <span class="node-badge">Zero Breaches Detected</span>
+          </div>
+
+          <div class="pipeline-node" id="pnode-3" onclick="selectPipelineNode(3)">
+            <div class="node-num"><span>04 / VERIFY</span><span class="node-latency">&lt;14ms</span></div>
+            <div class="node-title">ShadowReplay Parity</div>
+            <div class="node-desc">Executes parallel differential replays against legacy baseline AST.</div>
+            <span class="node-badge">Parity Rate: 99.94%</span>
+          </div>
+
+          <div class="pipeline-node" id="pnode-4" onclick="selectPipelineNode(4)">
+            <div class="node-num"><span>05 / AUDIT</span><span class="node-latency">&lt;1ms</span></div>
+            <div class="node-title">Cryptographic Receipt</div>
+            <div class="node-desc">Appends SHA-256 provenance receipts into immutable SRE audit log.</div>
+            <span class="node-badge">SOC2 / ISO Certified</span>
+          </div>
+        </div>
+
+        <!-- Dynamic Inspector Panel -->
+        <div class="infographic-inspector">
+          <div class="inspector-meta">
+            <h5 id="inspectTitle">Stage 01: Context Pruning & Boundary Gate</h5>
+            <p id="inspectDesc">
+              Intercepts incoming prompts and agent tool results. Drops unreferenced ephemeral tokens, prunes redundant stack traces, and enforces PII redaction before context touches inference.
+            </p>
+            <div class="inspector-pills">
+              <span class="pill pill-cyan" id="inspectStat1">Latency: 1.8ms</span>
+              <span class="pill pill-emerald" id="inspectStat2">Token Reduction: 74.2%</span>
+              <span class="pill pill-indigo" id="inspectStat3">Subsystem: zd_prune_v2</span>
+            </div>
+          </div>
+          <pre class="inspector-code" id="inspectCode">// ZeroDrift Kernel Hook: Stage 01
+pub fn enforce_context_boundary(ctx: &mut WorkingMemory) -> KernelResult<()> {
+    ctx.strip_unbounded_payloads(MAX_FRAME_SIZE)?;
+    ctx.redact_sensitive_tokens(&[Pattern::BearerToken, Pattern::SSN])?;
+    ctx.compact_lru_history(4096)
+}</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================================================
+         INTERACTIVE SYSTEMS WORKBENCH
+         ========================================================================== -->
     <section class="container" id="workbench">
       <div class="section-title">
         <h3>Interactive Systems Workbench</h3>
-        <p>Test the three core ZeroDrift architectural engines live in your browser.</p>
+        <p>Test the three core ZeroDrift architectural engines live in your browser with real-time feedback.</p>
       </div>
 
       <div class="workbench">
@@ -995,7 +1574,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
                 <span id="certHash">Verification SHA-256: 0x8c4476a2a7bcae062e849fca · Latency: 380ms → 18ms (15.8x faster)</span>
               </div>
             </div>
-            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--emerald); font-weight: 700;">
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--emerald-glow); font-weight: 700;">
               Memory Delta: -84.2% · 0 Divergences
             </div>
           </div>
@@ -1076,7 +1655,69 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       </div>
     </section>
 
-    <!-- Commercial Solutioning & Advisory (Saleable) -->
+    <!-- ==========================================================================
+         VISUAL ARCHITECTURAL COMPARISON (Infographical Breakdown)
+         ========================================================================== -->
+    <section class="container" id="compare">
+      <div class="section-title">
+        <h3>Architectural Comparison Matrix</h3>
+        <p>Why prototype LLM wrappers fail in staging vs. how ZeroDrift enforces deterministic stability.</p>
+      </div>
+
+      <div class="comparison-grid">
+        <!-- Bad Approach -->
+        <div class="compare-card compare-bad">
+          <span class="compare-badge badge-bad">Legacy / Unharnessed Approach</span>
+          <h4 class="compare-title">Standard Conversational Wrapper</h4>
+          <p class="compare-desc">
+            Directly feeding unfiltered conversational prompts into single trophy models. Fragile, unmonitored, with unbounded loops.
+          </p>
+          <div class="compare-metrics">
+            <div class="comp-metric-box">
+              <div class="label">Production Failure Rate</div>
+              <div class="val-bad">88.4%</div>
+            </div>
+            <div class="comp-metric-box">
+              <div class="label">Token FinOps Waste</div>
+              <div class="val-bad">30x Overhead</div>
+            </div>
+          </div>
+          <ul class="compare-bullets">
+            <li><span style="color: var(--rose);">✕</span> Cascading hallucination storms in unmonitored multi-agent loops</li>
+            <li><span style="color: var(--rose);">✕</span> Zero isolation: Agent has unrestricted shell and external socket access</li>
+            <li><span style="color: var(--rose);">✕</span> No rollback: mutations directly corrupt staging or production databases</li>
+            <li><span style="color: var(--rose);">✕</span> Context bloating drives latency past 45 seconds per response</li>
+          </ul>
+        </div>
+
+        <!-- ZeroDrift Approach -->
+        <div class="compare-card compare-good">
+          <span class="compare-badge badge-good">ZeroDrift Engineered Architecture</span>
+          <h4 class="compare-title">Deterministic Execution Harness</h4>
+          <p class="compare-desc">
+            Treating LLMs as untrusted, non-deterministic workers wrapped in strict eBPF sandboxes, schema validation gates, and replay certs.
+          </p>
+          <div class="compare-metrics">
+            <div class="comp-metric-box">
+              <div class="label">Differential Parity</div>
+              <div class="val-good">99.94%</div>
+            </div>
+            <div class="comp-metric-box">
+              <div class="label">p99 Latency SLA</div>
+              <div class="val-good">&lt; 32ms</div>
+            </div>
+          </div>
+          <ul class="compare-bullets">
+            <li><span style="color: var(--emerald-glow);">✓</span> Bounded execution graphs with automated circuit breakers and max retry limits</li>
+            <li><span style="color: var(--emerald-glow);">✓</span> eBPF kernel hooks intercept illicit socket egress and forbidden file operations</li>
+            <li><span style="color: var(--emerald-glow);">✓</span> ShadowReplay certifies zero-variance parity against baseline code before deploy</li>
+            <li><span style="color: var(--emerald-glow);">✓</span> Cryptographic SHA-256 audit receipts prove compliance for SOC2 and ISO</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Commercial Solutioning & Advisory -->
     <section class="container" id="advisory">
       <div class="section-title">
         <h3>Enterprise Solutions & Advisory</h3>
@@ -1285,8 +1926,372 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
   </footer>
 
   <script>
-    // Tab Switching
+    /* ==========================================================================
+       1. WEB AUDIO API SYNTHESIZER (Tactile HUD Sound Effects Engine)
+       ========================================================================== */
+    class SoundEngine {
+      constructor() {
+        this.ctx = null;
+        this.enabled = true;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      // Crisp mechanical UI click
+      click() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      }
+
+      // High-tech frequency sweep (Replay simulation)
+      sweep() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(220, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.35);
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.35);
+      }
+
+      // Security intercept alert buzz (eBPF violation)
+      alert() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(160, now);
+        osc.frequency.setValueAtTime(130, now + 0.08);
+        gain.gain.setValueAtTime(0.09, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.22);
+      }
+
+      // Crystal chime success (Parity & AutoSandbox passed)
+      success() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+        notes.forEach((freq, idx) => {
+          const now = this.ctx.currentTime + (idx * 0.06);
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        });
+      }
+
+      // Terminal keystroke tick
+      tick() {
+        if (!this.enabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(800 + Math.random() * 400, now);
+        gain.gain.setValueAtTime(0.03, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.02);
+      }
+    }
+
+    const sound = new SoundEngine();
+
+    function toggleAudio() {
+      sound.enabled = !sound.enabled;
+      const btn = document.getElementById('audioToggleBtn');
+      const wave = document.getElementById('audioWaveVisualizer');
+      const txt = document.getElementById('audioBtnText');
+      if (sound.enabled) {
+        sound.init();
+        sound.click();
+        wave.classList.remove('audio-muted');
+        txt.textContent = 'HUD FX: ON';
+        btn.style.borderColor = 'rgba(56, 189, 248, 0.4)';
+      } else {
+        wave.classList.add('audio-muted');
+        txt.textContent = 'HUD FX: MUTE';
+        btn.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+      }
+    }
+
+    // Attach sound to general buttons and links
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('button, a, select, input[type="range"]');
+      if (target && !target.id.includes('audioToggleBtn')) {
+        sound.click();
+      }
+    });
+
+    /* ==========================================================================
+       2. LIVE OSCILLOSCOPE DUAL-WAVEFORM CANVAS
+       ========================================================================== */
+    const oscCanvas = document.getElementById('oscilloscopeCanvas');
+    const oscCtx = oscCanvas.getContext('2d');
+    let oscPhase = 0;
+    let oscLocked = true;
+    let oscWiggle = 0;
+
+    function resizeOscCanvas() {
+      const rect = oscCanvas.getBoundingClientRect();
+      oscCanvas.width = rect.width * window.devicePixelRatio;
+      oscCanvas.height = rect.height * window.devicePixelRatio;
+    }
+    window.addEventListener('resize', resizeOscCanvas);
+    resizeOscCanvas();
+
+    function drawOscilloscope() {
+      const w = oscCanvas.width;
+      const h = oscCanvas.height;
+      oscCtx.clearRect(0, 0, w, h);
+
+      // Grid Lines
+      oscCtx.strokeStyle = 'rgba(56, 189, 248, 0.06)';
+      oscCtx.lineWidth = 1;
+      const gridGap = 24 * window.devicePixelRatio;
+      for (let x = 0; x < w; x += gridGap) {
+        oscCtx.beginPath();
+        oscCtx.moveTo(x, 0);
+        oscCtx.lineTo(x, h);
+        oscCtx.stroke();
+      }
+      for (let y = 0; y < h; y += gridGap) {
+        oscCtx.beginPath();
+        oscCtx.moveTo(0, y);
+        oscCtx.lineTo(w, y);
+        oscCtx.stroke();
+      }
+
+      const centerY = h / 2;
+      const amp = h * 0.28;
+
+      // 1. Draw Legacy Baseline Wave (Emerald)
+      oscCtx.strokeStyle = '#10b981';
+      oscCtx.lineWidth = 2 * window.devicePixelRatio;
+      oscCtx.shadowColor = '#10b981';
+      oscCtx.shadowBlur = 8 * window.devicePixelRatio;
+      oscCtx.beginPath();
+      for (let x = 0; x < w; x += 3) {
+        const t = (x / w) * Math.PI * 4 + oscPhase;
+        const y = centerY + Math.sin(t) * amp * 0.85 + Math.sin(t * 2.5) * (amp * 0.15);
+        if (x === 0) oscCtx.moveTo(x, y);
+        else oscCtx.lineTo(x, y);
+      }
+      oscCtx.stroke();
+
+      // 2. Draw ZeroDrift Replay Wave (Cyan)
+      oscCtx.strokeStyle = '#00f2fe';
+      oscCtx.lineWidth = 2 * window.devicePixelRatio;
+      oscCtx.shadowColor = '#00f2fe';
+      oscCtx.shadowBlur = 12 * window.devicePixelRatio;
+      oscCtx.beginPath();
+      for (let x = 0; x < w; x += 3) {
+        const t = (x / w) * Math.PI * 4 + oscPhase;
+        const drift = oscLocked ? 0 : Math.sin(t * 5 + oscWiggle) * (amp * 0.2);
+        const y = centerY + Math.sin(t) * amp * 0.85 + Math.sin(t * 2.5) * (amp * 0.15) + drift;
+        if (x === 0) oscCtx.moveTo(x, y);
+        else oscCtx.lineTo(x, y);
+      }
+      oscCtx.stroke();
+      oscCtx.shadowBlur = 0;
+
+      oscPhase += 0.045;
+      oscWiggle += 0.08;
+      requestAnimationFrame(drawOscilloscope);
+    }
+    requestAnimationFrame(drawOscilloscope);
+
+    /* ==========================================================================
+       3. AMBIENT BACKGROUND PARTICLES (Canvas Visual Effect)
+       ========================================================================== */
+    const bgCanvas = document.getElementById('ambientBgCanvas');
+    const bgCtx = bgCanvas.getContext('2d');
+    let particles = [];
+
+    function resizeBgCanvas() {
+      bgCanvas.width = window.innerWidth;
+      bgCanvas.height = window.innerHeight;
+      particles = [];
+      const count = Math.floor(window.innerWidth / 35);
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * bgCanvas.width,
+          y: Math.random() * bgCanvas.height,
+          radius: Math.random() * 1.8 + 0.6,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: (Math.random() - 0.5) * 0.35,
+          color: Math.random() > 0.5 ? 'rgba(56, 189, 248, 0.4)' : 'rgba(99, 102, 241, 0.4)'
+        });
+      }
+    }
+    window.addEventListener('resize', resizeBgCanvas);
+    resizeBgCanvas();
+
+    function renderBgParticles() {
+      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0) p.x = bgCanvas.width;
+        if (p.x > bgCanvas.width) p.x = 0;
+        if (p.y < 0) p.y = bgCanvas.height;
+        if (p.y > bgCanvas.height) p.y = 0;
+
+        bgCtx.fillStyle = p.color;
+        bgCtx.beginPath();
+        bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        bgCtx.fill();
+      });
+      requestAnimationFrame(renderBgParticles);
+    }
+    requestAnimationFrame(renderBgParticles);
+
+    /* ==========================================================================
+       4. INTERACTIVE INFOGRAPHIC INSPECTOR LOGIC
+       ========================================================================== */
+    const pipelineData = [
+      {
+        title: "Stage 01: Context Pruning & Boundary Gate",
+        desc: "Intercepts incoming prompts and agent tool results. Drops unreferenced ephemeral tokens, prunes redundant stack traces, and enforces PII redaction before context touches inference.",
+        stat1: "Latency: 1.8ms",
+        stat2: "Token Reduction: 74.2%",
+        stat3: "Subsystem: zd_prune_v2",
+        code: `// ZeroDrift Kernel Hook: Stage 01
+pub fn enforce_context_boundary(ctx: &mut WorkingMemory) -> KernelResult<()> {
+    ctx.strip_unbounded_payloads(MAX_FRAME_SIZE)?;
+    ctx.redact_sensitive_tokens(&[Pattern::BearerToken, Pattern::SSN])?;
+    ctx.compact_lru_history(4096)
+}`
+      },
+      {
+        title: "Stage 02: Model Ladder Dispatcher",
+        desc: "Routes task complexity. Routine extraction and classification route directly to fast sub-40ms 8B local engines, while complex AST migration reaches frontier reasoning models.",
+        stat1: "Latency: 7.4ms",
+        stat2: "FinOps Cost: 30x Lower",
+        stat3: "Subsystem: zd_router_ast",
+        code: `// ZeroDrift Kernel Hook: Stage 02
+pub fn route_model_ladder(task: &ASTTask) -> EngineTier {
+    match task.complexity_score() {
+        0..=3 => EngineTier::Edge8bQuantized,
+        4..=7 => EngineTier::MidFastCodegen,
+        _     => EngineTier::HeavyFrontierReasoning,
+    }
+}`
+      },
+      {
+        title: "Stage 03: eBPF Syscall & Blast-Radius Guard",
+        desc: "Sandboxes agent tools via Linux eBPF probes. Restricts outbound TCP egress, blocks arbitrary shell escapes, and prevents cascading write operations on disk.",
+        stat1: "Latency: 3.2ms",
+        stat2: "Egress Leaks: 0",
+        stat3: "Subsystem: ebpf_kprobe_sec",
+        code: `// ZeroDrift eBPF Syscall Filter
+SEC("kprobe/sys_connect")
+int BPF_KPROBE(trace_connect, struct sockaddr_in *addr) {
+    if (!is_approved_egress(addr->sin_addr.s_addr)) {
+        bpf_send_signal(SIGKILL); // Terminate offending process
+        return -EPERM;
+    }
+    return 0;
+}`
+      },
+      {
+        title: "Stage 04: ShadowReplay Parity Verifier",
+        desc: "Executes parallel replay passes against captured legacy baseline inputs. Compares JSON/binary output schemas down to the bitwise byte level with zero semantic drift.",
+        stat1: "Latency: 13.8ms",
+        stat2: "Parity Rate: 99.94%",
+        stat3: "Subsystem: replay_diff_engine",
+        code: `// ZeroDrift Differential Parity Diff
+pub fn verify_replay_stream(legacy: &OutputPayload, modern: &OutputPayload) -> ParityCertificate {
+    let diff = ast_diff_engine::compare(legacy, modern);
+    assert_eq!(diff.structural_divergences, 0);
+    ParityCertificate::sign(diff.canonical_hash())
+}`
+      },
+      {
+        title: "Stage 05: Cryptographic Receipt Vault",
+        desc: "Records an immutable SHA-256 execution receipt with timestamps, latency metrics, and verification hashes into an append-only distributed ledger for enterprise compliance.",
+        stat1: "Latency: 0.9ms",
+        stat2: "Compliance: SOC2 Type II",
+        stat3: "Subsystem: zd_audit_vault",
+        code: `// ZeroDrift Cryptographic Receipt
+pub fn commit_audit_receipt(run: &VerifiedExecution) -> ReceiptHash {
+    let raw = serde_json::to_vec(&run).expect("Valid execution frame");
+    let hash = sha256::digest(&raw);
+    AuditVault::append(hash, run.timestamp)
+}`
+      }
+    ];
+
+    function selectPipelineNode(index) {
+      sound.click();
+      document.querySelectorAll('.pipeline-node').forEach((node, idx) => {
+        if (idx === index) node.classList.add('node-active');
+        else node.classList.remove('node-active');
+      });
+
+      const d = pipelineData[index];
+      document.getElementById('inspectTitle').textContent = d.title;
+      document.getElementById('inspectDesc').textContent = d.desc;
+      document.getElementById('inspectStat1').textContent = d.stat1;
+      document.getElementById('inspectStat2').textContent = d.stat2;
+      document.getElementById('inspectStat3').textContent = d.stat3;
+      document.getElementById('inspectCode').textContent = d.code;
+    }
+
+    /* ==========================================================================
+       5. INTERACTIVE WORKBENCH LOGIC
+       ========================================================================== */
     function switchTab(tabId) {
+      sound.click();
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
       
@@ -1297,7 +2302,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       if (targetContent) targetContent.classList.add('active');
     }
 
-    // Scenarios for Replay
     const scenarios = {
       financial: {
         legacy: `// COBOL / Fixed-Income Amortization Engine
@@ -1356,6 +2360,7 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
     };
 
     function updateReplayScenario() {
+      sound.click();
       const sc = document.getElementById('replayScenario').value;
       const data = scenarios[sc];
       document.getElementById('legacyCodeView').textContent = data.legacy;
@@ -1365,27 +2370,44 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
     }
 
     function executeReplaySim() {
+      sound.sweep();
       const btn = document.getElementById('btnRunReplay');
       const origText = btn.innerHTML;
       btn.innerHTML = `<span class="pill-dot"></span> Replaying 500 traces...`;
       btn.style.opacity = '0.7';
+
+      // Temporarily wiggle oscilloscope then snap to locked
+      oscLocked = false;
+      document.getElementById('telemetryLockState').textContent = 'VERIFYING DIFF';
+      document.getElementById('telemetryLockState').style.color = 'var(--amber)';
+      document.getElementById('oscilloscopeVarianceReadout').textContent = 'VARIANCE DELTA: ANALYZING 500 SAMPLES...';
       
       setTimeout(() => {
+        sound.success();
+        oscLocked = true;
+        document.getElementById('telemetryLockState').textContent = 'PARITY LOCKED';
+        document.getElementById('telemetryLockState').style.color = 'var(--emerald-glow)';
+        document.getElementById('oscilloscopeVarianceReadout').textContent = 'VARIANCE DELTA: 0.000% (ZERO DRIFT)';
+
         btn.innerHTML = `✓ 500/500 Verified (100% Parity)`;
         btn.style.background = 'linear-gradient(135deg, #059669, #047857)';
         btn.style.opacity = '1';
         setTimeout(() => {
           btn.innerHTML = origText;
           btn.style.background = 'linear-gradient(135deg, var(--emerald), #059669)';
-        }, 3000);
-      }, 750);
+        }, 3200);
+      }, 950);
     }
 
-    // Scrubber for FlightRecorder
     function updateScrubber(val) {
+      sound.tick();
       const times = ["T+00.00s", "T+01.40s", "T+03.20s", "T+04.80s"];
       document.getElementById('scrubberTimeBadge').textContent = times[val];
       
+      if (val == 2) {
+        sound.alert(); // Violation step sound
+      }
+
       for (let i = 0; i <= 3; i++) {
         const el = document.getElementById('step' + i);
         if (i == val) {
@@ -1396,22 +2418,27 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       }
     }
 
-    // AutoSandbox Terminal Simulation
     function triggerAutoSandboxRun() {
+      sound.click();
       const term = document.getElementById('termOutput');
       term.innerHTML = `<span class="term-line-cyan">[*] Ingested Alert:</span> P1 [CRITICAL] Memory Leak in OrderSettlementWorker\n<span class="term-line-amber">[*] Provisioning Ephemeral WebAssembly Sandbox...</span>`;
       
       setTimeout(() => {
+        sound.alert();
         term.innerHTML += `\n<span class="term-line-cyan">[*] Synthesizing Regression Spec: tests/repro_test.go</span>\n<span class="term-line-red">[-] RUN test_order_concurrency ... FAIL (Exit 1 - Mutex Deadlock)</span>`;
-      }, 500);
+      }, 550);
 
       setTimeout(() => {
+        sound.success();
         term.innerHTML += `\n<span class="term-line-cyan">[*] ZeroDrift Applying AST Lock Ordering Fix...</span>\n<span class="term-line-green">[+] RUN test_order_concurrency ... PASS (Exit 0 - 12ms)</span>\n<span class="term-line-green">[+] Zero-Regression Certified. Ready-to-merge PR #142 drafted.</span>`;
-      }, 1200);
+      }, 1300);
     }
 
-    // Modal handlers
+    /* ==========================================================================
+       6. MODAL HANDLERS
+       ========================================================================== */
     function openModal(id) {
+      sound.click();
       document.getElementById('ed1-modal').style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
@@ -1420,11 +2447,13 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       document.body.style.overflow = 'auto';
     }
     function closeModalDirect() {
+      sound.click();
       document.getElementById('ed1-modal').style.display = 'none';
       document.body.style.overflow = 'auto';
     }
 
     function openAssessmentModal(title) {
+      sound.click();
       document.getElementById('modalSelectedOffer').textContent = title;
       document.getElementById('assessment-modal').style.display = 'flex';
       document.body.style.overflow = 'hidden';
@@ -1434,6 +2463,7 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       document.body.style.overflow = 'auto';
     }
     function closeAssessmentModalDirect() {
+      sound.click();
       document.getElementById('assessment-modal').style.display = 'none';
       document.body.style.overflow = 'auto';
     }
