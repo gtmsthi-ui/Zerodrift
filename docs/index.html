@@ -33,32 +33,95 @@
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    /* THEME 1: Cyber Obsidian (Default) */
+    /* WCAG: Accessibility Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -120px;
+      left: 1.5rem;
+      background: var(--cyan-bright);
+      color: #05070d;
+      padding: 0.75rem 1.4rem;
+      font-weight: 800;
+      font-size: 0.9rem;
+      border-radius: 8px;
+      z-index: 10000;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(0, 242, 254, 0.6);
+      transition: top 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .skip-link:focus {
+      top: 1.25rem;
+      outline: 3px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    /* WCAG: High-Visibility Accessible Focus Ring */
+    *:focus-visible {
+      outline: 2px solid var(--cyan-bright) !important;
+      outline-offset: 3px !important;
+      box-shadow: 0 0 12px rgba(0, 242, 254, 0.5) !important;
+    }
+    body.theme-cleanroom *:focus-visible {
+      outline-color: #2563eb !important;
+      box-shadow: 0 0 12px rgba(37, 99, 235, 0.45) !important;
+    }
+
+    /* WCAG: Respect User Reduced Motion Preferences */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+      }
+      .marquee-track { animation: none !important; }
+      .border-beam-box::before { animation: none !important; }
+      #ambientBgCanvas { opacity: 0.1 !important; }
+    }
+
+    /* ==========================================================================
+       THEME 1: Cyber Obsidian (Neo-Glassmorphic Cybernetic Void)
+       ========================================================================== */
     body.theme-cyber {
       --bg-dark: #05070d;
       --bg-surface: #0a0e1a;
-      --bg-panel: rgba(13, 19, 33, 0.82);
-      --bg-card: rgba(16, 24, 44, 0.78);
-      --bg-card-hover: rgba(24, 36, 64, 0.92);
-      --border-subtle: rgba(56, 189, 248, 0.14);
-      --border-glow: rgba(56, 189, 248, 0.42);
-      --border-beam: rgba(0, 242, 254, 0.65);
+      --bg-panel: rgba(13, 19, 33, 0.75);
+      --bg-card: rgba(16, 24, 44, 0.72);
+      --bg-card-hover: rgba(24, 36, 64, 0.88);
+      --border-subtle: rgba(56, 189, 248, 0.16);
+      --border-glow: rgba(56, 189, 248, 0.45);
+      --border-beam: rgba(0, 242, 254, 0.7);
       --cyan: #38bdf8;
       --cyan-bright: #00f2fe;
       --emerald: #10b981;
       --emerald-glow: #34d399;
+      --card-blur: 24px;
+    }
+    body.theme-cyber .bento-card-large,
+    body.theme-cyber .bento-card-side,
+    body.theme-cyber .telemetry-rack,
+    body.theme-cyber .infographic-wrapper,
+    body.theme-cyber .workbench,
+    body.theme-cyber .card,
+    body.theme-cyber .sol-card {
+      backdrop-filter: blur(var(--card-blur)) saturate(190%);
+      -webkit-backdrop-filter: blur(var(--card-blur)) saturate(190%);
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
-    /* THEME 2: Matrix Terminal (Phosphor Hacker Green) */
+    /* ==========================================================================
+       THEME 2: Matrix Terminal (Retro Hacker Phosphor Holodeck)
+       ========================================================================== */
     body.theme-matrix {
       --bg-dark: #020904;
       --bg-surface: #051408;
-      --bg-panel: rgba(6, 26, 11, 0.85);
-      --bg-card: rgba(8, 32, 14, 0.82);
-      --bg-card-hover: rgba(12, 46, 20, 0.95);
-      --border-subtle: rgba(34, 197, 94, 0.2);
-      --border-glow: rgba(34, 197, 94, 0.48);
-      --border-beam: rgba(74, 222, 128, 0.75);
+      --bg-panel: rgba(6, 26, 11, 0.88);
+      --bg-card: rgba(8, 32, 14, 0.85);
+      --bg-card-hover: rgba(12, 46, 20, 0.96);
+      --border-subtle: rgba(34, 197, 94, 0.28);
+      --border-glow: rgba(34, 197, 94, 0.55);
+      --border-beam: rgba(74, 222, 128, 0.85);
       --cyan: #4ade80;
       --cyan-bright: #22c55e;
       --emerald: #16a34a;
@@ -66,87 +129,150 @@
       --amber: #eab308;
       --indigo: #15803d;
       --text-main: #f0fdf4;
-      --text-muted: #86efac;
+      --text-muted: #bbf7d0;
       --text-dim: #4ade80;
+    }
+    /* CRT Scanlines Overlay */
+    body.theme-matrix::after {
+      content: " ";
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none;
+      z-index: 999;
+      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.35) 0px, rgba(0,0,0,0.35) 1px, transparent 2px, transparent 4px);
+      opacity: 0.65;
+    }
+    body.theme-matrix h1, body.theme-matrix h2, body.theme-matrix h3, body.theme-matrix .metric-val {
+      text-shadow: 0 0 12px rgba(34, 197, 94, 0.65);
     }
     body.theme-matrix .brand-icon {
       background: linear-gradient(135deg, #22c55e, #15803d) !important;
-      box-shadow: 0 0 25px rgba(34, 197, 94, 0.5) !important;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.6) !important;
+      font-family: var(--font-mono);
     }
     body.theme-matrix .btn-primary {
       background: linear-gradient(135deg, #22c55e, #16a34a) !important;
       color: #020904 !important;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.35) !important;
+      box-shadow: 0 0 20px rgba(34, 197, 94, 0.45) !important;
+      font-family: var(--font-mono);
+      letter-spacing: 0.04em;
+    }
+    body.theme-matrix .bento-tag::before {
+      content: "[SYS_KERNEL] ";
+      opacity: 0.8;
+    }
+    body.theme-matrix .bento-card-large,
+    body.theme-matrix .bento-card-side,
+    body.theme-matrix .telemetry-rack,
+    body.theme-matrix .infographic-wrapper,
+    body.theme-matrix .workbench,
+    body.theme-matrix .card,
+    body.theme-matrix .sol-card {
+      border: 1px solid rgba(34, 197, 94, 0.35) !important;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.12), inset 0 0 15px rgba(34, 197, 94, 0.04) !important;
     }
 
-    /* THEME 3: Amber Flare (Linear / Solar Monolith) */
+    /* ==========================================================================
+       THEME 3: Amber Flare (Industrial Aerospace & Solar Monolith)
+       ========================================================================== */
     body.theme-amber {
-      --bg-dark: #0a0805;
-      --bg-surface: #140e08;
-      --bg-panel: rgba(28, 18, 10, 0.85);
-      --bg-card: rgba(36, 22, 11, 0.82);
-      --bg-card-hover: rgba(48, 30, 14, 0.95);
-      --border-subtle: rgba(245, 158, 11, 0.2);
-      --border-glow: rgba(245, 158, 11, 0.48);
-      --border-beam: rgba(251, 191, 36, 0.75);
+      --bg-dark: #0c0804;
+      --bg-surface: #170e06;
+      --bg-panel: rgba(32, 20, 10, 0.88);
+      --bg-card: rgba(40, 24, 12, 0.85);
+      --bg-card-hover: rgba(54, 32, 16, 0.96);
+      --border-subtle: rgba(245, 158, 11, 0.25);
+      --border-glow: rgba(245, 158, 11, 0.55);
+      --border-beam: rgba(251, 191, 36, 0.85);
       --cyan: #fbbf24;
       --cyan-bright: #f59e0b;
       --emerald: #10b981;
       --emerald-glow: #34d399;
       --indigo: #d97706;
       --text-main: #fffbeb;
-      --text-muted: #fde68a;
-      --text-dim: #b45309;
+      --text-muted: #fef3c7;
+      --text-dim: #d97706;
     }
     body.theme-amber .brand-icon {
       background: linear-gradient(135deg, #f59e0b, #d97706) !important;
-      box-shadow: 0 0 25px rgba(245, 158, 11, 0.5) !important;
+      box-shadow: 0 0 25px rgba(245, 158, 11, 0.55) !important;
     }
     body.theme-amber .btn-primary {
       background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
-      color: #0a0805 !important;
-      box-shadow: 0 0 20px rgba(245, 158, 11, 0.35) !important;
+      color: #0c0804 !important;
+      box-shadow: 0 0 22px rgba(245, 158, 11, 0.4) !important;
+    }
+    body.theme-amber .telemetry-rack,
+    body.theme-amber .infographic-header {
+      background-image: repeating-linear-gradient(45deg, rgba(245, 158, 11, 0.04), rgba(245, 158, 11, 0.04) 10px, transparent 10px, transparent 20px);
+    }
+    body.theme-amber .bento-card-large,
+    body.theme-amber .bento-card-side,
+    body.theme-amber .telemetry-rack,
+    body.theme-amber .infographic-wrapper,
+    body.theme-amber .workbench,
+    body.theme-amber .card,
+    body.theme-amber .sol-card {
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(245, 158, 11, 0.3) !important;
+      box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(251, 191, 36, 0.15) !important;
     }
 
-    /* THEME 4: Deep Nebula (Quantum Violet & AI Frontier) */
+    /* ==========================================================================
+       THEME 4: Deep Nebula (Quantum Violet & Chromatic Deep Space)
+       ========================================================================== */
     body.theme-nebula {
       --bg-dark: #070312;
-      --bg-surface: #100726;
-      --bg-panel: rgba(25, 11, 52, 0.85);
-      --bg-card: rgba(32, 14, 66, 0.82);
-      --bg-card-hover: rgba(45, 18, 92, 0.95);
-      --border-subtle: rgba(168, 85, 247, 0.2);
-      --border-glow: rgba(168, 85, 247, 0.48);
-      --border-beam: rgba(236, 72, 153, 0.75);
+      --bg-surface: #110728;
+      --bg-panel: rgba(28, 12, 58, 0.85);
+      --bg-card: rgba(36, 15, 74, 0.82);
+      --bg-card-hover: rgba(50, 20, 102, 0.95);
+      --border-subtle: rgba(168, 85, 247, 0.25);
+      --border-glow: rgba(168, 85, 247, 0.55);
+      --border-beam: rgba(236, 72, 153, 0.85);
       --cyan: #c084fc;
       --cyan-bright: #a855f7;
       --emerald: #06b6d4;
       --emerald-glow: #22d3ee;
       --indigo: #7c3aed;
       --text-main: #faf5ff;
-      --text-muted: #d8b4fe;
-      --text-dim: #9333ea;
+      --text-muted: #f3e8ff;
+      --text-dim: #c084fc;
     }
     body.theme-nebula .brand-icon {
       background: linear-gradient(135deg, #a855f7, #ec4899) !important;
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.5) !important;
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.55) !important;
     }
     body.theme-nebula .btn-primary {
       background: linear-gradient(135deg, #c084fc, #a855f7) !important;
       color: #070312 !important;
-      box-shadow: 0 0 20px rgba(168, 85, 247, 0.35) !important;
+      box-shadow: 0 0 20px rgba(168, 85, 247, 0.45) !important;
+    }
+    body.theme-nebula .bento-card-large,
+    body.theme-nebula .bento-card-side,
+    body.theme-nebula .telemetry-rack,
+    body.theme-nebula .infographic-wrapper,
+    body.theme-nebula .workbench,
+    body.theme-nebula .card,
+    body.theme-nebula .sol-card {
+      backdrop-filter: blur(28px) saturate(200%);
+      -webkit-backdrop-filter: blur(28px) saturate(200%);
+      border: 1px solid rgba(168, 85, 247, 0.3) !important;
+      box-shadow: 0 20px 50px -15px rgba(124, 58, 237, 0.25), inset 0 1px 0 rgba(236, 72, 153, 0.2) !important;
     }
 
-    /* THEME 5: Cleanroom Light (Titanium Laboratory Light Mode) */
+    /* ==========================================================================
+       THEME 5: Cleanroom Light (Swiss Titanium Laboratory Light Mode - WCAG AAA)
+       ========================================================================== */
     body.theme-cleanroom {
-      --bg-dark: #f6f8fc;
+      --bg-dark: #f8fafc;
       --bg-surface: #ffffff;
-      --bg-panel: rgba(255, 255, 255, 0.94);
-      --bg-card: rgba(255, 255, 255, 0.94);
+      --bg-panel: rgba(255, 255, 255, 0.92);
+      --bg-card: rgba(255, 255, 255, 0.92);
       --bg-card-hover: #ffffff;
-      --border-subtle: rgba(15, 23, 42, 0.12);
-      --border-glow: rgba(37, 99, 235, 0.35);
-      --border-beam: rgba(37, 99, 235, 0.65);
+      --border-subtle: rgba(15, 23, 42, 0.14);
+      --border-glow: rgba(37, 99, 235, 0.4);
+      --border-beam: rgba(37, 99, 235, 0.7);
       --cyan: #0284c7;
       --cyan-bright: #2563eb;
       --emerald: #059669;
@@ -155,18 +281,19 @@
       --rose: #e11d48;
       --indigo: #4f46e5;
       --text-main: #0f172a;
-      --text-muted: #334155;
-      --text-dim: #64748b;
+      --text-muted: #1e293b;
+      --text-dim: #475569;
     }
     body.theme-cleanroom {
       background-image: 
-        radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.06) 0%, transparent 45%),
-        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.05) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.04) 0%, transparent 45%),
         radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 60%);
     }
     body.theme-cleanroom header {
-      background: rgba(255, 255, 255, 0.94) !important;
-      border-bottom-color: rgba(15, 23, 42, 0.1) !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      border-bottom-color: rgba(15, 23, 42, 0.12) !important;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
     }
     body.theme-cleanroom .hero h2 {
       background: linear-gradient(180deg, #0f172a 0%, #334155 100%) !important;
@@ -181,11 +308,11 @@
     body.theme-cleanroom .btn-primary {
       background: linear-gradient(135deg, #2563eb, #1d4ed8) !important;
       color: #ffffff !important;
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.25) !important;
+      box-shadow: 0 0 20px rgba(37, 99, 235, 0.28) !important;
     }
     body.theme-cleanroom .btn-outline {
       background: #ffffff !important;
-      border-color: rgba(15, 23, 42, 0.18) !important;
+      border-color: rgba(15, 23, 42, 0.22) !important;
       color: #0f172a !important;
     }
     body.theme-cleanroom .bento-card-large,
@@ -196,12 +323,34 @@
     body.theme-cleanroom .workbench,
     body.theme-cleanroom .card,
     body.theme-cleanroom .sol-card {
-      box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.08) !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      border: 1px solid rgba(15, 23, 42, 0.12) !important;
+      box-shadow: 0 12px 35px -8px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
+    }
+    body.theme-cleanroom .bento-title,
+    body.theme-cleanroom .infographic-header h4,
+    body.theme-cleanroom .terminal-header,
+    body.theme-cleanroom .tool-desc h4,
+    body.theme-cleanroom .cert-text h5,
+    body.theme-cleanroom .step-title,
+    body.theme-cleanroom .sol-title,
+    body.theme-cleanroom .card-num,
+    body.theme-cleanroom .cmd-item,
+    body.theme-cleanroom .cmd-input,
+    body.theme-cleanroom .section-title h3,
+    body.theme-cleanroom .footer-inner strong {
+      color: #0f172a !important;
+    }
+    body.theme-cleanroom .cmd-box,
+    body.theme-cleanroom .modal-content {
+      background: #ffffff !important;
+      border-color: rgba(15, 23, 42, 0.15) !important;
+      box-shadow: 0 30px 80px -20px rgba(15, 23, 42, 0.15) !important;
     }
     body.theme-cleanroom footer {
-      background: #eef2f6 !important;
-      color: #475569 !important;
-      border-top-color: rgba(15, 23, 42, 0.1) !important;
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border-top-color: rgba(15, 23, 42, 0.12) !important;
     }
 
     /* Global Smooth Theme Transition */
@@ -289,6 +438,209 @@
     }
     @keyframes rotateBeam {
       100% { transform: rotate(360deg); }
+    }
+
+    /* Scroll Progress Indicator Bar */
+    .scroll-progress-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 2.5px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan-bright), var(--emerald-glow), var(--indigo));
+      z-index: 105;
+      box-shadow: 0 0 10px var(--cyan-bright);
+      transition: width 0.06s linear;
+    }
+
+    /* Theme Persona HUD Badge */
+    .theme-persona-badge {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid var(--border-subtle);
+      color: var(--cyan-bright);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: all 0.25s ease;
+    }
+
+    /* Active Nav Link (ScrollSpy) */
+    .nav-link.nav-link-active {
+      color: var(--cyan-bright) !important;
+      position: relative;
+    }
+    .nav-link.nav-link-active::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--cyan-bright);
+      border-radius: 2px;
+      box-shadow: 0 0 8px var(--cyan-bright);
+    }
+
+    /* Hamburger Button (Mobile / Tablet) */
+    .btn-hamburger {
+      display: none;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      padding: 0;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+      z-index: 110;
+    }
+    .btn-hamburger:hover {
+      background: rgba(56, 189, 248, 0.14);
+      border-color: var(--cyan);
+    }
+    .hamburger-bar {
+      width: 20px;
+      height: 2px;
+      background-color: currentColor;
+      border-radius: 2px;
+      transition: all 0.25s ease;
+    }
+    .btn-hamburger.active .hamburger-bar:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .btn-hamburger.active .hamburger-bar:nth-child(2) {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    .btn-hamburger.active .hamburger-bar:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Mobile Navigation Drawer & Backdrop */
+    .mobile-drawer-backdrop {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 240;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .mobile-drawer-backdrop.show {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-nav-drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 320px;
+      max-width: 86vw;
+      background: var(--bg-surface);
+      border-left: 1px solid var(--border-glow);
+      backdrop-filter: blur(28px) saturate(180%);
+      z-index: 250;
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -15px 0 50px rgba(0, 0, 0, 0.85);
+      overflow-y: auto;
+    }
+    .mobile-nav-drawer.open {
+      transform: translateX(0);
+    }
+
+    .mobile-drawer-header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-drawer-close {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: background 0.15s ease;
+    }
+    .btn-drawer-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .mobile-drawer-links {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+    .mobile-nav-link {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .mobile-nav-link:hover, .mobile-nav-link.nav-link-active {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--cyan-bright);
+      transform: translateX(4px);
+    }
+
+    .mobile-drawer-footer {
+      margin-top: auto;
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+    .mobile-theme-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    .mobile-theme-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.55rem 0.65rem;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      transition: all 0.15s ease;
+    }
+    .mobile-theme-btn:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
     }
 
     /* Navigation */
@@ -1896,32 +2248,60 @@
     }
 
     @media (max-width: 990px) {
-      .hero h2 { font-size: 2.6rem; }
-      .research-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .hero { margin: 2.5rem auto 1.5rem; padding: 0 1.25rem; }
+      .hero h2 { font-size: 2.35rem; }
+      .research-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; padding: 1.25rem; }
       .metric-card { border-right: none; }
       .bento-card-large, .bento-card-side { grid-column: span 12; }
       .diff-grid, .solutions-grid, .comparison-grid, .pipeline-grid, .infographic-inspector { grid-template-columns: 1fr; }
       .timeline-stream { grid-template-columns: 1fr 1fr; }
-      .nav-links { display: none; }
+      .nav-links { display: none !important; }
+      .btn-hamburger { display: flex !important; }
+      .nav-actions .btn-outline, .nav-actions .btn-primary { display: none !important; }
+      .nav-container { padding: 0.75rem 1.25rem; }
+      .container { padding: 0 1.25rem 3.5rem; }
+      .section-title { margin: 3.5rem 0 2rem; }
+      .section-title h3 { font-size: 1.85rem; }
+      .rack-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+      .rack-status-grid { flex-wrap: wrap; gap: 1rem; }
+      .infographic-wrapper { padding: 1.5rem; }
+    }
+
+    @media (max-width: 580px) {
+      .hero h2 { font-size: 1.95rem; }
+      .research-metrics { grid-template-columns: 1fr; }
+      .timeline-stream { grid-template-columns: 1fr; }
+      .btn-cmd-k { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- WCAG: Accessible Skip to Content Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
   <!-- Ambient Particle Mesh Canvas -->
   <canvas id="ambientBgCanvas"></canvas>
 
   <!-- Navigation -->
-  <header>
+  <header role="banner">
+    <!-- Scroll Progress Indicator Bar -->
+    <div id="scrollProgressBar" class="scroll-progress-bar" aria-hidden="true"></div>
+
     <div class="nav-container">
-      <a href="#" class="brand">
+      <a href="#" class="brand" aria-label="ZeroDrift Home">
         <div class="brand-icon">ZD</div>
         <div class="brand-text">
           <h1>ZeroDrift <span class="tag-ver">v0.9.4</span></h1>
-          <span class="subline">Deterministic Systems & Forensics Suite</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 2px;">
+            <span class="subline">Deterministic Reliability</span>
+            <span id="headerPersonaBadge" class="theme-persona-badge">NEO-GLASS // CYBER</span>
+          </div>
         </div>
       </a>
-      <div class="nav-links">
+
+      <!-- Primary Desktop Navigation -->
+      <nav aria-label="Primary Navigation" class="nav-links">
         <a href="#bento" class="nav-link">Architecture Lab</a>
         <a href="#telemetry" class="nav-link">Oscilloscope Radar</a>
         <a href="#pipeline" class="nav-link">Kernel Flow</a>
@@ -1929,37 +2309,38 @@
         <a href="#compare" class="nav-link">Matrix</a>
         <a href="#whitepapers" class="nav-link">Whitepapers</a>
         <a href="#advisory" class="nav-link">Advisory</a>
-      </div>
+      </nav>
+
       <div class="nav-actions">
         <!-- Multi-Theme Dropdown Selector -->
         <div class="theme-picker-wrap">
-          <button class="btn-theme-toggle" id="themePickerBtn" onclick="toggleThemeDropdown()" title="Switch Visual Theme">
+          <button class="btn-theme-toggle" id="themePickerBtn" onclick="toggleThemeDropdown()" aria-label="Select Visual Theme" aria-haspopup="true" aria-expanded="false" title="Switch Visual Theme">
             <span id="themePickerIcon">🌌</span>
             <span id="themePickerLabel">Cyber</span>
             <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
           </button>
-          <div class="theme-dropdown-menu" id="themeDropdownMenu">
-            <div class="theme-opt active" onclick="setTheme('cyber')">
+          <div class="theme-dropdown-menu" id="themeDropdownMenu" role="menu">
+            <div class="theme-opt active" onclick="setTheme('cyber')" role="menuitem">
               <span class="theme-dot" style="background: #00f2fe; color: #00f2fe;"></span>
               <span>Cyber Obsidian</span>
               <span class="theme-tag">Default</span>
             </div>
-            <div class="theme-opt" onclick="setTheme('matrix')">
+            <div class="theme-opt" onclick="setTheme('matrix')" role="menuitem">
               <span class="theme-dot" style="background: #22c55e; color: #22c55e;"></span>
               <span>Matrix Terminal</span>
               <span class="theme-tag">Hacker</span>
             </div>
-            <div class="theme-opt" onclick="setTheme('amber')">
+            <div class="theme-opt" onclick="setTheme('amber')" role="menuitem">
               <span class="theme-dot" style="background: #f59e0b; color: #f59e0b;"></span>
               <span>Amber Flare</span>
               <span class="theme-tag">Solar</span>
             </div>
-            <div class="theme-opt" onclick="setTheme('nebula')">
+            <div class="theme-opt" onclick="setTheme('nebula')" role="menuitem">
               <span class="theme-dot" style="background: #a855f7; color: #a855f7;"></span>
               <span>Deep Nebula</span>
               <span class="theme-tag">Cosmic</span>
             </div>
-            <div class="theme-opt" onclick="setTheme('cleanroom')">
+            <div class="theme-opt" onclick="setTheme('cleanroom')" role="menuitem">
               <span class="theme-dot" style="background: #2563eb; color: #2563eb;"></span>
               <span>Cleanroom Light</span>
               <span class="theme-tag">Day Mode</span>
@@ -1968,13 +2349,13 @@
         </div>
 
         <!-- Command Palette Trigger (⌘K) -->
-        <button class="btn-cmd-k" onclick="openCmdPalette()" title="Press ⌘K or Ctrl+K">
+        <button class="btn-cmd-k" onclick="openCmdPalette()" title="Press ⌘K or Ctrl+K" aria-label="Open Command Palette">
           <span>Search Systems...</span>
           <span class="kbd-shortcut">⌘K</span>
         </button>
 
         <!-- Audio HUD Synthesizer Toggle -->
-        <button class="btn-audio-toggle" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD Sound Effects">
+        <button class="btn-audio-toggle" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD Sound Effects" aria-label="Toggle Audio HUD Sound Effects">
           <span class="audio-waves" id="audioWaveVisualizer">
             <span class="audio-bar"></span>
             <span class="audio-bar"></span>
@@ -1990,11 +2371,81 @@
         <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary">
           Connect with Gautam
         </a>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="btn-hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+          <span class="hamburger-bar"></span>
+        </button>
       </div>
     </div>
   </header>
 
-  <main>
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" onclick="closeMobileMenu()" aria-hidden="true"></div>
+  <nav class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation" aria-hidden="true">
+    <div class="mobile-drawer-header">
+      <div class="brand">
+        <div class="brand-icon">ZD</div>
+        <div class="brand-text">
+          <div style="font-weight: 800; font-size: 1.1rem; color: var(--text-main);">ZeroDrift</div>
+          <span class="subline" id="mobileThemeBadge">NEO-GLASS // CYBER</span>
+        </div>
+      </div>
+      <button class="btn-drawer-close" onclick="closeMobileMenu()" aria-label="Close navigation menu">&times;</button>
+    </div>
+    <div class="mobile-drawer-links">
+      <a href="#bento" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Architecture Lab</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#telemetry" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Oscilloscope Radar</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#pipeline" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Kernel Flow</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#workbench" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Interactive Workbench</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#compare" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Differential Matrix</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#whitepapers" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Research Whitepapers</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#advisory" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Enterprise Advisory</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+    </div>
+    <div class="mobile-drawer-footer">
+      <div style="font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 0.05em;">Visual Theme Experience</div>
+      <div class="mobile-theme-grid">
+        <button class="mobile-theme-btn" onclick="setTheme('cyber'); closeMobileMenu();">🌌 Cyber</button>
+        <button class="mobile-theme-btn" onclick="setTheme('matrix'); closeMobileMenu();">⚡ Matrix</button>
+        <button class="mobile-theme-btn" onclick="setTheme('amber'); closeMobileMenu();">🌅 Amber</button>
+        <button class="mobile-theme-btn" onclick="setTheme('nebula'); closeMobileMenu();">🔮 Nebula</button>
+        <button class="mobile-theme-btn" onclick="setTheme('cleanroom'); closeMobileMenu();" style="grid-column: span 2;">☀️ Cleanroom (Light)</button>
+      </div>
+      <div style="display: flex; gap: 0.6rem; margin-top: 1rem;">
+        <button class="btn-cmd-k" onclick="closeMobileMenu(); openCmdPalette();" style="flex: 1; justify-content: center;">Search ⌘K</button>
+        <button class="btn-audio-toggle" onclick="toggleAudio();" style="flex: 1; justify-content: center;">Toggle FX</button>
+      </div>
+      <div style="margin-top: 1rem; display: flex; flex-direction: column; gap: 0.6rem;">
+        <a href="https://github.com/gtmsthi-ui/Zerodrift" target="_blank" class="btn-outline" style="justify-content: center;">GitHub Repository</a>
+        <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="justify-content: center;">Connect with Gautam</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main-content" tabindex="-1">
     <!-- Hero Section -->
     <section class="hero">
       <div class="pill-group">
@@ -2132,14 +2583,14 @@
             </div>
             <div class="finops-calculator">
               <div class="calc-row">
-                <span>Monthly Inbound LLM Calls:</span>
+                <label for="calcSlider" style="cursor: pointer;">Monthly Inbound LLM Calls:</label>
                 <span id="callCountLabel" style="color: var(--cyan-bright); font-weight: 700;">500,000 req/mo</span>
               </div>
-              <input type="range" class="calc-slider" id="calcSlider" min="50000" max="5000000" step="50000" value="500000" oninput="updateFinOpsCalc(this.value)">
+              <input type="range" class="calc-slider" id="calcSlider" min="50000" max="5000000" step="50000" value="500000" oninput="updateFinOpsCalc(this.value)" aria-label="Monthly Inbound LLM Calls Slider" aria-valuemin="50000" aria-valuemax="5000000" aria-valuenow="500000" aria-valuetext="500,000 requests per month">
               <div class="calc-result-box">
                 <div>
                   <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Estimated Monthly Savings</div>
-                  <div class="calc-saved-val" id="savingsValue">$21,400 / mo</div>
+                  <div class="calc-saved-val" id="savingsValue" aria-live="polite">$21,400 / mo</div>
                 </div>
                 <button class="btn-primary" onclick="openAssessmentModal('FinOps Unit Economics Sprint')" style="padding: 0.4rem 0.85rem; font-size: 0.78rem;">Audit My Stack</button>
               </div>
@@ -2174,7 +2625,7 @@
     <!-- ==========================================================================
          LIVE TELEMETRY OSCILLOSCOPE (Visual Effect + Canvas)
          ========================================================================== -->
-    <section class="container" id="telemetry" style="padding-bottom: 2rem;">
+    <section class="container" id="telemetry" role="region" aria-label="Live Telemetry Oscilloscope" style="padding-bottom: 2rem;">
       <div class="telemetry-rack">
         <div class="rack-header">
           <div class="rack-title">
@@ -2188,7 +2639,7 @@
           <div class="rack-status-grid">
             <div class="rack-stat-item"><span>SAMPLING:</span> <span>100 kHz</span></div>
             <div class="rack-stat-item"><span>JITTER:</span> <span>&plusmn;0.018ms</span></div>
-            <div class="rack-stat-item"><span>STATE:</span> <span id="telemetryLockState" style="color: var(--emerald-glow);">PARITY LOCKED</span></div>
+            <div class="rack-stat-item"><span>STATE:</span> <span id="telemetryLockState" aria-live="polite" style="color: var(--emerald-glow);">PARITY LOCKED</span></div>
           </div>
         </div>
 
@@ -2199,7 +2650,7 @@
               <span class="legend-badge"><span class="legend-line-emerald"></span> Legacy Baseline Wave</span>
               <span class="legend-badge"><span class="legend-line-cyan"></span> ZeroDrift Replay Output</span>
             </div>
-            <div id="oscilloscopeVarianceReadout">VARIANCE DELTA: 0.000% (ZERO DRIFT)</div>
+            <div id="oscilloscopeVarianceReadout" aria-live="polite">VARIANCE DELTA: 0.000% (ZERO DRIFT)</div>
           </div>
         </div>
       </div>
@@ -2385,7 +2836,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
           <div class="scrubber-container">
             <div class="slider-row">
               <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">0.00s</span>
-              <input type="range" id="timeSlider" min="0" max="3" value="2" oninput="updateScrubber(this.value)">
+              <input type="range" id="timeSlider" min="0" max="3" value="2" oninput="updateScrubber(this.value)" aria-label="Execution Forensics Time Scrubber" aria-valuemin="0" aria-valuemax="3" aria-valuenow="2" aria-valuetext="T+03.20s - Syscall Intercepted">
               <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">5.40s</span>
             </div>
 
@@ -2425,14 +2876,14 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
               <p>When an on-call alert fires, ZeroDrift spins up an ephemeral container, synthesizes a reproduction test, confirms the failure (Red), applies an atomic patch, and verifies it passes (Green).</p>
             </div>
             <div class="tool-controls">
-              <button class="btn-run" onclick="triggerAutoSandboxRun()">
+              <button class="btn-run" onclick="triggerAutoSandboxRun()" aria-label="Synthesize Ephemeral Sandbox and Run Auto-Heal">
                 <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
                 Synthesize Sandbox & Auto-Heal
               </button>
             </div>
           </div>
 
-          <div class="incident-terminal" id="termOutput">
+          <div class="incident-terminal" id="termOutput" role="region" aria-live="polite" aria-label="Self-Healing Terminal Log">
 <span class="term-line-cyan">[*] Ingested Alert:</span> P1 [CRITICAL] Memory Leak & Concurrency Deadlock in OrderSettlementWorker
 <span class="term-line-cyan">[*] Spawning Ephemeral Sandbox:</span> container://zd-runner-x86-9042 (250ms)
 <span class="term-line-amber">[*] Synthesizing Reproduction Test:</span> tests/repro_incident_4819_test.go
@@ -2630,11 +3081,11 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
   </main>
 
   <!-- Interactive Command Palette Modal (⌘K) -->
-  <div id="cmdPaletteModal" onclick="closeCmdPalette(event)">
+  <div id="cmdPaletteModal" role="dialog" aria-modal="true" aria-label="Command Palette" onclick="closeCmdPalette(event)">
     <div class="cmd-box" onclick="event.stopPropagation()">
       <div class="cmd-input-wrap">
         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-        <input type="text" class="cmd-input" id="cmdInput" placeholder="Type a command or jump to system..." oninput="filterCmds(this.value)">
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Type a command or jump to system..." aria-label="Command Search Input" oninput="filterCmds(this.value)">
         <span class="kbd-shortcut">ESC</span>
       </div>
       <div class="cmd-list" id="cmdList">
@@ -2695,12 +3146,12 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
   </div>
 
   <!-- Modal Reader for Whitepaper 01 -->
-  <div id="ed1-modal" class="modal-overlay" onclick="closeModal(event)">
+  <div id="ed1-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="ed1-heading" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
-      <button class="modal-close" onclick="closeModalDirect()">&times;</button>
+      <button class="modal-close" onclick="closeModalDirect()" aria-label="Close whitepaper dialog">&times;</button>
       <div class="article-body">
         <span class="card-num">WHITEPAPER #01 · PRACTICAL AI & SYSTEMS ARCHITECTURE</span>
-        <h1 style="margin-top: 0.5rem;">The Model Race Is Over. The Enterprise Harness Race Just Began</h1>
+        <h1 id="ed1-heading" style="margin-top: 0.5rem;">The Model Race Is Over. The Enterprise Harness Race Just Began</h1>
         <div class="article-meta">By Gautam Sethi · ZeroDrift Systems Research Group · Published October 2026</div>
 
         <p>There is a flawed way engineering teams evaluate AI progress: they screenshot model benchmark leaderboards, argue about MMLU-Pro margins on Slack, swap out API keys in their <code>.env</code> file, and call that an architectural upgrade.</p>
@@ -2746,9 +3197,9 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
   </div>
 
   <!-- Assessment Inquiry Modal -->
-  <div id="assessment-modal" class="modal-overlay" onclick="closeAssessmentModal(event)">
+  <div id="assessment-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalSelectedOffer" onclick="closeAssessmentModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 620px;">
-      <button class="modal-close" onclick="closeAssessmentModalDirect()">&times;</button>
+      <button class="modal-close" onclick="closeAssessmentModalDirect()" aria-label="Close assessment inquiry dialog">&times;</button>
       <div style="margin-bottom: 1.5rem;">
         <span class="card-num">ZERODRIFT ENTERPRISE ENGAGEMENTS</span>
         <h2 style="font-size: 1.6rem; margin-top: 0.35rem; color: #fff;" id="modalSelectedOffer">Architecture Assessment</h2>
@@ -2893,38 +3344,107 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         osc.stop(now + 0.02);
       }
 
-      themeChord() {
+      themeChord(themeKey) {
         if (!this.enabled) return;
         this.init();
         if (!this.ctx) return;
-        const notes = [440, 554.37, 659.25, 880];
-        notes.forEach((freq, idx) => {
-          const now = this.ctx.currentTime + (idx * 0.045);
+        const now = this.ctx.currentTime;
+
+        if (themeKey === 'matrix') {
+          // Retro Hacker Terminal: Mechanical switch click + dual modem carrier tone
+          const osc1 = this.ctx.createOscillator();
+          const osc2 = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc1.type = 'sawtooth';
+          osc2.type = 'square';
+          osc1.frequency.setValueAtTime(800, now);
+          osc2.frequency.setValueAtTime(1200, now + 0.04);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.18);
+          osc2.stop(now + 0.18);
+        } else if (themeKey === 'amber') {
+          // Industrial Monolith: Deep warm analog vacuum-tube chord
+          const notes = [220, 277.18, 329.63, 415.30]; // A3, C#4, E4, G#4
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const filter = this.ctx.createBiquadFilter();
+            const gain = this.ctx.createGain();
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.02));
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(450, now);
+            gain.gain.setValueAtTime(0.045, now + (idx * 0.02));
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + (idx * 0.02));
+            osc.stop(now + 0.35);
+          });
+        } else if (themeKey === 'nebula') {
+          // Quantum Prism: Shimmering cosmic Solfeggio miracle tone (528Hz, 639Hz, 852Hz)
+          const notes = [528, 639, 852];
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.05));
+            gain.gain.setValueAtTime(0.04, now + (idx * 0.05));
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + (idx * 0.05));
+            osc.stop(now + 0.45);
+          });
+        } else if (themeKey === 'cleanroom') {
+          // Swiss Cleanroom: Ultra-precise Leica haptic tactile micro-click
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, now);
-          gain.gain.setValueAtTime(0.04, now);
-          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(3200, now);
+          osc.frequency.exponentialRampToValueAtTime(200, now + 0.015);
+          gain.gain.setValueAtTime(0.07, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.015);
           osc.connect(gain);
           gain.connect(this.ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.32);
-        });
+          osc.stop(now + 0.015);
+        } else {
+          // Cyber Obsidian: Crystalline neo-glass arpeggio
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, now + (idx * 0.04));
+            gain.gain.setValueAtTime(0.05, now + (idx * 0.04));
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+            osc.start(now + (idx * 0.04));
+            osc.stop(now + 0.3);
+          });
+        }
       }
     }
 
     const sound = new SoundEngine();
 
     /* ==========================================================================
-       MULTI-THEME CONTROLLER (Cyber, Matrix, Amber, Nebula, Cleanroom)
+       MULTI-THEME REVOLUTION CONTROLLER (Cyber, Matrix, Amber, Nebula, Cleanroom)
        ========================================================================== */
     const themes = {
-      cyber: { name: 'Cyber Obsidian', icon: '🌌', oscLegacy: '#10b981', oscReplay: '#00f2fe', pColor1: 'rgba(56, 189, 248, 0.4)', pColor2: 'rgba(99, 102, 241, 0.4)' },
-      matrix: { name: 'Matrix Terminal', icon: '⚡', oscLegacy: '#16a34a', oscReplay: '#22c55e', pColor1: 'rgba(34, 197, 94, 0.45)', pColor2: 'rgba(74, 222, 128, 0.35)' },
-      amber: { name: 'Amber Flare', icon: '🌅', oscLegacy: '#10b981', oscReplay: '#f59e0b', pColor1: 'rgba(245, 158, 11, 0.45)', pColor2: 'rgba(251, 191, 36, 0.35)' },
-      nebula: { name: 'Deep Nebula', icon: '🔮', oscLegacy: '#06b6d4', oscReplay: '#a855f7', pColor1: 'rgba(168, 85, 247, 0.45)', pColor2: 'rgba(236, 72, 153, 0.35)' },
-      cleanroom: { name: 'Cleanroom Light', icon: '☀️', oscLegacy: '#059669', oscReplay: '#2563eb', pColor1: 'rgba(37, 99, 235, 0.25)', pColor2: 'rgba(2, 132, 199, 0.25)' }
+      cyber: { name: 'Cyber Obsidian', icon: '🌌', persona: 'NEO-GLASS // CYBER', oscLegacy: '#10b981', oscReplay: '#00f2fe' },
+      matrix: { name: 'Matrix Terminal', icon: '⚡', persona: 'PHOSPHOR CRT // ROOT', oscLegacy: '#16a34a', oscReplay: '#22c55e' },
+      amber: { name: 'Amber Flare', icon: '🌅', persona: 'SOLAR FLARE // TELEMETRY', oscLegacy: '#10b981', oscReplay: '#f59e0b' },
+      nebula: { name: 'Deep Nebula', icon: '🔮', persona: 'QUANTUM PRISM // 3D WARP', oscLegacy: '#06b6d4', oscReplay: '#a855f7' },
+      cleanroom: { name: 'Cleanroom Light', icon: '☀️', persona: 'SWISS TITANIUM // AAA LIGHT', oscLegacy: '#059669', oscReplay: '#2563eb' }
     };
 
     let activeThemeKey = localStorage.getItem('zerodrift_theme') || 'cyber';
@@ -2944,6 +3464,12 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       if (btnIcon) btnIcon.textContent = themes[themeKey].icon;
       if (btnLabel) btnLabel.textContent = themes[themeKey].name.split(' ')[0];
 
+      // Update Theme Persona Badges in Desktop and Mobile HUDs
+      const headerBadge = document.getElementById('headerPersonaBadge');
+      if (headerBadge) headerBadge.textContent = themes[themeKey].persona;
+      const mobileBadge = document.getElementById('mobileThemeBadge');
+      if (mobileBadge) mobileBadge.textContent = themes[themeKey].persona;
+
       document.querySelectorAll('.theme-opt').forEach(opt => {
         if (opt.getAttribute('onclick') && opt.getAttribute('onclick').includes(themeKey)) {
           opt.classList.add('active');
@@ -2958,28 +3484,121 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       oscLegacyColor = themes[themeKey].oscLegacy;
       oscReplayColor = themes[themeKey].oscReplay;
 
-      if (typeof particles !== 'undefined' && particles.length) {
-        particles.forEach(p => {
-          p.color = Math.random() > 0.5 ? themes[themeKey].pColor1 : themes[themeKey].pColor2;
-        });
+      // Re-initialize dynamic ambient background canvas for the chosen theme
+      if (typeof initBgEngine === 'function') {
+        initBgEngine(themeKey);
       }
 
-      sound.themeChord();
+      sound.themeChord(themeKey);
     }
 
     function toggleThemeDropdown() {
       sound.click();
       const menu = document.getElementById('themeDropdownMenu');
-      if (menu) menu.classList.toggle('show');
+      const btn = document.getElementById('themePickerBtn');
+      if (menu) {
+        menu.classList.toggle('show');
+        if (btn) btn.setAttribute('aria-expanded', menu.classList.contains('show'));
+      }
     }
 
     document.addEventListener('click', e => {
       const wrap = document.querySelector('.theme-picker-wrap');
       if (wrap && !wrap.contains(e.target)) {
         const menu = document.getElementById('themeDropdownMenu');
+        const btn = document.getElementById('themePickerBtn');
         if (menu) menu.classList.remove('show');
+        if (btn) btn.setAttribute('aria-expanded', 'false');
       }
     });
+
+    /* ==========================================================================
+       MOBILE DRAWER NAVIGATION MANAGEMENT
+       ========================================================================== */
+    function toggleMobileMenu() {
+      sound.click();
+      const drawer = document.getElementById('mobileNavDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      const btn = document.getElementById('hamburgerBtn');
+      const isOpen = drawer && drawer.classList.contains('open');
+      if (isOpen) {
+        closeMobileMenu();
+      } else if (drawer) {
+        drawer.classList.add('open');
+        if (backdrop) backdrop.classList.add('show');
+        if (btn) {
+          btn.classList.add('active');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMobileMenu() {
+      const drawer = document.getElementById('mobileNavDrawer');
+      const backdrop = document.getElementById('mobileDrawerBackdrop');
+      const btn = document.getElementById('hamburgerBtn');
+      if (drawer) {
+        drawer.classList.remove('open');
+        drawer.setAttribute('aria-hidden', 'true');
+      }
+      if (backdrop) backdrop.classList.remove('show');
+      if (btn) {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      document.body.style.overflow = '';
+    }
+
+    /* ==========================================================================
+       SCROLL PROGRESS & SCROLLSPY ACTIVE SECTION MANAGEMENT
+       ========================================================================== */
+    function updateScrollProgress() {
+      const scrollBar = document.getElementById('scrollProgressBar');
+      if (!scrollBar) return;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrolled = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      scrollBar.style.width = scrolled + '%';
+    }
+
+    const sectionsToSpy = ['bento', 'telemetry', 'pipeline', 'workbench', 'compare', 'whitepapers', 'advisory'];
+    function updateScrollSpy() {
+      const scrollPos = window.scrollY + 180;
+      let currentSec = '';
+      for (const id of sectionsToSpy) {
+        const el = document.getElementById(id);
+        if (el) {
+          const top = el.offsetTop;
+          const height = el.offsetHeight;
+          if (scrollPos >= top && scrollPos < top + height) {
+            currentSec = id;
+            break;
+          }
+        }
+      }
+      document.querySelectorAll('.nav-links .nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === '#' + currentSec) {
+          link.classList.add('nav-link-active');
+        } else {
+          link.classList.remove('nav-link-active');
+        }
+      });
+      document.querySelectorAll('.mobile-drawer-links .mobile-nav-link').forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === '#' + currentSec) {
+          link.classList.add('nav-link-active');
+        } else {
+          link.classList.remove('nav-link-active');
+        }
+      });
+    }
+
+    window.addEventListener('scroll', () => {
+      updateScrollProgress();
+      updateScrollSpy();
+    }, { passive: true });
 
     function toggleAudio() {
       sound.enabled = !sound.enabled;
@@ -3194,45 +3813,242 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
        ========================================================================== */
     const bgCanvas = document.getElementById('ambientBgCanvas');
     const bgCtx = bgCanvas.getContext('2d');
-    let particles = [];
+    let bgMouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', e => {
+      bgMouse.x = e.clientX;
+      bgMouse.y = e.clientY;
+    });
+
+    // Theme Data Structures
+    let cyberNodes = [];
+    let matrixDrops = [];
+    const matrixChars = "0123456789ABCDEFλφΣ42<>[]/*{}#%^";
+    let amberEmbers = [];
+    let nebulaStars = [];
 
     function resizeBgCanvas() {
       bgCanvas.width = window.innerWidth;
       bgCanvas.height = window.innerHeight;
-      particles = [];
-      const currentThemeConfig = themes[activeThemeKey] || themes.cyber;
-      const count = Math.floor(window.innerWidth / 35);
-      for (let i = 0; i < count; i++) {
-        particles.push({
-          x: Math.random() * bgCanvas.width,
-          y: Math.random() * bgCanvas.height,
-          radius: Math.random() * 1.8 + 0.6,
-          vx: (Math.random() - 0.5) * 0.35,
-          vy: (Math.random() - 0.5) * 0.35,
-          color: Math.random() > 0.5 ? currentThemeConfig.pColor1 : currentThemeConfig.pColor2
-        });
-      }
+      initBgEngine(activeThemeKey);
     }
     window.addEventListener('resize', resizeBgCanvas);
-    resizeBgCanvas();
+
+    function initBgEngine(themeKey) {
+      const w = bgCanvas.width;
+      const h = bgCanvas.height;
+      if (!w || !h) return;
+
+      if (themeKey === 'cyber') {
+        cyberNodes = [];
+        const count = Math.min(65, Math.floor(w / 28));
+        for (let i = 0; i < count; i++) {
+          cyberNodes.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            radius: Math.random() * 2 + 1
+          });
+        }
+      } else if (themeKey === 'matrix') {
+        const colWidth = 20;
+        const cols = Math.floor(w / colWidth);
+        matrixDrops = [];
+        for (let i = 0; i < cols; i++) {
+          matrixDrops[i] = Math.floor(Math.random() * -50);
+        }
+      } else if (themeKey === 'amber') {
+        amberEmbers = [];
+        const count = Math.min(75, Math.floor(w / 25));
+        for (let i = 0; i < count; i++) {
+          amberEmbers.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            vy: -(Math.random() * 0.9 + 0.35),
+            vx: (Math.random() - 0.5) * 0.3,
+            size: Math.random() * 2.5 + 1,
+            alpha: Math.random() * 0.7 + 0.3,
+            wobble: Math.random() * Math.PI * 2
+          });
+        }
+      } else if (themeKey === 'nebula') {
+        nebulaStars = [];
+        const count = Math.min(160, Math.floor(w / 12));
+        for (let i = 0; i < count; i++) {
+          nebulaStars.push({
+            x: (Math.random() - 0.5) * w * 1.5,
+            y: (Math.random() - 0.5) * h * 1.5,
+            z: Math.random() * 1000 + 1,
+            prevZ: 1000,
+            size: Math.random() * 1.6 + 0.8,
+            hue: Math.random() > 0.5 ? 275 : 320
+          });
+        }
+      }
+    }
 
     function renderBgParticles() {
-      bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
-      particles.forEach(p => {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0) p.x = bgCanvas.width;
-        if (p.x > bgCanvas.width) p.x = 0;
-        if (p.y < 0) p.y = bgCanvas.height;
-        if (p.y > bgCanvas.height) p.y = 0;
+      const w = bgCanvas.width;
+      const h = bgCanvas.height;
+      if (!w || !h) {
+        requestAnimationFrame(renderBgParticles);
+        return;
+      }
 
-        bgCtx.fillStyle = p.color;
-        bgCtx.beginPath();
-        bgCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        bgCtx.fill();
-      });
+      if (activeThemeKey === 'matrix') {
+        // Authentic green phosphor cascade with soft persistence trail
+        bgCtx.fillStyle = 'rgba(2, 9, 4, 0.12)';
+        bgCtx.fillRect(0, 0, w, h);
+        bgCtx.font = '14px "JetBrains Mono", monospace';
+        const colWidth = 20;
+        for (let i = 0; i < matrixDrops.length; i++) {
+          const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+          const x = i * colWidth;
+          const y = matrixDrops[i] * 18;
+
+          // Glowing leader char
+          bgCtx.fillStyle = '#ffffff';
+          bgCtx.fillText(char, x, y);
+          // Trail char
+          bgCtx.fillStyle = 'rgba(34, 197, 94, 0.85)';
+          bgCtx.fillText(char, x, y - 18);
+
+          if (y > h && Math.random() > 0.975) {
+            matrixDrops[i] = 0;
+          }
+          matrixDrops[i]++;
+        }
+      } else if (activeThemeKey === 'cyber') {
+        bgCtx.clearRect(0, 0, w, h);
+        // Draw interconnected cyber nodes with cursor repulsion
+        for (let i = 0; i < cyberNodes.length; i++) {
+          const n = cyberNodes[i];
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0) n.x = w;
+          if (n.x > w) n.x = 0;
+          if (n.y < 0) n.y = h;
+          if (n.y > h) n.y = 0;
+
+          // Mouse repulsion
+          const dx = n.x - bgMouse.x;
+          const dy = n.y - bgMouse.y;
+          const distMouse = Math.hypot(dx, dy);
+          if (distMouse < 140) {
+            n.x += (dx / distMouse) * 1.5;
+            n.y += (dy / distMouse) * 1.5;
+          }
+
+          bgCtx.fillStyle = 'rgba(0, 242, 254, 0.65)';
+          bgCtx.beginPath();
+          bgCtx.arc(n.x, n.y, n.radius, 0, Math.PI * 2);
+          bgCtx.fill();
+
+          for (let j = i + 1; j < cyberNodes.length; j++) {
+            const m = cyberNodes[j];
+            const d = Math.hypot(n.x - m.x, n.y - m.y);
+            if (d < 115) {
+              bgCtx.strokeStyle = `rgba(0, 242, 254, ${(1 - d / 115) * 0.28})`;
+              bgCtx.lineWidth = 1;
+              bgCtx.beginPath();
+              bgCtx.moveTo(n.x, n.y);
+              bgCtx.lineTo(m.x, m.y);
+              bgCtx.stroke();
+            }
+          }
+        }
+      } else if (activeThemeKey === 'amber') {
+        bgCtx.clearRect(0, 0, w, h);
+        // Solar flare rising embers
+        amberEmbers.forEach(e => {
+          e.y += e.vy;
+          e.wobble += 0.04;
+          e.x += e.vx + Math.sin(e.wobble) * 0.45;
+          if (e.y < 0) {
+            e.y = h + 10;
+            e.x = Math.random() * w;
+          }
+          if (e.x < 0) e.x = w;
+          if (e.x > w) e.x = 0;
+
+          bgCtx.fillStyle = `rgba(245, 158, 11, ${e.alpha * 0.75})`;
+          bgCtx.beginPath();
+          bgCtx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
+          bgCtx.fill();
+        });
+      } else if (activeThemeKey === 'nebula') {
+        // Hyperspace 3D Warp Starfield
+        bgCtx.fillStyle = 'rgba(7, 3, 18, 0.25)';
+        bgCtx.fillRect(0, 0, w, h);
+        const cx = w / 2;
+        const cy = h / 2;
+
+        nebulaStars.forEach(s => {
+          s.prevZ = s.z;
+          s.z -= 4.5;
+          if (s.z <= 0) {
+            s.z = 1000;
+            s.prevZ = 1000;
+            s.x = (Math.random() - 0.5) * w * 1.5;
+            s.y = (Math.random() - 0.5) * h * 1.5;
+          }
+
+          const k = 380 / s.z;
+          const px = s.x * k + cx;
+          const py = s.y * k + cy;
+
+          const prevK = 380 / s.prevZ;
+          const prevPx = s.x * prevK + cx;
+          const prevPy = s.y * prevK + cy;
+
+          if (px >= 0 && px <= w && py >= 0 && py <= h) {
+            const alpha = Math.min(1, (1 - s.z / 1000) * 1.3);
+            bgCtx.strokeStyle = `hsla(${s.hue}, 90%, 65%, ${alpha})`;
+            bgCtx.lineWidth = Math.min(2.5, (1 - s.z / 1000) * 3);
+            bgCtx.beginPath();
+            bgCtx.moveTo(prevPx, prevPy);
+            bgCtx.lineTo(px, py);
+            bgCtx.stroke();
+          }
+        });
+      } else if (activeThemeKey === 'cleanroom') {
+        bgCtx.clearRect(0, 0, w, h);
+        // Architectural Swiss precision grid
+        bgCtx.strokeStyle = 'rgba(37, 99, 235, 0.05)';
+        bgCtx.lineWidth = 1;
+        const step = 48;
+        for (let x = 0; x < w; x += step) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(x, 0);
+          bgCtx.lineTo(x, h);
+          bgCtx.stroke();
+        }
+        for (let y = 0; y < h; y += step) {
+          bgCtx.beginPath();
+          bgCtx.moveTo(0, y);
+          bgCtx.lineTo(w, y);
+          bgCtx.stroke();
+        }
+
+        // Coordinate crosshairs
+        bgCtx.strokeStyle = 'rgba(37, 99, 235, 0.18)';
+        for (let x = step * 3; x < w; x += step * 6) {
+          for (let y = step * 3; y < h; y += step * 6) {
+            bgCtx.beginPath();
+            bgCtx.moveTo(x - 5, y);
+            bgCtx.lineTo(x + 5, y);
+            bgCtx.moveTo(x, y - 5);
+            bgCtx.lineTo(x, y + 5);
+            bgCtx.stroke();
+          }
+        }
+      }
+
       requestAnimationFrame(renderBgParticles);
     }
+
+    // Initialize Canvas on page load
+    resizeBgCanvas();
     requestAnimationFrame(renderBgParticles);
 
     // Apply saved theme on page load
