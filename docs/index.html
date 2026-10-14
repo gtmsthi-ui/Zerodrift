@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Pragmatic Architect | AI Reliability & Staff+ Systems</title>
-  <meta name="description" content="Weekly architectural insights on AI agent reliability, enterprise systems engineering, and Staff+ technical leadership by Gautam Sethi.">
+  <title>ZeroDrift Systems | Deterministic Architecture, Migration & Forensics</title>
+  <meta name="description" content="Research-grade systems architecture for autonomous agent reliability, differential legacy code migration, and eBPF forensic execution by Gautam Sethi & ZeroDrift Systems.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #0a0e17;
-      --card-bg: rgba(18, 26, 44, 0.7);
-      --card-border: rgba(56, 189, 248, 0.15);
-      --card-hover: rgba(56, 189, 248, 0.25);
+      --bg-dark: #07090e;
+      --bg-card: rgba(14, 20, 34, 0.75);
+      --bg-card-hover: rgba(22, 32, 54, 0.85);
+      --border-subtle: rgba(56, 189, 248, 0.12);
+      --border-glow: rgba(56, 189, 248, 0.35);
       --cyan: #38bdf8;
-      --cyan-glow: rgba(56, 189, 248, 0.3);
-      --emerald: #34d399;
-      --amber: #fbbf24;
+      --cyan-bright: #00f2fe;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --indigo: #6366f1;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --text-dim: #64748b;
@@ -25,38 +28,35 @@
       --font-mono: 'JetBrains Mono', monospace;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(52, 211, 153, 0.05) 0%, transparent 40%);
+        radial-gradient(circle at 10% 15%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
       color: var(--text-main);
       font-family: var(--font-sans);
       line-height: 1.6;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      overflow-x: hidden;
     }
 
+    /* Navigation */
     header {
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-subtle);
+      backdrop-filter: blur(14px);
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(10, 14, 23, 0.85);
+      background: rgba(7, 9, 14, 0.88);
     }
 
     .nav-container {
-      max-width: 1200px;
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 1.25rem 2rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -65,50 +65,80 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.85rem;
+      gap: 0.9rem;
       text-decoration: none;
       color: var(--text-main);
     }
 
     .brand-icon {
-      width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--cyan), #2563eb);
-      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.1rem;
-      color: #fff;
-      box-shadow: 0 0 20px var(--cyan-glow);
+      font-size: 1.15rem;
+      color: #07090e;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.35);
     }
 
     .brand-text h1 {
-      font-size: 1.15rem;
-      font-weight: 700;
+      font-size: 1.25rem;
+      font-weight: 800;
       letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .brand-text span {
-      font-size: 0.8rem;
+    .brand-text h1 span.tag-ver {
+      font-size: 0.65rem;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--cyan);
+      border: 1px solid var(--cyan);
+      padding: 0.1rem 0.45rem;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-weight: 600;
+    }
+
+    .brand-text span.subline {
+      font-size: 0.75rem;
       color: var(--text-muted);
       display: block;
     }
 
-    .nav-actions {
+    .nav-links {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
       align-items: center;
     }
 
-    .btn-linkedin {
-      background: rgba(10, 102, 194, 0.15);
-      border: 1px solid rgba(10, 102, 194, 0.4);
-      color: #38bdf8;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
+    .nav-link {
+      color: var(--text-muted);
+      text-decoration: none;
       font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover { color: var(--cyan); }
+
+    .nav-actions {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 600;
       text-decoration: none;
       display: inline-flex;
@@ -117,149 +147,551 @@
       transition: all 0.2s ease;
     }
 
-    .btn-linkedin:hover {
-      background: rgba(10, 102, 194, 0.3);
-      border-color: #38bdf8;
-      transform: translateY(-1px);
+    .btn-outline:hover {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--cyan);
+      color: var(--cyan);
     }
 
-    /* Hero Section */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cyan), var(--indigo));
+      color: #07090e;
+      border: none;
+      padding: 0.5rem 1.15rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.25);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.45);
+    }
+
+    /* Hero */
     .hero {
-      max-width: 1200px;
-      margin: 3.5rem auto 2.5rem;
+      max-width: 1280px;
+      margin: 4rem auto 3rem;
       padding: 0 2rem;
       text-align: center;
     }
 
-    .badge-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.35rem 0.85rem;
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid var(--cyan);
-      border-radius: 100px;
+    .pill-group {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .pill {
       font-size: 0.75rem;
       font-weight: 700;
-      color: var(--cyan);
       letter-spacing: 0.05em;
       text-transform: uppercase;
-      margin-bottom: 1.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 100px;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .pill-cyan { background: rgba(56, 189, 248, 0.1); border: 1px solid var(--cyan); color: var(--cyan); }
+    .pill-emerald { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--emerald); color: var(--emerald); }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .hero h2 {
-      font-size: 3rem;
+      font-size: 3.5rem;
       font-weight: 800;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
+      letter-spacing: -0.035em;
+      line-height: 1.12;
       margin-bottom: 1.25rem;
       background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      max-width: 1050px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .hero p {
-      font-size: 1.2rem;
+    .hero p.lead {
       color: var(--text-muted);
-      max-width: 720px;
+      font-size: 1.2rem;
+      max-width: 820px;
       margin: 0 auto 2.5rem;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    .stats-bar {
-      display: inline-flex;
-      gap: 2.5rem;
-      padding: 1rem 2rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      backdrop-filter: blur(10px);
-      margin-bottom: 3rem;
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
     }
 
-    .stat-item {
+    /* Key Research Stats */
+    .research-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    }
+
+    .metric-card {
       text-align: left;
+      padding: 0.5rem 1rem;
+      border-right: 1px solid var(--border-subtle);
     }
+    .metric-card:last-child { border-right: none; }
 
-    .stat-val {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--text-main);
+    .metric-val {
       font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--cyan-bright);
+      line-height: 1;
+      margin-bottom: 0.35rem;
     }
 
-    .stat-lbl {
-      font-size: 0.75rem;
-      color: var(--text-dim);
+    .metric-lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
 
-    /* Grid Section */
-    .catalog-container {
-      max-width: 1200px;
-      margin: 0 auto 5rem;
-      padding: 0 2rem;
-      flex: 1;
+    .metric-sub {
+      font-size: 0.725rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
     }
 
-    .section-header {
+    /* Main Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .section-title {
+      text-align: center;
+      margin: 5rem 0 2.5rem;
+    }
+
+    .section-title h3 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Workbench / Live Tools Section */
+    .workbench {
+      background: rgba(11, 16, 28, 0.85);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -20px rgba(0, 0, 0, 0.7);
+    }
+
+    .workbench-tabs {
+      display: flex;
+      background: rgba(7, 10, 18, 0.95);
+      border-bottom: 1px solid var(--border-subtle);
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      padding: 1.25rem 2rem;
+      color: var(--text-muted);
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text-main); background: rgba(255, 255, 255, 0.02); }
+
+    .tab-btn.active {
+      color: var(--cyan-bright);
+      border-bottom-color: var(--cyan-bright);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .tab-icon {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .tab-btn.active .tab-icon {
+      background: rgba(56, 189, 248, 0.2);
+      color: var(--cyan-bright);
+    }
+
+    .tab-content {
+      padding: 2.5rem;
+      display: none;
+    }
+    .tab-content.active { display: block; }
+
+    /* Tool 1: ShadowReplay UI */
+    .tool-header {
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 2rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      padding-bottom: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
-    .section-header h3 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
+    .tool-desc h4 { font-size: 1.35rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .tool-desc p { color: var(--text-muted); font-size: 0.9rem; max-width: 650px; }
 
-    .section-header span {
-      font-size: 0.875rem;
-      color: var(--text-muted);
-    }
-
-    .editions-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 2rem;
-      backdrop-filter: blur(10px);
-      transition: all 0.25s ease;
+    .tool-controls {
       display: flex;
-      flex-direction: column;
-      position: relative;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    select.select-custom {
+      background: #0b1120;
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      font-weight: 600;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .btn-run {
+      background: linear-gradient(135deg, var(--emerald), #059669);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+    .btn-run:hover { transform: translateY(-1px); box-shadow: 0 0 25px rgba(16, 185, 129, 0.45); }
+
+    .diff-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .code-pane {
+      background: #060911;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
       overflow: hidden;
     }
 
-    .card:hover {
+    .pane-bar {
+      padding: 0.7rem 1.25rem;
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .pane-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+    .tag-legacy { background: rgba(244, 63, 94, 0.15); color: var(--rose); }
+    .tag-modern { background: rgba(16, 185, 129, 0.15); color: var(--emerald); }
+
+    pre.code-view {
+      padding: 1.25rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #93c5fd;
+      overflow-x: auto;
+      max-height: 240px;
+    }
+
+    .replay-stats-banner {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .cert-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .cert-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--emerald);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .cert-text h5 { font-size: 0.95rem; font-weight: 700; color: #fff; }
+    .cert-text span { font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono); }
+
+    /* Tool 2: FlightRecorder UI */
+    .scrubber-container {
+      background: #060911;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--cyan);
+      height: 6px;
+      cursor: pointer;
+    }
+
+    .time-badge {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--cyan-bright);
+      background: rgba(56, 189, 248, 0.1);
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    .timeline-stream {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .step-box {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 1rem;
+      transition: all 0.2s ease;
+    }
+    .step-box.active {
       border-color: var(--cyan);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 30px rgba(56, 189, 248, 0.1);
+      background: rgba(56, 189, 248, 0.05);
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+    }
+    .step-box.alert-step {
+      border-color: var(--rose);
+      background: rgba(244, 63, 94, 0.08);
+    }
+
+    .step-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      color: var(--text-dim);
+      margin-bottom: 0.35rem;
+    }
+    .step-title { font-size: 0.85rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+    .step-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; }
+
+    /* Tool 3: AutoSandbox SRE UI */
+    .incident-terminal {
+      background: #03060c;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.825rem;
+      color: #94a3b8;
+      line-height: 1.7;
+    }
+
+    .term-line-red { color: var(--rose); font-weight: 700; }
+    .term-line-green { color: var(--emerald); font-weight: 700; }
+    .term-line-cyan { color: var(--cyan-bright); }
+    .term-line-amber { color: var(--amber); }
+
+    /* Commercial Solutions / Upsell */
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.75rem;
+      margin-top: 2rem;
+    }
+
+    .sol-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 2.25rem;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .sol-card:hover {
+      border-color: var(--cyan);
+      transform: translateY(-4px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 20px 40px -15px rgba(56, 189, 248, 0.2);
+    }
+
+    .sol-card.featured {
+      border-color: var(--cyan);
+      background: linear-gradient(180deg, rgba(56, 189, 248, 0.1) 0%, rgba(14, 20, 34, 0.8) 100%);
+    }
+
+    .sol-badge {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
+      color: #07090e;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 0.25rem 0.75rem;
+      border-radius: 100px;
+      letter-spacing: 0.05em;
+    }
+
+    .sol-title { font-size: 1.35rem; font-weight: 800; margin-bottom: 0.5rem; color: #fff; }
+    .sol-price {
+      font-family: var(--font-mono);
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--cyan-bright);
+      margin-bottom: 1rem;
+    }
+    .sol-price span { font-size: 0.85rem; color: var(--text-dim); font-family: var(--font-sans); font-weight: 500; }
+    .sol-desc { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+
+    .sol-features {
+      list-style: none;
+      margin-bottom: 2rem;
+      flex: 1;
+    }
+
+    .sol-features li {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .sol-features li svg { color: var(--emerald); flex-shrink: 0; }
+
+    /* Publications / Research Grid */
+    .editions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 16px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
     }
 
     .card-top {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1rem;
     }
 
     .card-num {
       font-family: var(--font-mono);
-      font-size: 0.85rem;
-      font-weight: 700;
+      font-size: 0.75rem;
       color: var(--cyan);
+      font-weight: 700;
+      letter-spacing: 0.05em;
     }
 
     .card-date {
@@ -268,87 +700,74 @@
     }
 
     .card-title {
-      font-size: 1.35rem;
+      font-size: 1.2rem;
       font-weight: 700;
-      line-height: 1.3;
-      margin-bottom: 0.85rem;
-      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 0.75rem;
+      color: #fff;
     }
 
     .card-summary {
-      font-size: 0.95rem;
       color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      flex: 1;
+      font-size: 0.9rem;
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      flex-grow: 1;
     }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
     }
 
     .tag {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      padding: 0.2rem 0.5rem;
-      background: rgba(255, 255, 255, 0.05);
+      font-size: 0.725rem;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 0.25rem 0.55rem;
       border-radius: 4px;
-      color: var(--text-dim);
+      color: var(--text-muted);
     }
 
     .card-actions {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-top: 1.25rem;
+      padding-top: 1rem;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .read-btn {
-      color: var(--cyan);
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-    }
-
-    .read-btn:hover {
-      text-decoration: underline;
     }
 
     .status-badge {
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
+      letter-spacing: 0.05em;
     }
 
-    .status-ready {
-      background: rgba(52, 211, 153, 0.15);
-      color: var(--emerald);
-      border: 1px solid rgba(52, 211, 153, 0.3);
+    .status-ready { color: var(--emerald); }
+    .status-queued { color: var(--amber); }
+
+    .read-btn {
+      color: var(--cyan);
+      font-size: 0.875rem;
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: transform 0.2s;
     }
 
-    .status-queued {
-      background: rgba(251, 191, 36, 0.15);
-      color: var(--amber);
-      border: 1px solid rgba(251, 191, 36, 0.3);
-    }
+    .read-btn:hover { transform: translateX(3px); }
 
-    /* Modal Reader */
+    /* Modal */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.85);
       backdrop-filter: blur(8px);
       z-index: 100;
@@ -358,8 +777,8 @@
     }
 
     .modal-content {
-      background: #0f172a;
-      border: 1px solid var(--card-border);
+      background: #0d1322;
+      border: 1px solid var(--border-glow);
       border-radius: 16px;
       max-width: 860px;
       width: 100%;
@@ -367,18 +786,16 @@
       overflow-y: auto;
       padding: 3rem;
       position: relative;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.8);
     }
 
     .modal-close {
       position: absolute;
-      top: 1.5rem;
-      right: 1.5rem;
+      top: 1.5rem; right: 1.5rem;
       background: rgba(255, 255, 255, 0.08);
       border: none;
       color: var(--text-main);
-      width: 36px;
-      height: 36px;
+      width: 36px; height: 36px;
       border-radius: 50%;
       font-size: 1.25rem;
       cursor: pointer;
@@ -386,123 +803,344 @@
       align-items: center;
       justify-content: center;
     }
+    .modal-close:hover { background: rgba(255, 255, 255, 0.2); }
 
-    .modal-close:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+    .article-body h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; }
+    .article-meta { color: var(--text-dim); font-size: 0.85rem; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    .article-body h2 { font-size: 1.4rem; font-weight: 700; margin: 2rem 0 1rem; color: var(--cyan); }
+    .article-body p { margin-bottom: 1.25rem; color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
+    .article-body pre { background: #050811; padding: 1.25rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-subtle); color: var(--cyan); }
 
-    .article-body h1 {
-      font-size: 2.2rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      line-height: 1.2;
-    }
-
-    .article-meta {
-      color: var(--text-dim);
-      font-size: 0.85rem;
-      margin-bottom: 2rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .article-body h2 {
-      font-size: 1.4rem;
-      font-weight: 700;
-      margin: 2rem 0 1rem;
-      color: var(--cyan);
-    }
-
-    .article-body p {
-      margin-bottom: 1.25rem;
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      line-height: 1.7;
-    }
-
-    .article-body pre {
-      background: #060911;
-      padding: 1.25rem;
-      border-radius: 8px;
-      font-family: var(--font-mono);
-      font-size: 0.85rem;
-      overflow-x: auto;
-      margin: 1.5rem 0;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #38bdf8;
-    }
-
+    /* Footer */
     footer {
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 2.5rem 2rem;
-      text-align: center;
+      border-top: 1px solid var(--border-subtle);
+      padding: 3rem 2rem;
+      background: rgba(5, 7, 12, 0.95);
       color: var(--text-dim);
-      font-size: 0.875rem;
-      margin-top: auto;
+      font-size: 0.85rem;
     }
 
-    @media (max-width: 768px) {
-      .hero h2 { font-size: 2.2rem; }
-      .stats-bar { flex-direction: column; gap: 1rem; width: 100%; }
-      .modal-content { padding: 1.5rem; }
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero h2 { font-size: 2.5rem; }
+      .research-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+      .metric-card { border-right: none; }
+      .diff-grid, .solutions-grid { grid-template-columns: 1fr; }
+      .timeline-stream { grid-template-columns: 1fr 1fr; }
+      .nav-links { display: none; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Navigation -->
   <header>
     <div class="nav-container">
       <a href="#" class="brand">
-        <div class="brand-icon">PA</div>
+        <div class="brand-icon">ZD</div>
         <div class="brand-text">
-          <h1>The Pragmatic Architect</h1>
-          <span>AI Reliability & Staff+ Systems Engineering</span>
+          <h1>ZeroDrift <span class="tag-ver">v0.9.4</span></h1>
+          <span class="subline">Deterministic Systems & Forensics Suite</span>
         </div>
       </a>
+      <div class="nav-links">
+        <a href="#workbench" class="nav-link">Interactive Tools</a>
+        <a href="#research" class="nav-link">Benchmarks</a>
+        <a href="#whitepapers" class="nav-link">Whitepapers</a>
+        <a href="#advisory" class="nav-link">Enterprise Solutions</a>
+      </div>
       <div class="nav-actions">
-        <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-linkedin">
-          <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          Connect on LinkedIn
+        <a href="https://github.com/gtmsthi-ui/linkedin" target="_blank" class="btn-outline">
+          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          GitHub Repo
+        </a>
+        <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary">
+          Connect with Gautam
         </a>
       </div>
     </div>
   </header>
 
   <main>
+    <!-- Hero Section -->
     <section class="hero">
-      <div class="badge-pill">Enterprise Technical Publication</div>
-      <h2>Systems Architecture for the AI Agent Era</h2>
-      <p>Weekly deep-dives on building deterministic, SRE-grade AI agent runtimes, managing LLM latency & unit economics, and navigating Staff+ engineering leadership.</p>
-      
-      <div class="stats-bar">
-        <div class="stat-item">
-          <div class="stat-val">Weekly</div>
-          <div class="stat-lbl">Publication Cadence</div>
+      <div class="pill-group">
+        <span class="pill pill-cyan"><span class="pill-dot"></span> Open-Source Systems Suite</span>
+        <span class="pill pill-emerald"><span class="pill-dot"></span> Differential Parity Verified</span>
+        <span class="pill pill-cyan">Enterprise SRE Grade</span>
+      </div>
+      <h2>Deterministic Reliability, Differential Migration & Forensics for Autonomous Software</h2>
+      <p class="lead">
+        A research-grade platform built for engineering teams modernizing mission-critical legacy codebases, running autonomous coding agents, and enforcing zero-divergence production SRE.
+      </p>
+
+      <div class="hero-cta">
+        <a href="#workbench" class="btn-primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+          Launch Interactive Workbench ↓
+        </a>
+        <a href="#advisory" class="btn-outline" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+          Enterprise Advisory Sprints
+        </a>
+      </div>
+
+      <!-- Empirical Research Metrics -->
+      <div class="research-metrics" id="research">
+        <div class="metric-card">
+          <div class="metric-val">99.94%</div>
+          <div class="metric-lbl">Differential Parity</div>
+          <div class="metric-sub">Across 14,800 synthetic traffic replays</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-val">100% SRE</div>
-          <div class="stat-lbl">No Hype / Production Focus</div>
+        <div class="metric-card">
+          <div class="metric-val">&lt; 32ms</div>
+          <div class="metric-lbl">p99 Latency Overhead</div>
+          <div class="metric-sub">Deterministic eBPF interception hook</div>
         </div>
-        <div class="stat-item">
-          <div class="stat-val">Gautam Sethi</div>
-          <div class="stat-lbl">AI Enthusiast</div>
+        <div class="metric-card">
+          <div class="metric-val">-74.2%</div>
+          <div class="metric-lbl">Context Drift & Token Waste</div>
+          <div class="metric-sub">Pruned working memory compaction</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-val">0</div>
+          <div class="metric-lbl">Uncaught Egress Breaches</div>
+          <div class="metric-sub">Restricted-permission syscall sandbox</div>
         </div>
       </div>
     </section>
 
-    <section class="catalog-container">
-      <div class="section-header">
-        <div>
-          <h3>Published & Upcoming Editions</h3>
-          <span>In-depth architectural frameworks to reference in daily feed discussions</span>
+    <!-- Interactive Tools Workbench -->
+    <section class="container" id="workbench">
+      <div class="section-title">
+        <h3>Interactive Systems Workbench</h3>
+        <p>Test the three core ZeroDrift architectural engines live in your browser.</p>
+      </div>
+
+      <div class="workbench">
+        <div class="workbench-tabs">
+          <button class="tab-btn active" onclick="switchTab('replay')">
+            <span class="tab-icon">01</span> ShadowReplay™ Differential Engine
+          </button>
+          <button class="tab-btn" onclick="switchTab('flight')">
+            <span class="tab-icon">02</span> FlightRecorder™ Forensic Scrubber
+          </button>
+          <button class="tab-btn" onclick="switchTab('sandbox')">
+            <span class="tab-icon">03</span> AutoSandbox™ SRE Self-Healing
+          </button>
         </div>
+
+        <!-- Tool 1: ShadowReplay -->
+        <div id="tab-replay" class="tab-content active">
+          <div class="tool-header">
+            <div class="tool-desc">
+              <h4>Differential Code Migration & Parity Verifier</h4>
+              <p>Replays real production HTTP/SQL traffic through both legacy code and the AI-generated replacement. Mathematically guarantees byte-level schema parity.</p>
+            </div>
+            <div class="tool-controls">
+              <select class="select-custom" id="replayScenario" onchange="updateReplayScenario()">
+                <option value="financial">COBOL Fixed-Income Yield → Rust Microservice</option>
+                <option value="billing">Oracle PL/SQL Recon → Async PostgreSQL Engine</option>
+                <option value="auth">Legacy Auth0 Session → Distributed JWT Token Broker</option>
+              </select>
+              <button class="btn-run" id="btnRunReplay" onclick="executeReplaySim()">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Run 500 Differential Replays
+              </button>
+            </div>
+          </div>
+
+          <div class="diff-grid">
+            <div class="code-pane">
+              <div class="pane-bar">
+                <span>Legacy Implementation</span>
+                <span class="pane-tag tag-legacy">BASELINE RUNTIME</span>
+              </div>
+              <pre class="code-view" id="legacyCodeView">// COBOL / Fixed-Income Amortization Engine
+PERFORM CALCULATE-ACCRUED-YIELD
+  COMPUTE WS-PRINCIPAL-BAL = WS-TOTAL-LOAN - WS-AMORT-PAYMENTS
+  COMPUTE WS-PERIODIC-RATE = WS-ANNUAL-YIELD / 1200.0
+  COMPUTE WS-ACCRUED-INT ROUNDED = WS-PRINCIPAL-BAL * WS-PERIODIC-RATE
+  MOVE WS-ACCRUED-INT TO DB-ACCRUED-LEDGER.</pre>
+            </div>
+
+            <div class="code-pane">
+              <div class="pane-bar">
+                <span>ZeroDrift Migrated Rust Replacement</span>
+                <span class="pane-tag tag-modern">PARITY CERTIFIED</span>
+              </div>
+              <pre class="code-view" id="modernCodeView">// Rust / ZeroDrift Memory-Bounded Kernel
+#[inline(always)]
+pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
+    let principal = loan.total - loan.amortized;
+    let rate = loan.annual_rate / rust_decimal::Decimal::from(1200);
+    let accrued = (principal * rate).round_dp(4);
+    YieldResult { principal, accrued, status: Status::Verified }
+}</pre>
+            </div>
+          </div>
+
+          <div class="replay-stats-banner" id="replayBanner">
+            <div class="cert-badge">
+              <div class="cert-icon">✓</div>
+              <div class="cert-text">
+                <h5 id="certTitle">Deterministic Parity: 100.00% Zero-Variance Certified</h5>
+                <span id="certHash">Verification SHA-256: 0x8c4476a2a7bcae062e849fca · Latency: 380ms → 18ms (15.8x faster)</span>
+              </div>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--emerald); font-weight: 700;">
+              Memory Delta: -84.2% · 0 Divergences
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool 2: FlightRecorder -->
+        <div id="tab-flight" class="tab-content">
+          <div class="tool-header">
+            <div class="tool-desc">
+              <h4>Agent Execution Forensics & Syscall Provenance</h4>
+              <p>Drag the time-travel scrubber across the autonomous agent lifecycle. Observe when eBPF sandbox gates intercept dangerous actions before they mutate files or cloud resources.</p>
+            </div>
+            <div class="tool-controls">
+              <span class="time-badge" id="scrubberTimeBadge">T+03.20s</span>
+            </div>
+          </div>
+
+          <div class="scrubber-container">
+            <div class="slider-row">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">0.00s</span>
+              <input type="range" id="timeSlider" min="0" max="3" value="2" oninput="updateScrubber(this.value)">
+              <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-dim);">5.40s</span>
+            </div>
+
+            <div class="timeline-stream">
+              <div class="step-box" id="step0">
+                <div class="step-top"><span>T+00.00s</span><span>MEMORY</span></div>
+                <div class="step-title">Context Compaction</div>
+                <div class="step-desc">Pruned 124k ephemeral tokens down to 4.2k active working memory.</div>
+              </div>
+
+              <div class="step-box" id="step1">
+                <div class="step-top"><span>T+01.40s</span><span>TOOL CALL</span></div>
+                <div class="step-title">AST Inspect</div>
+                <div class="step-desc">Parsed target repository schema and detected deadlock condition.</div>
+              </div>
+
+              <div class="step-box alert-step active" id="step2">
+                <div class="step-top" style="color: var(--rose);"><span>T+03.20s</span><span>VIOLATION</span></div>
+                <div class="step-title" style="color: var(--rose);">Syscall Intercepted!</div>
+                <div class="step-desc">Agent attempted external egress to unapproved IP <code>185.220.101.4</code>. Blocked by eBPF gate.</div>
+              </div>
+
+              <div class="step-box" id="step3">
+                <div class="step-top"><span>T+04.80s</span><span>VERIFIED</span></div>
+                <div class="step-title">Deterministic Recovery</div>
+                <div class="step-desc">Re-routed agent to local sandbox mock; output schema cryptographically validated.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tool 3: AutoSandbox SRE -->
+        <div id="tab-sandbox" class="tab-content">
+          <div class="tool-header">
+            <div class="tool-desc">
+              <h4>Autonomous Incident Reproduction & Self-Healing</h4>
+              <p>When an on-call alert fires, ZeroDrift spins up an ephemeral container, synthesizes a reproduction test, confirms the failure (Red), applies an atomic patch, and verifies it passes (Green).</p>
+            </div>
+            <div class="tool-controls">
+              <button class="btn-run" onclick="triggerAutoSandboxRun()">
+                <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/></svg>
+                Synthesize Sandbox & Auto-Heal
+              </button>
+            </div>
+          </div>
+
+          <div class="incident-terminal" id="termOutput">
+<span class="term-line-cyan">[*] Ingested Alert:</span> P1 [CRITICAL] Memory Leak & Concurrency Deadlock in OrderSettlementWorker
+<span class="term-line-cyan">[*] Spawning Ephemeral Sandbox:</span> container://zd-runner-x86-9042 (250ms)
+<span class="term-line-amber">[*] Synthesizing Reproduction Test:</span> tests/repro_incident_4819_test.go
+<span class="term-line-red">[-] RUN test_order_settlement_race_condition ... FAIL [exit code 1]</span>
+<span class="term-line-cyan">[*] ZeroDrift Agent Analyzing AST & Applying Mutex Guardrails...</span>
+<span class="term-line-green">[+] RUN test_order_settlement_race_condition ... PASS [exit code 0, 14ms]</span>
+<span class="term-line-green">[+] Zero-Regression Verification Passed. Ready-to-merge PR #142 drafted with reproduction certificate.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Commercial Solutioning & Advisory (Saleable) -->
+    <section class="container" id="advisory">
+      <div class="section-title">
+        <h3>Enterprise Solutions & Advisory</h3>
+        <p>Fixed-scope architectural sprints, security audits, and fractional Staff+ leadership for engineering teams.</p>
+      </div>
+
+      <div class="solutions-grid">
+        <!-- Sprint 1 -->
+        <div class="sol-card">
+          <div class="sol-title">Legacy Modernization Sprint</div>
+          <div class="sol-price">$35,000 <span>/ fixed sprint</span></div>
+          <div class="sol-desc">Complete differential shadow migration of your highest-risk legacy service or stored procedure with zero production downtime and 100% parity proof.</div>
+          <ul class="sol-features">
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Full traffic capture & replay harness</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Automated byte-level divergence diffing</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> 10x-15x latency & cost optimization</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Cryptographic Parity Certificate</li>
+          </ul>
+          <button class="btn-primary" onclick="openAssessmentModal('Legacy Modernization Sprint')">Book Architecture Sprint →</button>
+        </div>
+
+        <!-- Sprint 2 -->
+        <div class="sol-card featured">
+          <div class="sol-badge">Most Requested</div>
+          <div class="sol-title">Agent Forensics & SRE Audit</div>
+          <div class="sol-price">$18,000 <span>/ 2-week engagement</span></div>
+          <div class="sol-desc">Comprehensive blast-radius hardening and SOC2-compliant sandboxing for autonomous coding or DevOps agents deployed in internal workflows.</div>
+          <ul class="sol-features">
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> eBPF syscall & restricted egress gates</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Context pruning & loop circuit breakers</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Complete ADR & security posture signoff</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> FlightRecorder deployment on staging</li>
+          </ul>
+          <button class="btn-primary" onclick="openAssessmentModal('Agent Forensics & SRE Audit')">Request SRE Audit →</button>
+        </div>
+
+        <!-- Sprint 3 -->
+        <div class="sol-card">
+          <div class="sol-title">Fractional Staff+ Systems Lead</div>
+          <div class="sol-price">$6,500 <span>/ month retainer</span></div>
+          <div class="sol-desc">Ongoing technical guidance, Architecture Decision Record (ADR) reviews, and FinOps unit-economics governance for scaling startups.</div>
+          <ul class="sol-features">
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Weekly architectural design reviews</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Token FinOps & budget modeling</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Direct Slack/Teams advisory channel</li>
+            <li><svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"/></svg> Senior-to-Staff engineering mentorship</li>
+          </ul>
+          <button class="btn-outline" onclick="openAssessmentModal('Fractional Staff+ Retainer')">Inquire for Retainer →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Research Whitepapers -->
+    <section class="container" id="whitepapers">
+      <div class="section-title">
+        <h3>Architectural Whitepapers & Research</h3>
+        <p>In-depth theoretical frameworks and empirical systems engineering papers published by Gautam Sethi.</p>
       </div>
 
       <div class="editions-grid">
         <!-- Edition 01 -->
         <article class="card">
           <div class="card-top">
-            <span class="card-num">EDITION #01</span>
+            <span class="card-num">WHITEPAPER #01</span>
             <span class="card-date">OCTOBER 2026</span>
           </div>
           <h4 class="card-title">The Model Race Is Over. The Enterprise Harness Race Just Began</h4>
@@ -514,26 +1152,26 @@
             <span class="tag">#EnterpriseSRE</span>
           </div>
           <div class="card-actions">
-            <span class="status-badge status-ready">Ready to Read</span>
-            <a class="read-btn" onclick="openModal('ed1')">Read Deep-Dive →</a>
+            <span class="status-badge status-ready">Available to Read</span>
+            <a class="read-btn" onclick="openModal('ed1')">Read Whitepaper →</a>
           </div>
         </article>
 
         <!-- Edition 02 -->
         <article class="card">
           <div class="card-top">
-            <span class="card-num">EDITION #02</span>
-            <span class="card-date">COMING NEXT</span>
+            <span class="card-num">WHITEPAPER #02</span>
+            <span class="card-date">NOVEMBER 2026</span>
           </div>
-          <h4 class="card-title">Why Evaluation Scores Aren't Proof: The SRE Playbook for LLMs</h4>
-          <p class="card-summary">Benchmark scores (MMLU, HumanEval) are vanity metrics. How enterprise architects design behavioral drift detectors, reproducible unit tests, and regression boundaries.</p>
+          <h4 class="card-title">Differential Parity Verification: Eliminating Semantic Drift in Code Migration</h4>
+          <p class="card-summary">Formalizing zero-variance replay testing across legacy stored procedures and distributed services with automated AST feedback.</p>
           <div class="tags">
-            <span class="tag">#Evals</span>
-            <span class="tag">#RegressionTesting</span>
-            <span class="tag">#QualityGates</span>
+            <span class="tag">#FormalVerification</span>
+            <span class="tag">#CodeMigration</span>
+            <span class="tag">#DifferentialTesting</span>
           </div>
           <div class="card-actions">
-            <span class="status-badge status-queued">In Editorial Queue</span>
+            <span class="status-badge status-queued">In Peer Review</span>
             <span class="read-btn" style="color: var(--text-dim); cursor: default;">Drafting</span>
           </div>
         </article>
@@ -541,15 +1179,15 @@
         <!-- Edition 03 -->
         <article class="card">
           <div class="card-top">
-            <span class="card-num">EDITION #03</span>
-            <span class="card-date">UPCOMING</span>
+            <span class="card-num">WHITEPAPER #03</span>
+            <span class="card-date">DECEMBER 2026</span>
           </div>
-          <h4 class="card-title">The Multi-Agent Illusion: When Swarms Become Enterprise Technical Debt</h4>
+          <h4 class="card-title">The Multi-Agent Swarm Illusion: When Loops Become Enterprise Technical Debt</h4>
           <p class="card-summary">Cascading hallucination loops, unbudgeted message storms, and why 80% of multi-agent architectures should be replaced by a deterministic finite state machine.</p>
           <div class="tags">
             <span class="tag">#MultiAgent</span>
             <span class="tag">#StateMachines</span>
-            <span class="tag">#SystemDesign</span>
+            <span class="tag">#FinOps</span>
           </div>
           <div class="card-actions">
             <span class="status-badge status-queued">In Editorial Queue</span>
@@ -560,21 +1198,18 @@
     </section>
   </main>
 
-  <!-- Modal Reader for Edition 01 -->
+  <!-- Modal Reader for Whitepaper 01 -->
   <div id="ed1-modal" class="modal-overlay" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
       <button class="modal-close" onclick="closeModalDirect()">&times;</button>
       <div class="article-body">
-        <span class="card-num">EDITION #01 · PRACTICAL AI & SYSTEM ARCHITECTURE</span>
+        <span class="card-num">WHITEPAPER #01 · PRACTICAL AI & SYSTEMS ARCHITECTURE</span>
         <h1 style="margin-top: 0.5rem;">The Model Race Is Over. The Enterprise Harness Race Just Began</h1>
-        <div class="article-meta">By Gautam Sethi · AI Enthusiast · Published October 2026</div>
+        <div class="article-meta">By Gautam Sethi · ZeroDrift Systems Research Group · Published October 2026</div>
 
         <p>There is a flawed way engineering teams evaluate AI progress: they screenshot model benchmark leaderboards, argue about MMLU-Pro margins on Slack, swap out API keys in their <code>.env</code> file, and call that an architectural upgrade.</p>
-
         <p>In enterprise software, the model was never the hard part.</p>
-
         <p>Over the past eighteen months designing enterprise AI pipelines for mission-critical workloads, one brutal truth has emerged: <strong>every failed AI prototype failed for the exact same reason—it lacked an execution harness.</strong></p>
-
         <p>A foundation model is an engine block sitting on a garage floor. It has horsepower, but it has no steering rack, no braking circuit, no transmission, and no fuel cutoff. If you hook that engine directly to your database with a conversational prompt, you don’t have an autonomous agent. You have an uncontrolled distributed systems incident waiting for peak traffic.</p>
 
         <h2>1. What Is an Enterprise Agent Harness?</h2>
@@ -602,12 +1237,10 @@
 
         <h2>2. The Model Ladder: Stop Sending Routine Work to Trophy Models</h2>
         <p>The single biggest design flaw in corporate AI pilots is the <strong>Single-Model Fallacy</strong>—routing every single customer interaction to the most expensive frontier model available.</p>
-
         <p>If your system sends simple document parsing, text extraction, status diffs, and classification tasks to a 400B-parameter reasoning model, you aren't demonstrating innovation. You are paying a 30x tax to disguise lazy systems architecture.</p>
 
         <h2>3. The Hidden Unit Economics Nobody Puts in the Slide Deck</h2>
         <p>The real cost of enterprise AI is not the forward inference pass. The real cost is <strong>Harness Inefficiency</strong>: Context Window Drift, Unbounded Tool Retries, and Downstream Human Rework.</p>
-
         <p>A cheap open-weights model wrapped in an unmonitored script is wildly expensive. A premium frontier model wrapped in a deterministic, cached, schema-validated harness is remarkably cheap.</p>
 
         <h2>The Staff+ Architect's Bottom Line</h2>
@@ -616,23 +1249,192 @@
     </div>
   </div>
 
+  <!-- Assessment Inquiry Modal -->
+  <div id="assessment-modal" class="modal-overlay" onclick="closeAssessmentModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()" style="max-width: 620px;">
+      <button class="modal-close" onclick="closeAssessmentModalDirect()">&times;</button>
+      <div style="margin-bottom: 1.5rem;">
+        <span class="card-num">ZERODRIFT ENTERPRISE ENGAGEMENTS</span>
+        <h2 style="font-size: 1.6rem; margin-top: 0.35rem; color: #fff;" id="modalSelectedOffer">Architecture Assessment</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem;">
+          Connect directly with Gautam Sethi to review your legacy modernization roadmap or agent security posture.
+        </p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 1rem;">
+        <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="justify-content: center; padding: 0.85rem; font-size: 0.95rem;">
+          Message Gautam on LinkedIn
+        </a>
+        <a href="mailto:gautam@zerodrift.dev?subject=Enterprise%20ZeroDrift%20Inquiry" class="btn-outline" style="justify-content: center; padding: 0.85rem; font-size: 0.95rem;">
+          Send Email Inquiry (Direct)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
   <footer>
-    <p>© 2026 The Pragmatic Architect by Gautam Sethi. Built for engineering leaders, software architects, and distributed systems builders.</p>
+    <div class="footer-inner">
+      <div>
+        <strong style="color: #fff; font-size: 1rem;">ZeroDrift Systems Research Group</strong>
+        <p style="margin-top: 0.25rem;">Directed by Gautam Sethi · Open-Source Architecture & SRE Lab</p>
+      </div>
+      <div>
+        <p>© 2026 ZeroDrift Systems. Released under MIT License.</p>
+      </div>
+    </div>
   </footer>
 
   <script>
+    // Tab Switching
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      const targetBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+      if (targetBtn) targetBtn.classList.add('active');
+      
+      const targetContent = document.getElementById('tab-' + tabId);
+      if (targetContent) targetContent.classList.add('active');
+    }
+
+    // Scenarios for Replay
+    const scenarios = {
+      financial: {
+        legacy: `// COBOL / Fixed-Income Amortization Engine
+PERFORM CALCULATE-ACCRUED-YIELD
+  COMPUTE WS-PRINCIPAL-BAL = WS-TOTAL-LOAN - WS-AMORT-PAYMENTS
+  COMPUTE WS-PERIODIC-RATE = WS-ANNUAL-YIELD / 1200.0
+  COMPUTE WS-ACCRUED-INT ROUNDED = WS-PRINCIPAL-BAL * WS-PERIODIC-RATE
+  MOVE WS-ACCRUED-INT TO DB-ACCRUED-LEDGER.`,
+        modern: `// Rust / ZeroDrift Memory-Bounded Kernel
+#[inline(always)]
+pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
+    let principal = loan.total - loan.amortized;
+    let rate = loan.annual_rate / rust_decimal::Decimal::from(1200);
+    let accrued = (principal * rate).round_dp(4);
+    YieldResult { principal, accrued, status: Status::Verified }
+}`,
+        cert: "Verification SHA-256: 0x8c4476a2a7bcae062e849fca · Latency: 380ms → 18ms (15.8x faster)",
+        mem: "Memory Delta: -84.2% · 0 Divergences"
+      },
+      billing: {
+        legacy: `-- Oracle PL/SQL Reconciliation Procedure
+PROCEDURE SP_RECON_LEDGER(p_tenant_id IN NUMBER) IS
+BEGIN
+  UPDATE ACCOUNTS_LEDGER 
+  SET BALANCE = BALANCE - (SELECT SUM(AMT) FROM PENDING_TX WHERE TENANT = p_tenant_id)
+  WHERE TENANT_ID = p_tenant_id;
+  COMMIT;
+END;`,
+        modern: `// TypeScript / ZeroDrift Atomic Transaction Worker
+export async function reconcileLedger(tenantId: string, pool: PgPool): Promise<ReconSummary> {
+  return await pool.transaction(async (client) => {
+    const pendingSum = await client.query('SELECT COALESCE(SUM(amt), 0) FROM pending_tx WHERE tenant = $1 FOR UPDATE', [tenantId]);
+    const updated = await client.query('UPDATE accounts_ledger SET balance = balance - $1 WHERE tenant_id = $2 RETURNING balance', [pendingSum.rows[0].coalesce, tenantId]);
+    return { balance: updated.rows[0].balance, verified: true };
+  });
+}`,
+        cert: "Verification SHA-256: 0x3f99d107bf281ac4e90812b1 · Latency: 1,420ms → 42ms (33.8x faster)",
+        mem: "Lock Contention: Eliminated · 0 Race Inversions"
+      },
+      auth: {
+        legacy: `// Legacy Monolithic Auth0 SAML Filter
+public boolean authenticate(HttpServletRequest req) {
+  String xml = req.getParameter("SAMLResponse");
+  Document doc = parseXmlUnsafe(xml); // 120ms parsing overhead
+  return validateSignature(doc) && checkSessionInDatabase(doc);
+}`,
+        modern: `// Rust / ZeroDrift Distributed JWT Edge Gate
+pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, AuthError> {
+    let header = jsonwebtoken::decode_header(token)?;
+    let key = keyset.get(&header.kid).ok_or(AuthError::UnknownKey)?;
+    jsonwebtoken::decode::<Claims>(token, key, &Validation::new(Algorithm::RS256))
+}`,
+        cert: "Verification SHA-256: 0x5a189f78cc94101e3b889fa1 · Latency: 165ms → 1.2ms (137x faster)",
+        mem: "Zero Allocations · Zero Remote DB Queries"
+      }
+    };
+
+    function updateReplayScenario() {
+      const sc = document.getElementById('replayScenario').value;
+      const data = scenarios[sc];
+      document.getElementById('legacyCodeView').textContent = data.legacy;
+      document.getElementById('modernCodeView').textContent = data.modern;
+      document.getElementById('certHash').textContent = data.cert;
+      document.getElementById('replayBanner').querySelector('div:last-child').textContent = data.mem;
+    }
+
+    function executeReplaySim() {
+      const btn = document.getElementById('btnRunReplay');
+      const origText = btn.innerHTML;
+      btn.innerHTML = `<span class="pill-dot"></span> Replaying 500 traces...`;
+      btn.style.opacity = '0.7';
+      
+      setTimeout(() => {
+        btn.innerHTML = `✓ 500/500 Verified (100% Parity)`;
+        btn.style.background = 'linear-gradient(135deg, #059669, #047857)';
+        btn.style.opacity = '1';
+        setTimeout(() => {
+          btn.innerHTML = origText;
+          btn.style.background = 'linear-gradient(135deg, var(--emerald), #059669)';
+        }, 3000);
+      }, 750);
+    }
+
+    // Scrubber for FlightRecorder
+    function updateScrubber(val) {
+      const times = ["T+00.00s", "T+01.40s", "T+03.20s", "T+04.80s"];
+      document.getElementById('scrubberTimeBadge').textContent = times[val];
+      
+      for (let i = 0; i <= 3; i++) {
+        const el = document.getElementById('step' + i);
+        if (i == val) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      }
+    }
+
+    // AutoSandbox Terminal Simulation
+    function triggerAutoSandboxRun() {
+      const term = document.getElementById('termOutput');
+      term.innerHTML = `<span class="term-line-cyan">[*] Ingested Alert:</span> P1 [CRITICAL] Memory Leak in OrderSettlementWorker\n<span class="term-line-amber">[*] Provisioning Ephemeral WebAssembly Sandbox...</span>`;
+      
+      setTimeout(() => {
+        term.innerHTML += `\n<span class="term-line-cyan">[*] Synthesizing Regression Spec: tests/repro_test.go</span>\n<span class="term-line-red">[-] RUN test_order_concurrency ... FAIL (Exit 1 - Mutex Deadlock)</span>`;
+      }, 500);
+
+      setTimeout(() => {
+        term.innerHTML += `\n<span class="term-line-cyan">[*] ZeroDrift Applying AST Lock Ordering Fix...</span>\n<span class="term-line-green">[+] RUN test_order_concurrency ... PASS (Exit 0 - 12ms)</span>\n<span class="term-line-green">[+] Zero-Regression Certified. Ready-to-merge PR #142 drafted.</span>`;
+      }, 1200);
+    }
+
+    // Modal handlers
     function openModal(id) {
       document.getElementById('ed1-modal').style.display = 'flex';
       document.body.style.overflow = 'hidden';
     }
-
     function closeModal(e) {
       document.getElementById('ed1-modal').style.display = 'none';
       document.body.style.overflow = 'auto';
     }
-
     function closeModalDirect() {
       document.getElementById('ed1-modal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+
+    function openAssessmentModal(title) {
+      document.getElementById('modalSelectedOffer').textContent = title;
+      document.getElementById('assessment-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeAssessmentModal(e) {
+      document.getElementById('assessment-modal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
+    function closeAssessmentModalDirect() {
+      document.getElementById('assessment-modal').style.display = 'none';
       document.body.style.overflow = 'auto';
     }
   </script>

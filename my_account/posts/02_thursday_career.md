@@ -4,7 +4,8 @@ title: "The real difference between Senior and Architect"
 day: "Thursday 8:30 AM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#17 Time Anchor"
-status: "buffer_scheduled"
+status: "published"
+published_at: "2026-10-13T18:00:00Z"
 buffer_post_id: "6ace363e1077be9dba26a4e8"
 ---
 
