@@ -171,65 +171,34 @@
       border: 1px solid rgba(34, 197, 94, 0.35) !important;
       box-shadow: 0 0 25px rgba(34, 197, 94, 0.12), inset 0 0 15px rgba(34, 197, 94, 0.04) !important;
     }
-    /* MATRIX THEME LAYOUT PLACEMENT: Left-Side Vertical Command Rail & Tiled Terminal */
-    @media (min-width: 991px) {
-      body.theme-matrix header {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        bottom: 0 !important;
-        width: 250px !important;
-        height: 100vh !important;
-        border-right: 1px solid rgba(34, 197, 94, 0.45) !important;
-        border-bottom: none !important;
-        background: rgba(2, 11, 5, 0.98) !important;
-        z-index: 200 !important;
-      }
-      body.theme-matrix .nav-container {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 1.5rem !important;
-        padding: 1.5rem 1rem !important;
-        height: 100% !important;
-      }
-      body.theme-matrix .nav-links {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        width: 100% !important;
-        gap: 0.5rem !important;
-      }
-      body.theme-matrix .nav-link {
-        width: 100% !important;
-        padding: 0.5rem 0.65rem !important;
-        border-left: 2px solid transparent !important;
-        font-family: var(--font-mono) !important;
-        font-size: 0.8rem !important;
-      }
-      body.theme-matrix .nav-link:hover, body.theme-matrix .nav-link.nav-link-active {
-        border-left-color: #22c55e !important;
-        background: rgba(34, 197, 94, 0.12) !important;
-        color: #4ade80 !important;
-      }
-      body.theme-matrix .nav-actions {
-        flex-direction: column !important;
-        align-items: stretch !important;
-        width: 100% !important;
-        margin-top: auto !important;
-        gap: 0.5rem !important;
-      }
-      body.theme-matrix main, body.theme-matrix footer {
-        margin-left: 250px !important;
-        width: calc(100% - 250px) !important;
-      }
-      body.theme-matrix .hero {
-        text-align: left !important;
-        padding-left: 2rem !important;
-      }
-      body.theme-matrix .hero .pill-group,
-      body.theme-matrix .hero-cta {
-        justify-content: flex-start !important;
-      }
+    /* MATRIX THEME: High-Visibility Green Phosphor Command Console Header */
+    body.theme-matrix header {
+      position: sticky !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      border-bottom: 2px solid #22c55e !important;
+      background: rgba(2, 11, 5, 0.96) !important;
+      box-shadow: 0 4px 25px rgba(34, 197, 94, 0.25) !important;
+      z-index: 1000 !important;
+    }
+    body.theme-matrix .nav-link {
+      font-family: var(--font-mono) !important;
+      color: #86efac !important;
+      font-size: 0.85rem !important;
+      letter-spacing: 0.04em !important;
+    }
+    body.theme-matrix .nav-link:hover, body.theme-matrix .nav-link.nav-link-active {
+      color: #22c55e !important;
+      text-shadow: 0 0 10px #22c55e !important;
+      background: rgba(34, 197, 94, 0.12) !important;
+      border-radius: 4px !important;
+    }
+    body.theme-matrix .theme-dropdown-menu {
+      border: 1px solid #22c55e !important;
+      box-shadow: 0 0 25px rgba(34, 197, 94, 0.35) !important;
+      background: #020904 !important;
     }
 
     /* ==========================================================================
@@ -357,24 +326,37 @@
       border: 1px solid var(--border-subtle) !important;
       box-shadow: 0 20px 50px -15px rgba(0, 242, 254, 0.2) !important;
     }
-    @media (min-width: 991px) {
-      body.theme-cyberdeck header {
-        position: fixed !important;
-        top: auto !important;
-        bottom: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100vw !important;
-        height: 72px !important;
-        border-top: 2px solid var(--cyan-bright) !important;
-        border-bottom: none !important;
-        background: rgba(4, 10, 24, 0.96) !important;
-        backdrop-filter: blur(24px) !important;
-        z-index: 200 !important;
-      }
-      body.theme-cyberdeck main {
-        padding-bottom: 95px !important;
-      }
+    /* CYBERDECK HUD: Tactical Cockpit Header (Top Docked, Chamfered Reticles) */
+    body.theme-cyberdeck header {
+      position: sticky !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      border-bottom: 2px solid var(--cyan-bright) !important;
+      background: rgba(4, 10, 24, 0.96) !important;
+      backdrop-filter: blur(24px) !important;
+      box-shadow: 0 4px 30px rgba(0, 242, 254, 0.25) !important;
+      z-index: 1000 !important;
+    }
+    body.theme-cyberdeck .nav-link {
+      font-family: var(--font-mono) !important;
+      color: #67e8f9 !important;
+      font-size: 0.85rem !important;
+      letter-spacing: 0.05em !important;
+      text-transform: uppercase !important;
+    }
+    body.theme-cyberdeck .nav-link:hover, body.theme-cyberdeck .nav-link.nav-link-active {
+      color: var(--cyan-bright) !important;
+      text-shadow: 0 0 12px var(--cyan-bright) !important;
+      background: rgba(0, 242, 254, 0.12) !important;
+      clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+    }
+    body.theme-cyberdeck .theme-dropdown-menu {
+      border: 1px solid var(--cyan-bright) !important;
+      box-shadow: 0 0 30px rgba(0, 242, 254, 0.35) !important;
+      background: rgba(4, 10, 24, 0.98) !important;
+      z-index: 99999 !important;
     }
 
     /* ==========================================================================
@@ -1075,7 +1057,7 @@
       padding: 0.5rem;
       min-width: 220px;
       box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.85);
-      z-index: 120;
+      z-index: 99999;
       backdrop-filter: blur(14px);
     }
 
@@ -1680,6 +1662,169 @@
 
     .legend-line-cyan { width: 14px; height: 2px; background: var(--cyan-bright); display: inline-block; box-shadow: 0 0 8px var(--cyan-bright); }
     .legend-line-emerald { width: 14px; height: 2px; background: var(--emerald); display: inline-block; box-shadow: 0 0 8px var(--emerald); }
+
+    /* ==========================================================================
+       SECTION: FORENSIC ARCHITECTURAL & VIDEO MOTION GALLERY
+       ========================================================================== */
+    .gallery-panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      padding: 2.2rem;
+      margin-bottom: 4rem;
+      position: relative;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+    }
+    .gallery-nav {
+      display: flex;
+      gap: 0.75rem;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+    }
+    .gallery-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 0.65rem 1.2rem;
+      border-radius: 10px;
+      font-size: 0.84rem;
+      font-family: var(--font-sans);
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: all 0.2s ease;
+    }
+    .gallery-tab-btn:hover {
+      background: rgba(56, 189, 248, 0.12);
+      border-color: var(--cyan);
+      color: var(--cyan-bright);
+    }
+    .gallery-tab-btn.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.22), rgba(99, 102, 241, 0.22));
+      border-color: var(--cyan-bright);
+      color: #ffffff;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.35);
+    }
+    .gallery-view {
+      display: none;
+      animation: fadeInDropdown 0.25s ease-out;
+    }
+    .gallery-view.active {
+      display: block;
+    }
+    .gallery-img-container {
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      background: #020409;
+      cursor: zoom-in;
+    }
+    .gallery-img-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+    .gallery-img-container:hover img {
+      transform: scale(1.015);
+    }
+    .gallery-zoom-badge {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: rgba(5, 7, 13, 0.8);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(8px);
+      color: var(--cyan-bright);
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      pointer-events: none;
+    }
+    .gallery-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1.25rem;
+      padding: 1rem 1.4rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .gallery-meta-badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .motion-stream-canvas {
+      width: 100%;
+      height: 440px;
+      display: block;
+      background: #02050e;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Lightbox Modal */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(16px);
+      z-index: 100000;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+    .lightbox-modal.active {
+      display: flex;
+      animation: fadeInDropdown 0.2s ease-out;
+    }
+    .lightbox-content {
+      max-width: 94vw;
+      max-height: 92vh;
+      position: relative;
+    }
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 86vh;
+      border-radius: 12px;
+      border: 1px solid var(--border-glow);
+      box-shadow: 0 0 60px rgba(0, 242, 254, 0.3);
+    }
+    .lightbox-close-btn {
+      position: absolute;
+      top: -45px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .lightbox-close-btn:hover {
+      background: #ef4444;
+      border-color: #ef4444;
+    }
 
     /* ==========================================================================
        SECTION: INTERACTIVE INFOGRAPHIC KERNEL (Pipeline Stages)
@@ -2567,6 +2712,7 @@
       <nav aria-label="Primary Navigation" class="nav-links">
         <a href="#bento" class="nav-link">Architecture Lab</a>
         <a href="#telemetry" class="nav-link">Oscilloscope Radar</a>
+        <a href="#gallery" class="nav-link">Forensics Gallery</a>
         <a href="#pipeline" class="nav-link">Kernel Flow</a>
         <a href="#workbench" class="nav-link">Workbench</a>
         <a href="#sandbox-lab" class="nav-link">Runtime Sandbox</a>
@@ -2676,6 +2822,10 @@
       </a>
       <a href="#telemetry" class="mobile-nav-link" onclick="closeMobileMenu()">
         <span>Oscilloscope Radar</span>
+        <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
+      </a>
+      <a href="#gallery" class="mobile-nav-link" onclick="closeMobileMenu()">
+        <span>Forensics Gallery</span>
         <span style="font-size: 0.8rem; color: var(--cyan);">→</span>
       </a>
       <a href="#pipeline" class="mobile-nav-link" onclick="closeMobileMenu()">
@@ -2935,6 +3085,117 @@
         </div>
       </div>
     </section>
+
+    <!-- ==========================================================================
+         SECTION: FORENSIC ARCHITECTURAL & VIDEO MOTION GALLERY
+         ========================================================================== -->
+    <section class="container lazy-reveal" id="gallery" style="margin-top: 5rem;">
+      <div class="section-title">
+        <div class="pill-group" style="justify-content: center; margin-bottom: 0.8rem;">
+          <span class="pill pill-cyan"><span class="pill-dot"></span> 8K Architectural Infographics</span>
+          <span class="pill pill-emerald">eBPF Real-Time Telemetry</span>
+          <span class="pill pill-purple">Live Motion Stream</span>
+        </div>
+        <h3>Forensic Systems Architecture & Motion Lab</h3>
+        <p>Interactive high-definition system topologies generated via Google multimodal AI, visualizing differential legacy AST translation, eBPF kprobe verification, and live kernel telemetry.</p>
+      </div>
+
+      <div class="gallery-panel spotlight-card">
+        <div class="gallery-nav" role="tablist" aria-label="Forensic Diagrams & Motion Stream">
+          <button class="gallery-tab-btn active" id="tabBtnDiff" onclick="switchGalleryTab('diff')" role="tab" aria-selected="true">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            <span>01 / Differential Migration Core</span>
+          </button>
+          <button class="gallery-tab-btn" id="tabBtnFlight" onclick="switchGalleryTab('flight')" role="tab" aria-selected="false">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>02 / FlightRecorder™ 3D Telemetry HUD</span>
+          </button>
+          <button class="gallery-tab-btn" id="tabBtnMotion" onclick="switchGalleryTab('motion')" role="tab" aria-selected="false">
+            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span>03 / Live Bytecode Motion Stream</span>
+          </button>
+        </div>
+
+        <!-- View 1: Differential Migration Core -->
+        <div class="gallery-view active" id="gview-diff" role="tabpanel">
+          <div class="gallery-img-container" onclick="openLightbox('assets/images/zerodrift_diff_migration.jpg', 'ZeroDrift Differential Migration Engine & eBPF Verification Core')">
+            <img src="assets/images/zerodrift_diff_migration.jpg" alt="ZeroDrift Differential Migration Core Infographic" loading="lazy">
+            <div class="gallery-zoom-badge">🔍 Click to Inspect 8K Diagram</div>
+          </div>
+          <div class="gallery-meta-bar">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: #fff; margin-bottom: 0.25rem;">ZeroDrift Differential Migration Core & eBPF Verification Engine</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Inbound legacy streams (COBOL, Java, PL-SQL) verified down to bitwise byte parity against memory-safe Rust & WebAssembly micro-kernels.</div>
+            </div>
+            <div class="gallery-meta-badges">
+              <span class="pill pill-emerald">Variance: 0.000%</span>
+              <span class="pill pill-cyan">SHA-256 Parity Seal</span>
+              <span class="pill pill-purple">Dual-Tier Dispatch</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 2: FlightRecorder Telemetry HUD -->
+        <div class="gallery-view" id="gview-flight" role="tabpanel">
+          <div class="gallery-img-container" onclick="openLightbox('assets/images/zerodrift_flight_recorder_diagram.jpg', 'ZeroDrift FlightRecorder SOC Telemetry HUD')">
+            <img src="assets/images/zerodrift_flight_recorder_diagram.jpg" alt="ZeroDrift FlightRecorder SOC Telemetry HUD Diagram" loading="lazy">
+            <div class="gallery-zoom-badge">🔍 Click to Inspect 8K Diagram</div>
+          </div>
+          <div class="gallery-meta-bar">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: #fff; margin-bottom: 0.25rem;">FlightRecorder™ Real-Time SRE Forensic HUD</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">3D holographic kernel process tree, memory leak bounded execution buffers, and Linux eBPF kprobe syscall interceptor enforcing zero unauthorized egress.</div>
+            </div>
+            <div class="gallery-meta-badges">
+              <span class="pill pill-emerald">Egress Violations: 0</span>
+              <span class="pill pill-cyan">Latency: 1400ms → 12ms (-99%)</span>
+              <span class="pill pill-amber">Ring 0 Probe Filter</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- View 3: Live Bytecode Motion Stream -->
+        <div class="gallery-view" id="gview-motion" role="tabpanel">
+          <div style="position: relative;">
+            <canvas id="motionStreamCanvas" class="motion-stream-canvas"></canvas>
+            <div style="position: absolute; bottom: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; align-items: center; background: rgba(5, 7, 13, 0.88); backdrop-filter: blur(10px); padding: 0.65rem 1.25rem; border-radius: 10px; border: 1px solid var(--border-subtle); flex-wrap: wrap; gap: 0.5rem;">
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <button class="btn-rack-action" id="motionPlayPauseBtn" onclick="toggleMotionStream()" style="padding: 0.35rem 0.8rem; font-size: 0.78rem;">⏸ Pause Stream</button>
+                <button class="btn-rack-action" onclick="resetMotionStream()" style="padding: 0.35rem 0.8rem; font-size: 0.78rem;">🔄 Reset Flow</button>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--cyan-bright); margin-left: 0.5rem;">SPEED:</span>
+                <button class="btn-rack-action" onclick="setMotionSpeed(0.5)" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;">0.5x</button>
+                <button class="btn-rack-action" onclick="setMotionSpeed(1.0)" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;">1.0x</button>
+                <button class="btn-rack-action" onclick="setMotionSpeed(2.0)" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;">2.0x</button>
+              </div>
+              <div style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--emerald-glow); display: flex; gap: 1rem;">
+                <span>STATUS: STREAMING</span>
+                <span>VERIFICATION: 100% PARITY</span>
+                <span id="motionFpsCounter">60 FPS</span>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-meta-bar">
+            <div>
+              <div style="font-weight: 800; font-size: 1.05rem; color: #fff; margin-bottom: 0.25rem;">Deterministic Bytecode Stream Execution</div>
+              <div style="font-size: 0.85rem; color: var(--text-muted);">Real-time canvas simulation of untrusted code AST conversion through hardware-isolated ring buffers into verifiable micro-instructions.</div>
+            </div>
+            <div class="gallery-meta-badges">
+              <span class="pill pill-emerald">0 Buffer Overflows</span>
+              <span class="pill pill-cyan">Memory Boundary: 128MB</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox Modal for 8K Inspection -->
+    <div class="lightbox-modal" id="galleryLightbox" onclick="closeLightbox(event)" role="dialog" aria-modal="true" aria-label="Forensic Diagram Lightbox">
+      <div class="lightbox-content" onclick="event.stopPropagation()">
+        <button class="lightbox-close-btn" onclick="closeLightboxDirect()" aria-label="Close Lightbox">&times;</button>
+        <img id="lightboxImg" src="" alt="High-Resolution Architectural Diagram">
+        <div style="font-family: var(--font-sans); color: #fff; margin-top: 0.75rem; text-align: center; font-weight: 700; font-size: 1rem;" id="lightboxCaption"></div>
+      </div>
+    </div>
 
     <!-- ==========================================================================
          INTERACTIVE INFOGRAPHIC: THE ZERODRIFT EXECUTION KERNEL
@@ -3922,7 +4183,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       scrollBar.style.width = scrolled + '%';
     }
 
-    const sectionsToSpy = ['bento', 'telemetry', 'pipeline', 'workbench', 'sandbox-lab', 'compare', 'whitepapers', 'advisory'];
+    const sectionsToSpy = ['bento', 'telemetry', 'gallery', 'pipeline', 'workbench', 'sandbox-lab', 'compare', 'whitepapers', 'advisory'];
     function updateScrollSpy() {
       const scrollPos = window.scrollY + 180;
       let currentSec = '';
@@ -4763,7 +5024,188 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
     }
 
     /* ==========================================================================
-       11. PAGE UI LAZY REVEAL INTERSECTION OBSERVER
+       12. FORENSIC ARCHITECTURAL GALLERY, LIGHTBOX & MOTION STREAM
+       ========================================================================== */
+    function switchGalleryTab(tabId) {
+      sound.click();
+      document.querySelectorAll('.gallery-tab-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.gallery-view').forEach(view => view.classList.remove('active'));
+
+      const targetBtn = document.getElementById('tabBtn' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
+      if (targetBtn) targetBtn.classList.add('active');
+
+      const targetView = document.getElementById('gview-' + tabId);
+      if (targetView) targetView.classList.add('active');
+
+      if (tabId === 'motion') {
+        resizeMotionCanvas();
+      }
+    }
+
+    function openLightbox(src, caption) {
+      sound.click();
+      const modal = document.getElementById('galleryLightbox');
+      const img = document.getElementById('lightboxImg');
+      const cap = document.getElementById('lightboxCaption');
+      if (modal && img) {
+        img.src = src;
+        if (cap) cap.textContent = caption || '';
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeLightbox(e) {
+      const modal = document.getElementById('galleryLightbox');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    function closeLightboxDirect() {
+      sound.click();
+      const modal = document.getElementById('galleryLightbox');
+      if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+      }
+    }
+
+    /* Interactive Motion Stream Canvas */
+    const motionCanvas = document.getElementById('motionStreamCanvas');
+    const motionCtx = motionCanvas ? motionCanvas.getContext('2d') : null;
+    let motionRunning = true;
+    let motionSpeed = 1.0;
+    let motionPackets = [];
+
+    function resizeMotionCanvas() {
+      if (!motionCanvas) return;
+      const rect = motionCanvas.getBoundingClientRect();
+      motionCanvas.width = rect.width * window.devicePixelRatio;
+      motionCanvas.height = rect.height * window.devicePixelRatio;
+      initMotionPackets();
+    }
+    window.addEventListener('resize', resizeMotionCanvas);
+
+    function initMotionPackets() {
+      if (!motionCanvas) return;
+      const w = motionCanvas.width;
+      const h = motionCanvas.height;
+      motionPackets = [];
+      for (let i = 0; i < 28; i++) {
+        motionPackets.push({
+          x: Math.random() * (w * 0.25),
+          y: (h * 0.2) + Math.random() * (h * 0.6),
+          vx: (Math.random() * 2 + 1.8),
+          size: Math.random() * 3 + 2,
+          stage: 1,
+          color: '#38bdf8',
+          payload: '0x' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0')
+        });
+      }
+    }
+
+    function toggleMotionStream() {
+      sound.click();
+      motionRunning = !motionRunning;
+      const btn = document.getElementById('motionPlayPauseBtn');
+      if (btn) btn.textContent = motionRunning ? '⏸ Pause Stream' : '▶ Resume Stream';
+    }
+
+    function resetMotionStream() {
+      sound.sweep();
+      initMotionPackets();
+    }
+
+    function setMotionSpeed(speed) {
+      sound.tick();
+      motionSpeed = speed;
+    }
+
+    function renderMotionStream() {
+      if (!motionCanvas || !motionCtx) return;
+      const w = motionCanvas.width;
+      const h = motionCanvas.height;
+
+      if (motionRunning) {
+        motionCtx.fillStyle = 'rgba(2, 5, 14, 0.22)';
+        motionCtx.fillRect(0, 0, w, h);
+
+        // Draw 3 Stages: [Mainframe Inbound] -> [eBPF Parity Gate] -> [Rust/WASM Kernel]
+        const col1 = w * 0.28;
+        const col2 = w * 0.68;
+
+        // Stage dividing guide lines
+        motionCtx.strokeStyle = 'rgba(56, 189, 248, 0.12)';
+        motionCtx.setLineDash([4, 6]);
+        motionCtx.beginPath();
+        motionCtx.moveTo(col1, 0); motionCtx.lineTo(col1, h);
+        motionCtx.moveTo(col2, 0); motionCtx.lineTo(col2, h);
+        motionCtx.stroke();
+        motionCtx.setLineDash([]);
+
+        // Stage labels
+        motionCtx.font = `${Math.max(10, Math.floor(11 * window.devicePixelRatio))}px "JetBrains Mono", monospace`;
+        motionCtx.fillStyle = 'rgba(148, 163, 184, 0.6)';
+        motionCtx.fillText('[STAGE 01: LEGACY INBOUND]', 20, 30);
+        motionCtx.fillStyle = 'rgba(56, 189, 248, 0.8)';
+        motionCtx.fillText('[STAGE 02: eBPF AST VERIFIER]', col1 + 20, 30);
+        motionCtx.fillStyle = 'rgba(52, 211, 153, 0.8)';
+        motionCtx.fillText('[STAGE 03: RUST/WASM CORE]', col2 + 20, 30);
+
+        // Center eBPF verification aura
+        const auraX = (col1 + col2) / 2;
+        const auraY = h / 2;
+        motionCtx.strokeStyle = 'rgba(0, 242, 254, 0.15)';
+        motionCtx.beginPath();
+        motionCtx.arc(auraX, auraY, h * 0.32, 0, Math.PI * 2);
+        motionCtx.stroke();
+
+        // Process Packets
+        motionPackets.forEach(p => {
+          p.x += p.vx * motionSpeed;
+
+          if (p.x > col1 && p.x < col2) {
+            p.color = '#00f2fe';
+            // Slight jitter in verification zone
+            p.y += (Math.random() - 0.5) * 0.8;
+          } else if (p.x >= col2) {
+            p.color = '#34d399';
+          }
+
+          if (p.x > w + 20) {
+            p.x = -10;
+            p.y = (h * 0.2) + Math.random() * (h * 0.6);
+            p.color = '#38bdf8';
+          }
+
+          motionCtx.fillStyle = p.color;
+          motionCtx.shadowColor = p.color;
+          motionCtx.shadowBlur = 8;
+          motionCtx.beginPath();
+          motionCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          motionCtx.fill();
+          motionCtx.shadowBlur = 0;
+
+          // Render small hex payload label
+          if (p.size > 3.5) {
+            motionCtx.font = `${Math.max(8, Math.floor(9 * window.devicePixelRatio))}px monospace`;
+            motionCtx.fillStyle = 'rgba(255,255,255,0.45)';
+            motionCtx.fillText(p.payload, p.x + 8, p.y + 3);
+          }
+        });
+      }
+
+      requestAnimationFrame(renderMotionStream);
+    }
+
+    // Initialize Motion Stream
+    resizeMotionCanvas();
+    requestAnimationFrame(renderMotionStream);
+
+    /* ==========================================================================
+       13. PAGE UI LAZY REVEAL INTERSECTION OBSERVER
        ========================================================================== */
     if ('IntersectionObserver' in window) {
       const revealObserver = new IntersectionObserver((entries, obs) => {

@@ -139,18 +139,32 @@ async def human_type(element, text):
             await asyncio.sleep(random.uniform(0.2, 0.5))
 
 
-async def run_reply_monitor(dry_run=False, max_replies=4):
+async def run_reply_monitor(dry_run=False, max_replies=4, headless=True):
     cfg = load_config()
     replied_ids = get_replied_ids()
     print(f"[*] Starting Autonomous Reply Monitor (Max: {max_replies} replies)...")
+
+    # Check if li_at cookie is configured in config.json or environment
+    li_at_val = cfg.get("linkedin", {}).get("li_at") or os.environ.get("LINKEDIN_LI_AT")
 
     os.makedirs(USER_DATA_DIR, exist_ok=True)
     async with async_playwright() as p:
         browser = await p.chromium.launch_persistent_context(
             user_data_dir=USER_DATA_DIR,
-            headless=False,
+            headless=headless,
             args=["--disable-blink-features=AutomationControlled"]
         )
+        if li_at_val:
+            print("[*] Injecting 'li_at' session cookie from configuration...")
+            await browser.add_cookies([{
+                "name": "li_at",
+                "value": li_at_val.strip(),
+                "domain": ".www.linkedin.com",
+                "path": "/",
+                "secure": True,
+                "httpOnly": True
+            }])
+
         page = await browser.new_page()
 
         print("[*] Navigating to LinkedIn Notifications...")
@@ -160,9 +174,10 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
         cookies = await browser.cookies()
         has_li_at = any(c.get("name") == "li_at" for c in cookies)
         if not has_li_at or "login" in page.url or "checkpoint" in page.url or "authwall" in page.url:
-            print("[-] Not logged in: LinkedIn authentication cookie ('li_at') is missing.")
-            print("[!] Please run: python scripts/linkedin_engage.py --login")
-            print("[!] Log in inside the Chromium window that pops up until your feed loads.")
+            print("[-] Not logged in: LinkedIn authentication cookie ('li_at') is missing or expired.")
+            print("[!] Two ways to authenticate:")
+            print("    1. Paste your 'li_at' cookie directly into my_account/config.json under \"linkedin\": {\"li_at\": \"...\"}")
+            print("    2. Or run interactively in your terminal: python scripts/linkedin_engage.py --login")
             await browser.close()
             return
 
@@ -365,10 +380,11 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
 def main():
     parser = argparse.ArgumentParser(description="Autonomous LinkedIn Reply Monitor.")
     parser.add_argument("--dry-run", action="store_true", help="Preview typing without submitting")
+    parser.add_argument("--headful", action="store_true", help="Open visible Chromium browser window")
     parser.add_argument("--max", type=int, default=4, help="Max replies per session (default: 4)")
     args = parser.parse_args()
 
-    asyncio.run(run_reply_monitor(dry_run=args.dry_run, max_replies=args.max))
+    asyncio.run(run_reply_monitor(dry_run=args.dry_run, max_replies=args.max, headless=not args.headful))
 
 
 if __name__ == "__main__":
