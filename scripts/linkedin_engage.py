@@ -77,27 +77,29 @@ async def handle_login():
         print("[*] Keep the window open until your feed loads...")
 
         logged_in = False
-        for _ in range(150): # up to 5 minutes
+        print("[*] Waiting for login completion (up to 5 minutes). You can take your time...")
+        for sec in range(150):  # 150 * 2s = 300 seconds
             await asyncio.sleep(2)
             try:
                 cookies = await browser.cookies()
                 has_li_at = any(c.get("name") == "li_at" for c in cookies)
-                if has_li_at and ("feed" in page.url or "mynetwork" in page.url or "messaging" in page.url or page.url == "https://www.linkedin.com/"):
-                    print("[+] SUCCESS: LinkedIn authentication verified!")
+                current_url = page.url
+                if has_li_at and ("feed" in current_url or "mynetwork" in current_url or "messaging" in current_url or "notifications" in current_url or current_url.rstrip("/") == "https://www.linkedin.com"):
+                    print("\n[+] SUCCESS: LinkedIn authentication verified!")
                     print("[+] 'li_at' session cookie successfully saved in my_account/browser_session.")
                     logged_in = True
                     break
             except Exception:
-                break
+                pass
 
         if not logged_in:
-            print("[!] Still waiting for login... If you have finished logging in, press Enter in the terminal to save session:")
             try:
-                # Give a 15-second grace period
-                await asyncio.sleep(15)
                 cookies = await browser.cookies()
                 if any(c.get("name") == "li_at" for c in cookies):
                     print("[+] 'li_at' cookie found! Session saved.")
+                    logged_in = True
+                else:
+                    print("[-] Timed out waiting for login. 'li_at' cookie not found.")
             except Exception:
                 pass
 

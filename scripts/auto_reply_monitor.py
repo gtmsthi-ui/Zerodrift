@@ -172,6 +172,8 @@ async def run_reply_monitor(dry_run=False, max_replies=4):
                 break
 
             card_text = await card.inner_text()
+            clean_brief = re.sub(r"\s+", " ", card_text)[:90]
+            print(f"  [Notif {idx+1}] {clean_brief}...")
             lower_text = card_text.lower()
 
             is_comment_on_my_post = "commented on your post" in lower_text
