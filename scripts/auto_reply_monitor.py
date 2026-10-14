@@ -140,6 +140,7 @@ async def human_type(element, text):
 
 
 async def run_reply_monitor(dry_run=False, max_replies=4):
+    cfg = load_config()
     replied_ids = get_replied_ids()
     print(f"[*] Starting Autonomous Reply Monitor (Max: {max_replies} replies)...")
 
