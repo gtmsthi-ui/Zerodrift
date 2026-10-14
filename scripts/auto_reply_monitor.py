@@ -144,8 +144,9 @@ async def run_reply_monitor(dry_run=False, max_replies=4, headless=True):
     replied_ids = get_replied_ids()
     print(f"[*] Starting Autonomous Reply Monitor (Max: {max_replies} replies)...")
 
-    # Check if li_at cookie is configured in config.json or environment
+    # Check if li_at cookie and jsessionid are configured in config.json or environment
     li_at_val = cfg.get("linkedin", {}).get("li_at") or os.environ.get("LINKEDIN_LI_AT")
+    jsession_val = cfg.get("linkedin", {}).get("jsessionid") or cfg.get("linkedin", {}).get("JSESSIONID") or os.environ.get("LINKEDIN_JSESSIONID")
 
     os.makedirs(USER_DATA_DIR, exist_ok=True)
     async with async_playwright() as p:
@@ -154,16 +155,46 @@ async def run_reply_monitor(dry_run=False, max_replies=4, headless=True):
             headless=headless,
             args=["--disable-blink-features=AutomationControlled"]
         )
+        cookies_to_add = []
         if li_at_val:
-            print("[*] Injecting 'li_at' session cookie from configuration...")
-            await browser.add_cookies([{
-                "name": "li_at",
-                "value": li_at_val.strip(),
-                "domain": ".www.linkedin.com",
-                "path": "/",
-                "secure": True,
-                "httpOnly": True
-            }])
+            cookies_to_add.extend([
+                {
+                    "name": "li_at",
+                    "value": li_at_val.strip(),
+                    "domain": ".linkedin.com",
+                    "path": "/",
+                    "secure": True,
+                    "httpOnly": True
+                },
+                {
+                    "name": "li_at",
+                    "value": li_at_val.strip(),
+                    "domain": ".www.linkedin.com",
+                    "path": "/",
+                    "secure": True,
+                    "httpOnly": True
+                }
+            ])
+        if jsession_val:
+            cookies_to_add.extend([
+                {
+                    "name": "JSESSIONID",
+                    "value": jsession_val.strip(),
+                    "domain": ".linkedin.com",
+                    "path": "/",
+                    "secure": True
+                },
+                {
+                    "name": "JSESSIONID",
+                    "value": jsession_val.strip(),
+                    "domain": ".www.linkedin.com",
+                    "path": "/",
+                    "secure": True
+                }
+            ])
+        if cookies_to_add:
+            print("[*] Injecting session authentication cookies from configuration...")
+            await browser.add_cookies(cookies_to_add)
 
         page = await browser.new_page()
 
