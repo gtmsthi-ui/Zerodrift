@@ -7,15 +7,17 @@
   <meta name="description" content="Research-grade systems architecture for autonomous agent reliability, differential legacy code migration, and eBPF forensic execution by Gautam Sethi & ZeroDrift Systems Group.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-dark: #06080e;
-      --bg-panel: rgba(11, 16, 28, 0.82);
-      --bg-card: rgba(15, 23, 42, 0.75);
-      --bg-card-hover: rgba(24, 34, 60, 0.88);
+      --bg-dark: #05070d;
+      --bg-surface: #0a0e1a;
+      --bg-panel: rgba(13, 19, 33, 0.78);
+      --bg-card: rgba(16, 24, 44, 0.75);
+      --bg-card-hover: rgba(24, 36, 64, 0.9);
       --border-subtle: rgba(56, 189, 248, 0.12);
       --border-glow: rgba(56, 189, 248, 0.38);
+      --border-beam: rgba(0, 242, 254, 0.6);
       --cyan: #38bdf8;
       --cyan-bright: #00f2fe;
       --emerald: #10b981;
@@ -36,9 +38,9 @@
     body {
       background-color: var(--bg-dark);
       background-image: 
-        radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.04) 0%, transparent 60%);
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.03) 0%, transparent 60%);
       color: var(--text-main);
       font-family: var(--font-sans);
       line-height: 1.6;
@@ -59,9 +61,58 @@
       opacity: 0.35;
     }
 
-    header, main, footer, .modal-overlay {
+    header, main, footer, .modal-overlay, #cmdPalette {
       position: relative;
       z-index: 2;
+    }
+
+    /* Spotlight cursor glow utility for cards */
+    .spotlight-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .spotlight-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(400px circle at var(--mouse-x, -500px) var(--mouse-y, -500px), rgba(56, 189, 248, 0.12), transparent 40%);
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+      z-index: 1;
+    }
+    .spotlight-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Animated Border Beam */
+    .border-beam-box {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      padding: 1px;
+      background: rgba(56, 189, 248, 0.15);
+    }
+    .border-beam-box::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      top: -50%;
+      left: -50%;
+      background: conic-gradient(transparent, transparent, var(--cyan-bright), transparent, transparent);
+      animation: rotateBeam 6s linear infinite;
+      z-index: 0;
+    }
+    .border-beam-content {
+      position: relative;
+      background: #090e1b;
+      border-radius: 17px;
+      z-index: 1;
+      height: 100%;
+    }
+    @keyframes rotateBeam {
+      100% { transform: rotate(360deg); }
     }
 
     /* Navigation */
@@ -71,11 +122,11 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(6, 8, 14, 0.92);
+      background: rgba(5, 7, 13, 0.92);
     }
 
     .nav-container {
-      max-width: 1340px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 0.85rem 2rem;
       display: flex;
@@ -101,7 +152,7 @@
       justify-content: center;
       font-weight: 800;
       font-size: 1.15rem;
-      color: #06080e;
+      color: #05070d;
       box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
       position: relative;
     }
@@ -161,8 +212,38 @@
 
     .nav-actions {
       display: flex;
-      gap: 0.85rem;
+      gap: 0.75rem;
       align-items: center;
+    }
+
+    /* Command Palette Button (⌘K) */
+    .btn-cmd-k {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: var(--font-sans);
+    }
+    .btn-cmd-k:hover {
+      border-color: var(--cyan);
+      color: var(--cyan);
+      background: rgba(56, 189, 248, 0.08);
+    }
+    .kbd-shortcut {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: var(--text-main);
     }
 
     /* Audio HUD Control Button */
@@ -238,7 +319,7 @@
 
     .btn-primary {
       background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
-      color: #06080e;
+      color: #05070d;
       border: none;
       padding: 0.5rem 1.15rem;
       border-radius: 8px;
@@ -258,12 +339,13 @@
       box-shadow: 0 0 30px rgba(56, 189, 248, 0.45);
     }
 
-    /* Hero */
+    /* Hero Section */
     .hero {
-      max-width: 1340px;
+      max-width: 1360px;
       margin: 3.5rem auto 2.5rem;
       padding: 0 2rem;
       text-align: center;
+      position: relative;
     }
 
     .pill-group {
@@ -298,24 +380,24 @@
     }
 
     .hero h2 {
-      font-size: 3.6rem;
-      font-weight: 800;
-      letter-spacing: -0.035em;
-      line-height: 1.1;
-      margin-bottom: 1.25rem;
+      font-size: 3.8rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+      margin-bottom: 1.35rem;
       background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      max-width: 1100px;
+      max-width: 1140px;
       margin-left: auto;
       margin-right: auto;
     }
 
     .hero p.lead {
       color: var(--text-muted);
-      font-size: 1.18rem;
-      max-width: 860px;
-      margin: 0 auto 2.25rem;
+      font-size: 1.2rem;
+      max-width: 880px;
+      margin: 0 auto 2.35rem;
       line-height: 1.65;
     }
 
@@ -333,7 +415,7 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 1.25rem;
-      max-width: 1140px;
+      max-width: 1180px;
       margin: 0 auto;
       padding: 1.5rem 2rem;
       background: var(--bg-card);
@@ -353,7 +435,7 @@
 
     .metric-val {
       font-family: var(--font-mono);
-      font-size: 2.1rem;
+      font-size: 2.2rem;
       font-weight: 800;
       color: var(--cyan-bright);
       line-height: 1;
@@ -375,9 +457,45 @@
       margin-top: 0.25rem;
     }
 
+    /* Modern Marquee (Magic UI Style) */
+    .marquee-container {
+      max-width: 100vw;
+      overflow: hidden;
+      margin: 3.5rem 0 2rem;
+      position: relative;
+      mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+      -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 3rem;
+      width: max-content;
+      animation: scrollMarquee 28s linear infinite;
+    }
+
+    .marquee-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      white-space: nowrap;
+      transition: color 0.2s;
+    }
+    .marquee-item:hover { color: var(--cyan-bright); }
+    .marquee-item span.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); }
+
+    @keyframes scrollMarquee {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
     /* Main Container */
     .container {
-      max-width: 1340px;
+      max-width: 1360px;
       margin: 0 auto;
       padding: 0 2rem 5rem;
     }
@@ -388,7 +506,7 @@
     }
 
     .section-title h3 {
-      font-size: 2.3rem;
+      font-size: 2.35rem;
       font-weight: 800;
       letter-spacing: -0.025em;
       margin-bottom: 0.5rem;
@@ -400,21 +518,163 @@
 
     .section-title p {
       color: var(--text-muted);
-      font-size: 1.02rem;
-      max-width: 720px;
+      font-size: 1.05rem;
+      max-width: 740px;
       margin: 0 auto;
     }
 
     /* ==========================================================================
-       SECTION: LIVE TELEMETRY OSCILLOSCOPE (Visual Effect + Canvas)
+       SECTION: BENTO GRID WITH INFOGRAPHICAL HIGH-RES VISUAL ASSETS
+       ========================================================================== */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .bento-card-large {
+      grid-column: span 8;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glow);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bento-card-side {
+      grid-column: span 4;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .bento-media-wrap {
+      position: relative;
+      width: 100%;
+      height: 290px;
+      overflow: hidden;
+      background: #020409;
+    }
+
+    .bento-media-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .bento-card-large:hover .bento-media-wrap img,
+    .bento-card-side:hover .bento-media-wrap img {
+      transform: scale(1.04);
+    }
+
+    .bento-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(10, 14, 26, 0.95) 100%);
+      pointer-events: none;
+    }
+
+    .bento-body {
+      padding: 1.75rem 2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      z-index: 2;
+    }
+
+    .bento-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    .bento-title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .bento-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+    }
+
+    .bento-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 1rem;
+    }
+
+    /* FinOps Interactive Token Savings Calculator */
+    .finops-calculator {
+      background: #070a13;
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-top: 1rem;
+    }
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .calc-slider {
+      width: 100%;
+      accent-color: var(--cyan-bright);
+      margin: 0.5rem 0 1rem;
+      cursor: pointer;
+    }
+    .calc-result-box {
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .calc-saved-val {
+      font-family: var(--font-mono);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--emerald-glow);
+    }
+
+    /* ==========================================================================
+       SECTION: LIVE TELEMETRY OSCILLOSCOPE (Canvas Radar)
        ========================================================================== */
     .telemetry-rack {
-      background: #04060b;
+      background: #04060c;
       border: 1px solid var(--border-glow);
       border-radius: 18px;
       padding: 1.75rem;
       margin: 3.5rem auto 0;
-      max-width: 1140px;
+      max-width: 1180px;
       box-shadow: 0 25px 60px -20px rgba(0, 242, 254, 0.15);
       position: relative;
       overflow: hidden;
@@ -469,6 +729,29 @@
       animation: pulseDot 1s infinite;
     }
 
+    .rack-controls {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn-rack-action {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-subtle);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-rack-action:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--cyan);
+    }
+
     .rack-status-grid {
       display: flex;
       gap: 1.75rem;
@@ -482,7 +765,7 @@
     .canvas-wrapper {
       position: relative;
       width: 100%;
-      height: 180px;
+      height: 200px;
       border-radius: 10px;
       overflow: hidden;
       background: #020408;
@@ -519,7 +802,7 @@
     .legend-line-emerald { width: 14px; height: 2px; background: var(--emerald); display: inline-block; box-shadow: 0 0 8px var(--emerald); }
 
     /* ==========================================================================
-       SECTION: INFOGRAPHICAL ARCHITECTURE PIPELINE (Animated SVG & Nodes)
+       SECTION: INTERACTIVE INFOGRAPHIC KERNEL (Pipeline Stages)
        ========================================================================== */
     .infographic-wrapper {
       background: var(--bg-panel);
@@ -552,7 +835,6 @@
       max-width: 650px;
     }
 
-    /* Pipeline 5-Node Interactive Grid */
     .pipeline-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -633,7 +915,6 @@
       display: block;
     }
 
-    /* Infographic Inspector Display */
     .infographic-inspector {
       background: #040710;
       border: 1px solid var(--border-subtle);
@@ -678,93 +959,7 @@
     }
 
     /* ==========================================================================
-       SECTION: VISUAL ARCHITECTURAL COMPARISON (Infographical Breakdown)
-       ========================================================================== */
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .compare-card {
-      border-radius: 18px;
-      padding: 2.25rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .compare-bad {
-      background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, rgba(14, 20, 36, 0.7) 100%);
-      border: 1px solid rgba(244, 63, 94, 0.25);
-    }
-
-    .compare-good {
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 20, 36, 0.7) 100%);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      box-shadow: 0 0 35px rgba(16, 185, 129, 0.12);
-    }
-
-    .compare-badge {
-      font-family: var(--font-mono);
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      display: inline-block;
-      margin-bottom: 1rem;
-    }
-    .badge-bad { background: rgba(244, 63, 94, 0.18); color: var(--rose); }
-    .badge-good { background: rgba(16, 185, 129, 0.18); color: var(--emerald-glow); }
-
-    .compare-title {
-      font-size: 1.45rem;
-      font-weight: 800;
-      color: #fff;
-      margin-bottom: 0.5rem;
-    }
-
-    .compare-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-      line-height: 1.55;
-    }
-
-    .compare-metrics {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .comp-metric-box {
-      background: rgba(0, 0, 0, 0.35);
-      padding: 0.85rem 1rem;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .comp-metric-box .label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); }
-    .comp-metric-box .val-bad { font-size: 1.35rem; font-weight: 800; color: var(--rose); font-family: var(--font-mono); }
-    .comp-metric-box .val-good { font-size: 1.35rem; font-weight: 800; color: var(--emerald-glow); font-family: var(--font-mono); }
-
-    .compare-bullets {
-      list-style: none;
-      font-size: 0.86rem;
-      color: #cbd5e1;
-    }
-    .compare-bullets li {
-      padding: 0.5rem 0;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.65rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    /* ==========================================================================
-       WORKBENCH / LIVE INTERACTIVE TOOLS SECTION
+       SECTION: WORKBENCH / LIVE INTERACTIVE TOOLS
        ========================================================================== */
     .workbench {
       background: rgba(11, 16, 28, 0.9);
@@ -1036,6 +1231,92 @@
     .term-line-cyan { color: var(--cyan-bright); }
     .term-line-amber { color: var(--amber); }
 
+    /* ==========================================================================
+       SECTION: VISUAL ARCHITECTURAL COMPARISON MATRIX
+       ========================================================================== */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .compare-card {
+      border-radius: 18px;
+      padding: 2.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .compare-bad {
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.05) 0%, rgba(14, 20, 36, 0.7) 100%);
+      border: 1px solid rgba(244, 63, 94, 0.25);
+    }
+
+    .compare-good {
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 20, 36, 0.7) 100%);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      box-shadow: 0 0 35px rgba(16, 185, 129, 0.12);
+    }
+
+    .compare-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 1rem;
+    }
+    .badge-bad { background: rgba(244, 63, 94, 0.18); color: var(--rose); }
+    .badge-good { background: rgba(16, 185, 129, 0.18); color: var(--emerald-glow); }
+
+    .compare-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .compare-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      line-height: 1.55;
+    }
+
+    .compare-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .comp-metric-box {
+      background: rgba(0, 0, 0, 0.35);
+      padding: 0.85rem 1rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .comp-metric-box .label { font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); }
+    .comp-metric-box .val-bad { font-size: 1.35rem; font-weight: 800; color: var(--rose); font-family: var(--font-mono); }
+    .comp-metric-box .val-good { font-size: 1.35rem; font-weight: 800; color: var(--emerald-glow); font-family: var(--font-mono); }
+
+    .compare-bullets {
+      list-style: none;
+      font-size: 0.86rem;
+      color: #cbd5e1;
+    }
+    .compare-bullets li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
     /* Commercial Solutions */
     .solutions-grid {
       display: grid;
@@ -1072,7 +1353,7 @@
       top: -12px;
       right: 20px;
       background: linear-gradient(135deg, var(--cyan-bright), var(--indigo));
-      color: #06080e;
+      color: #05070d;
       font-size: 0.7rem;
       font-weight: 800;
       text-transform: uppercase;
@@ -1215,14 +1496,14 @@
 
     .read-btn:hover { transform: translateX(3px); }
 
-    /* Modals */
+    /* Modals & Command Palette */
     .modal-overlay {
       display: none;
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
       background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
+      backdrop-filter: blur(10px);
       z-index: 200;
       justify-content: center;
       align-items: center;
@@ -1230,9 +1511,9 @@
     }
 
     .modal-content {
-      background: #0d1322;
+      background: #0b1122;
       border: 1px solid var(--border-glow);
-      border-radius: 16px;
+      border-radius: 18px;
       max-width: 860px;
       width: 100%;
       max-height: 90vh;
@@ -1264,17 +1545,83 @@
     .article-body p { margin-bottom: 1.25rem; color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
     .article-body pre { background: #050811; padding: 1.25rem; border-radius: 8px; font-family: var(--font-mono); font-size: 0.85rem; overflow-x: auto; margin: 1.5rem 0; border: 1px solid var(--border-subtle); color: var(--cyan); }
 
+    /* Interactive Command Palette (Raycast / Linear style) */
+    #cmdPaletteModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(4, 6, 12, 0.85);
+      backdrop-filter: blur(12px);
+      z-index: 300;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 12vh;
+    }
+    .cmd-box {
+      background: #090e1c;
+      border: 1px solid var(--border-glow);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 620px;
+      box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9);
+      overflow: hidden;
+    }
+    .cmd-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1.15rem 1.5rem;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+    }
+    .cmd-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 1.1rem;
+      font-family: var(--font-sans);
+      width: 100%;
+    }
+    .cmd-list {
+      max-height: 340px;
+      overflow-y: auto;
+      padding: 0.75rem;
+    }
+    .cmd-item {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.88rem;
+      transition: all 0.15s ease;
+    }
+    .cmd-item:hover, .cmd-item.selected {
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--cyan-bright);
+    }
+    .cmd-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      color: var(--text-dim);
+    }
+
     /* Footer */
     footer {
       border-top: 1px solid var(--border-subtle);
-      padding: 3rem 2rem;
+      padding: 3.5rem 2rem;
       background: rgba(4, 6, 11, 0.96);
       color: var(--text-dim);
       font-size: 0.85rem;
     }
 
     .footer-inner {
-      max-width: 1340px;
+      max-width: 1360px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
@@ -1287,6 +1634,7 @@
       .hero h2 { font-size: 2.6rem; }
       .research-metrics { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
       .metric-card { border-right: none; }
+      .bento-card-large, .bento-card-side { grid-column: span 12; }
       .diff-grid, .solutions-grid, .comparison-grid, .pipeline-grid, .infographic-inspector { grid-template-columns: 1fr; }
       .timeline-stream { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
@@ -1295,7 +1643,7 @@
 </head>
 <body>
 
-  <!-- Background Ambient Cyber Particle Canvas -->
+  <!-- Ambient Particle Mesh Canvas -->
   <canvas id="ambientBgCanvas"></canvas>
 
   <!-- Navigation -->
@@ -1309,14 +1657,21 @@
         </div>
       </a>
       <div class="nav-links">
-        <a href="#telemetry" class="nav-link">Live Telemetry</a>
-        <a href="#pipeline" class="nav-link">Kernel Infographic</a>
-        <a href="#workbench" class="nav-link">Interactive Workbench</a>
-        <a href="#compare" class="nav-link">Architecture Matrix</a>
+        <a href="#bento" class="nav-link">Architecture Lab</a>
+        <a href="#telemetry" class="nav-link">Oscilloscope Radar</a>
+        <a href="#pipeline" class="nav-link">Kernel Flow</a>
+        <a href="#workbench" class="nav-link">Workbench</a>
+        <a href="#compare" class="nav-link">Matrix</a>
         <a href="#whitepapers" class="nav-link">Whitepapers</a>
         <a href="#advisory" class="nav-link">Advisory</a>
       </div>
       <div class="nav-actions">
+        <!-- Command Palette Trigger (⌘K) -->
+        <button class="btn-cmd-k" onclick="openCmdPalette()" title="Press ⌘K or Ctrl+K">
+          <span>Search Systems...</span>
+          <span class="kbd-shortcut">⌘K</span>
+        </button>
+
         <!-- Audio HUD Synthesizer Toggle -->
         <button class="btn-audio-toggle" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD Sound Effects">
           <span class="audio-waves" id="audioWaveVisualizer">
@@ -1352,15 +1707,15 @@
       </p>
 
       <div class="hero-cta">
-        <a href="#workbench" class="btn-primary" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
+        <a href="#workbench" class="btn-primary" style="padding: 0.8rem 1.85rem; font-size: 0.98rem;">
           Launch Interactive Workbench ↓
         </a>
-        <a href="#pipeline" class="btn-outline" style="padding: 0.75rem 1.75rem; font-size: 0.95rem;">
-          Explore Kernel Infographic
+        <a href="#bento" class="btn-outline" style="padding: 0.8rem 1.85rem; font-size: 0.98rem;">
+          View Architecture Lab
         </a>
       </div>
 
-      <!-- Empirical Research Metrics -->
+      <!-- Key Research Metrics -->
       <div class="research-metrics" id="research">
         <div class="metric-card">
           <div class="metric-val">99.94%</div>
@@ -1385,6 +1740,136 @@
       </div>
     </section>
 
+    <!-- Tech Stack Marquee (Magic UI Style) -->
+    <div class="marquee-container">
+      <div class="marquee-track">
+        <div class="marquee-item"><span class="dot"></span> Linux eBPF Ring 0</div>
+        <div class="marquee-item"><span class="dot"></span> Rust Memory-Bounded Tokio</div>
+        <div class="marquee-item"><span class="dot"></span> WebAssembly Ephemeral Sandboxing</div>
+        <div class="marquee-item"><span class="dot"></span> Abstract Syntax Tree (AST) Feedback</div>
+        <div class="marquee-item"><span class="dot"></span> Cryptographic SHA-256 Provenance</div>
+        <div class="marquee-item"><span class="dot"></span> Differential Parity Replay</div>
+        <div class="marquee-item"><span class="dot"></span> Finite State Machine Harness</div>
+        <div class="marquee-item"><span class="dot"></span> OpenTelemetry Tracing</div>
+        <div class="marquee-item"><span class="dot"></span> PostgreSQL CDC Replication</div>
+        <div class="marquee-item"><span class="dot"></span> Distributed JWT Edge Broker</div>
+        <!-- Duplicate for infinite seamless scroll -->
+        <div class="marquee-item"><span class="dot"></span> Linux eBPF Ring 0</div>
+        <div class="marquee-item"><span class="dot"></span> Rust Memory-Bounded Tokio</div>
+        <div class="marquee-item"><span class="dot"></span> WebAssembly Ephemeral Sandboxing</div>
+        <div class="marquee-item"><span class="dot"></span> Abstract Syntax Tree (AST) Feedback</div>
+        <div class="marquee-item"><span class="dot"></span> Cryptographic SHA-256 Provenance</div>
+        <div class="marquee-item"><span class="dot"></span> Differential Parity Replay</div>
+        <div class="marquee-item"><span class="dot"></span> Finite State Machine Harness</div>
+        <div class="marquee-item"><span class="dot"></span> OpenTelemetry Tracing</div>
+        <div class="marquee-item"><span class="dot"></span> PostgreSQL CDC Replication</div>
+        <div class="marquee-item"><span class="dot"></span> Distributed JWT Edge Broker</div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         SECTION: BENTO GRID INFOGRAPHICAL ASSETS (Aceternity / Magic UI Style)
+         ========================================================================== -->
+    <section class="container" id="bento">
+      <div class="section-title">
+        <h3>Autonomous Systems Architecture Lab</h3>
+        <p>Engineered visual diagnostics: How ZeroDrift unifies hardware-isolated sandboxes, differential verification, and unit economics.</p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Bento 1: Large Isometric Kernel Infographic -->
+        <div class="bento-card-large spotlight-card">
+          <div class="bento-media-wrap">
+            <img src="assets/images/zerodrift_kernel_architecture.jpg" alt="ZeroDrift Deterministic Kernel Architecture Diagram">
+            <div class="bento-overlay"></div>
+          </div>
+          <div class="bento-body">
+            <div>
+              <span class="bento-tag">🔬 ARCHITECTURAL SPECIFICATION · HARDWARE ABSTRACTION</span>
+              <h4 class="bento-title">Deterministic Isolated Execution Kernel</h4>
+              <p class="bento-desc">
+                Our core execution kernel separates untrusted stochastic model outputs from production hardware. Featuring a time-triggered scheduler, secure finite state machine, and cryptographic payload verification pipeline.
+              </p>
+            </div>
+            <div class="bento-footer">
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--emerald-glow);">Verified Parity: 100.00% Zero Drift</span>
+              <a href="#pipeline" class="read-btn">Inspect Kernel Pipeline →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 2: Side Forensics HUD -->
+        <div class="bento-card-side spotlight-card">
+          <div class="bento-media-wrap">
+            <img src="assets/images/zerodrift_flight_recorder_hud.jpg" alt="ZeroDrift SOC FlightRecorder HUD Telemetry">
+            <div class="bento-overlay"></div>
+          </div>
+          <div class="bento-body">
+            <div>
+              <span class="bento-tag">🛡️ SRE FORENSICS · eBPF NET_FILTER</span>
+              <h4 class="bento-title">FlightRecorder™ Real-Time Telemetry</h4>
+              <p class="bento-desc">
+                Live packet analyzer monitoring socket syscalls at Linux kernel Ring 0. Block unauthorized egress to unapproved external endpoints before data exfiltration occurs.
+              </p>
+            </div>
+            <div class="bento-footer">
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--cyan-bright);">Threat Alerts: 0 (Secure)</span>
+              <a href="#workbench" onclick="switchTab('flight')" class="read-btn">Launch Scrubber →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 3: FinOps Token Economics Calculator -->
+        <div class="bento-card-side spotlight-card" style="grid-column: span 6;">
+          <div class="bento-body">
+            <div>
+              <span class="bento-tag">💰 FINOPS UNIT ECONOMICS MODELER</span>
+              <h4 class="bento-title">Enterprise Token Waste Reduction</h4>
+              <p class="bento-desc">
+                Conventional AI prototypes send routine parsing and status updates to trophy 400B models. ZeroDrift’s Model Ladder routes routine work to fast 8B engines, saving up to 88% of your operational inference budget.
+              </p>
+            </div>
+            <div class="finops-calculator">
+              <div class="calc-row">
+                <span>Monthly Inbound LLM Calls:</span>
+                <span id="callCountLabel" style="color: var(--cyan-bright); font-weight: 700;">500,000 req/mo</span>
+              </div>
+              <input type="range" class="calc-slider" id="calcSlider" min="50000" max="5000000" step="50000" value="500000" oninput="updateFinOpsCalc(this.value)">
+              <div class="calc-result-box">
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--text-dim); text-transform: uppercase;">Estimated Monthly Savings</div>
+                  <div class="calc-saved-val" id="savingsValue">$21,400 / mo</div>
+                </div>
+                <button class="btn-primary" onclick="openAssessmentModal('FinOps Unit Economics Sprint')" style="padding: 0.4rem 0.85rem; font-size: 0.78rem;">Audit My Stack</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bento 4: AST Self-Healing Sandbox -->
+        <div class="bento-card-large spotlight-card" style="grid-column: span 6;">
+          <div class="bento-body">
+            <div>
+              <span class="bento-tag">⚡ AUTONOMOUS SRE HEALING</span>
+              <h4 class="bento-title">Differential Reproduction Sandbox</h4>
+              <p class="bento-desc">
+                When an on-call P1 alert fires, ZeroDrift provisions an ephemeral WebAssembly runner, executes a synthesized regression test to confirm the failure, generates an atomic mutex patch, and validates passing tests before drafting a pull request.
+              </p>
+            </div>
+            <div style="background: #040710; border: 1px solid rgba(56, 189, 248, 0.15); border-radius: 10px; padding: 1rem; font-family: var(--font-mono); font-size: 0.78rem;">
+              <div style="color: var(--cyan); margin-bottom: 0.35rem;">[zd_sre_orchestrator] Synthesizing reproduction suite...</div>
+              <div style="color: var(--rose);">[-] FAIL: Concurrency race condition detected in WorkerPool.go:L142</div>
+              <div style="color: var(--emerald-glow);">[+] PASS: ZeroDrift Lock-Ordering Patch validated (0 regressions)</div>
+            </div>
+            <div class="bento-footer" style="margin-top: 1rem;">
+              <span style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--text-dim);">Ephemeral Time: &lt; 250ms</span>
+              <a href="#workbench" onclick="switchTab('sandbox')" class="read-btn">Try AutoSandbox Demo →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ==========================================================================
          LIVE TELEMETRY OSCILLOSCOPE (Visual Effect + Canvas)
          ========================================================================== -->
@@ -1394,6 +1879,10 @@
           <div class="rack-title">
             <span class="rec-indicator"><span class="rec-dot"></span> LIVE TELEMETRY</span>
             <h4>ZeroDrift Differential Waveform & Parity Radar</h4>
+          </div>
+          <div class="rack-controls">
+            <button class="btn-rack-action" onclick="simulateJitterSpike()">Simulate Jitter</button>
+            <button class="btn-rack-action" onclick="lockParityPhase()">Lock Parity Phase</button>
           </div>
           <div class="rack-status-grid">
             <div class="rack-stat-item"><span>SAMPLING:</span> <span>100 kHz</span></div>
@@ -1656,7 +2145,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     </section>
 
     <!-- ==========================================================================
-         VISUAL ARCHITECTURAL COMPARISON (Infographical Breakdown)
+         VISUAL ARCHITECTURAL COMPARISON MATRIX
          ========================================================================== -->
     <section class="container" id="compare">
       <div class="section-title">
@@ -1666,7 +2155,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
 
       <div class="comparison-grid">
         <!-- Bad Approach -->
-        <div class="compare-card compare-bad">
+        <div class="compare-card compare-bad spotlight-card">
           <span class="compare-badge badge-bad">Legacy / Unharnessed Approach</span>
           <h4 class="compare-title">Standard Conversational Wrapper</h4>
           <p class="compare-desc">
@@ -1691,7 +2180,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         </div>
 
         <!-- ZeroDrift Approach -->
-        <div class="compare-card compare-good">
+        <div class="compare-card compare-good spotlight-card">
           <span class="compare-badge badge-good">ZeroDrift Engineered Architecture</span>
           <h4 class="compare-title">Deterministic Execution Harness</h4>
           <p class="compare-desc">
@@ -1726,7 +2215,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
 
       <div class="solutions-grid">
         <!-- Sprint 1 -->
-        <div class="sol-card">
+        <div class="sol-card spotlight-card">
           <div class="sol-title">Legacy Modernization Sprint</div>
           <div class="sol-price">$35,000 <span>/ fixed sprint</span></div>
           <div class="sol-desc">Complete differential shadow migration of your highest-risk legacy service or stored procedure with zero production downtime and 100% parity proof.</div>
@@ -1740,7 +2229,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         </div>
 
         <!-- Sprint 2 -->
-        <div class="sol-card featured">
+        <div class="sol-card featured spotlight-card">
           <div class="sol-badge">Most Requested</div>
           <div class="sol-title">Agent Forensics & SRE Audit</div>
           <div class="sol-price">$18,000 <span>/ 2-week engagement</span></div>
@@ -1755,7 +2244,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         </div>
 
         <!-- Sprint 3 -->
-        <div class="sol-card">
+        <div class="sol-card spotlight-card">
           <div class="sol-title">Fractional Staff+ Systems Lead</div>
           <div class="sol-price">$6,500 <span>/ month retainer</span></div>
           <div class="sol-desc">Ongoing technical guidance, Architecture Decision Record (ADR) reviews, and FinOps unit-economics governance for scaling startups.</div>
@@ -1779,7 +2268,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
 
       <div class="editions-grid">
         <!-- Edition 01 -->
-        <article class="card">
+        <article class="card spotlight-card">
           <div class="card-top">
             <span class="card-num">WHITEPAPER #01</span>
             <span class="card-date">OCTOBER 2026</span>
@@ -1799,7 +2288,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         </article>
 
         <!-- Edition 02 -->
-        <article class="card">
+        <article class="card spotlight-card">
           <div class="card-top">
             <span class="card-num">WHITEPAPER #02</span>
             <span class="card-date">NOVEMBER 2026</span>
@@ -1818,7 +2307,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         </article>
 
         <!-- Edition 03 -->
-        <article class="card">
+        <article class="card spotlight-card">
           <div class="card-top">
             <span class="card-num">WHITEPAPER #03</span>
             <span class="card-date">DECEMBER 2026</span>
@@ -1838,6 +2327,51 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       </div>
     </section>
   </main>
+
+  <!-- Interactive Command Palette Modal (⌘K) -->
+  <div id="cmdPaletteModal" onclick="closeCmdPalette(event)">
+    <div class="cmd-box" onclick="event.stopPropagation()">
+      <div class="cmd-input-wrap">
+        <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" class="cmd-input" id="cmdInput" placeholder="Type a command or jump to system..." oninput="filterCmds(this.value)">
+        <span class="kbd-shortcut">ESC</span>
+      </div>
+      <div class="cmd-list" id="cmdList">
+        <div class="cmd-item selected" onclick="execCmd('#workbench')">
+          <span>🛠️ Launch Interactive Systems Workbench</span>
+          <span class="cmd-badge">Jump</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('#bento')">
+          <span>🔬 View Architecture Lab & Bento Grid</span>
+          <span class="cmd-badge">Jump</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('#telemetry')">
+          <span>📡 Inspect Live Oscilloscope Telemetry</span>
+          <span class="cmd-badge">Radar</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('#pipeline')">
+          <span>⚙️ Explore 5-Stage Kernel Infographic</span>
+          <span class="cmd-badge">Dataflow</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('replay')">
+          <span>▶️ Run 500 Differential Replays (Simulation)</span>
+          <span class="cmd-badge">Execute</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('toggle_sound')">
+          <span>🔊 Toggle Web Audio Synthesizer</span>
+          <span class="cmd-badge">Audio</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('whitepaper')">
+          <span>📄 Read Whitepaper #01: The Model Race Is Over</span>
+          <span class="cmd-badge">Document</span>
+        </div>
+        <div class="cmd-item" onclick="execCmd('#advisory')">
+          <span>💼 Enterprise Advisory & Modernization Sprints</span>
+          <span class="cmd-badge">Solutions</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Modal Reader for Whitepaper 01 -->
   <div id="ed1-modal" class="modal-overlay" onclick="closeModal(event)">
@@ -1947,7 +2481,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         }
       }
 
-      // Crisp mechanical UI click
       click() {
         if (!this.enabled) return;
         this.init();
@@ -1966,7 +2499,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         osc.stop(now + 0.04);
       }
 
-      // High-tech frequency sweep (Replay simulation)
       sweep() {
         if (!this.enabled) return;
         this.init();
@@ -1985,7 +2517,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         osc.stop(now + 0.35);
       }
 
-      // Security intercept alert buzz (eBPF violation)
       alert() {
         if (!this.enabled) return;
         this.init();
@@ -2004,7 +2535,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         osc.stop(now + 0.22);
       }
 
-      // Crystal chime success (Parity & AutoSandbox passed)
       success() {
         if (!this.enabled) return;
         this.init();
@@ -2025,7 +2555,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         });
       }
 
-      // Terminal keystroke tick
       tick() {
         if (!this.enabled) return;
         this.init();
@@ -2064,7 +2593,6 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       }
     }
 
-    // Attach sound to general buttons and links
     document.addEventListener('click', (e) => {
       const target = e.target.closest('button, a, select, input[type="range"]');
       if (target && !target.id.includes('audioToggleBtn')) {
@@ -2073,7 +2601,93 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     });
 
     /* ==========================================================================
-       2. LIVE OSCILLOSCOPE DUAL-WAVEFORM CANVAS
+       2. CURSOR SPOTLIGHT TRACKER (Aceternity UI Pattern)
+       ========================================================================== */
+    document.querySelectorAll('.spotlight-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        card.style.setProperty('--mouse-x', `${x}px`);
+        card.style.setProperty('--mouse-y', `${y}px`);
+      });
+    });
+
+    /* ==========================================================================
+       3. INTERACTIVE COMMAND PALETTE (CMD+K / Ctrl+K)
+       ========================================================================== */
+    function openCmdPalette() {
+      sound.click();
+      document.getElementById('cmdPaletteModal').style.display = 'flex';
+      document.getElementById('cmdInput').value = '';
+      document.getElementById('cmdInput').focus();
+      filterCmds('');
+    }
+    function closeCmdPalette(e) {
+      document.getElementById('cmdPaletteModal').style.display = 'none';
+    }
+    window.addEventListener('keydown', e => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const modal = document.getElementById('cmdPaletteModal');
+        if (modal.style.display === 'flex') {
+          modal.style.display = 'none';
+        } else {
+          openCmdPalette();
+        }
+      }
+      if (e.key === 'Escape') {
+        document.getElementById('cmdPaletteModal').style.display = 'none';
+      }
+    });
+
+    function filterCmds(query) {
+      const q = query.toLowerCase().trim();
+      document.querySelectorAll('#cmdList .cmd-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        if (!q || text.includes(q)) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    function execCmd(target) {
+      sound.click();
+      document.getElementById('cmdPaletteModal').style.display = 'none';
+      if (target.startsWith('#')) {
+        const el = document.querySelector(target);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      } else if (target === 'replay') {
+        switchTab('replay');
+        document.querySelector('#workbench').scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => executeReplaySim(), 400);
+      } else if (target === 'toggle_sound') {
+        toggleAudio();
+      } else if (target === 'whitepaper') {
+        openModal('ed1');
+      }
+    }
+
+    /* ==========================================================================
+       4. FINOPS TOKEN ECONOMICS CALCULATOR
+       ========================================================================== */
+    function updateFinOpsCalc(val) {
+      sound.tick();
+      const count = parseInt(val, 10);
+      document.getElementById('callCountLabel').textContent = count.toLocaleString() + ' req/mo';
+      // Assume trophy model costs ~$30 / 1M tokens, 8B model costs ~$1.50 / 1M tokens with ZeroDrift pruning
+      // avg 1,500 tokens per call = 1.5k * count
+      const tokensMillion = (count * 1500) / 1000000;
+      const unoptimizedCost = tokensMillion * 32.00;
+      const zeroDriftCost = tokensMillion * 3.40;
+      const savings = Math.max(0, Math.round(unoptimizedCost - zeroDriftCost));
+      document.getElementById('savingsValue').textContent = '$' + savings.toLocaleString() + ' / mo';
+    }
+
+    /* ==========================================================================
+       5. LIVE OSCILLOSCOPE RADAR WITH INTERACTIVE JITTER CONTROLS
        ========================================================================== */
     const oscCanvas = document.getElementById('oscilloscopeCanvas');
     const oscCtx = oscCanvas.getContext('2d');
@@ -2136,7 +2750,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       oscCtx.beginPath();
       for (let x = 0; x < w; x += 3) {
         const t = (x / w) * Math.PI * 4 + oscPhase;
-        const drift = oscLocked ? 0 : Math.sin(t * 5 + oscWiggle) * (amp * 0.2);
+        const drift = oscLocked ? 0 : Math.sin(t * 6 + oscWiggle) * (amp * 0.28);
         const y = centerY + Math.sin(t) * amp * 0.85 + Math.sin(t * 2.5) * (amp * 0.15) + drift;
         if (x === 0) oscCtx.moveTo(x, y);
         else oscCtx.lineTo(x, y);
@@ -2145,13 +2759,29 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       oscCtx.shadowBlur = 0;
 
       oscPhase += 0.045;
-      oscWiggle += 0.08;
+      oscWiggle += 0.09;
       requestAnimationFrame(drawOscilloscope);
     }
     requestAnimationFrame(drawOscilloscope);
 
+    function simulateJitterSpike() {
+      sound.alert();
+      oscLocked = false;
+      document.getElementById('telemetryLockState').textContent = 'JITTER SPIKE DETECTED';
+      document.getElementById('telemetryLockState').style.color = 'var(--rose)';
+      document.getElementById('oscilloscopeVarianceReadout').textContent = 'VARIANCE DELTA: ±0.142% [DRIFT DETECTED]';
+    }
+
+    function lockParityPhase() {
+      sound.success();
+      oscLocked = true;
+      document.getElementById('telemetryLockState').textContent = 'PARITY LOCKED';
+      document.getElementById('telemetryLockState').style.color = 'var(--emerald-glow)';
+      document.getElementById('oscilloscopeVarianceReadout').textContent = 'VARIANCE DELTA: 0.000% (ZERO DRIFT)';
+    }
+
     /* ==========================================================================
-       3. AMBIENT BACKGROUND PARTICLES (Canvas Visual Effect)
+       6. AMBIENT BACKGROUND PARTICLES
        ========================================================================== */
     const bgCanvas = document.getElementById('ambientBgCanvas');
     const bgCtx = bgCanvas.getContext('2d');
@@ -2196,7 +2826,7 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     requestAnimationFrame(renderBgParticles);
 
     /* ==========================================================================
-       4. INTERACTIVE INFOGRAPHIC INSPECTOR LOGIC
+       7. INTERACTIVE INFOGRAPHIC KERNEL LOGIC
        ========================================================================== */
     const pipelineData = [
       {
@@ -2288,7 +2918,7 @@ pub fn commit_audit_receipt(run: &VerifiedExecution) -> ReceiptHash {
     }
 
     /* ==========================================================================
-       5. INTERACTIVE WORKBENCH LOGIC
+       8. WORKBENCH LOGIC
        ========================================================================== */
     function switchTab(tabId) {
       sound.click();
@@ -2376,7 +3006,6 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       btn.innerHTML = `<span class="pill-dot"></span> Replaying 500 traces...`;
       btn.style.opacity = '0.7';
 
-      // Temporarily wiggle oscilloscope then snap to locked
       oscLocked = false;
       document.getElementById('telemetryLockState').textContent = 'VERIFYING DIFF';
       document.getElementById('telemetryLockState').style.color = 'var(--amber)';
@@ -2405,7 +3034,7 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       document.getElementById('scrubberTimeBadge').textContent = times[val];
       
       if (val == 2) {
-        sound.alert(); // Violation step sound
+        sound.alert();
       }
 
       for (let i = 0; i <= 3; i++) {
@@ -2435,7 +3064,7 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
     }
 
     /* ==========================================================================
-       6. MODAL HANDLERS
+       9. MODALS
        ========================================================================== */
     function openModal(id) {
       sound.click();
