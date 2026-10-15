@@ -4,8 +4,9 @@ title: "The 3 Silent Production RAG Failure Modes"
 day: "Friday 8:30 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#1 Contrarian Thesis"
-status: "queued"
-score: 78.1
+status: "published"
+score: "78.1"
+published_at: "2026-10-15T07:43:27.578852Z"
 ---
 
 A benchmark score isn't evidence. An LLM answer isn't proof.
