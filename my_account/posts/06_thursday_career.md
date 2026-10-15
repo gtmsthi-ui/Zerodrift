@@ -4,8 +4,10 @@ title: "How to Price an AI Agent Run Before Your CFO Pages You"
 day: "Thursday 8:30 AM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#13 Playbook"
-status: "queued"
-score: 73.5
+status: "scheduled"
+score: "73.5"
+scheduled_at: "2026-10-22T03:00:00.000Z"
+buffer_post_id: "6ad091301b1f1d94be37ea73"
 ---
 
 Most engineering teams don't price an AI feature until the end of the month.

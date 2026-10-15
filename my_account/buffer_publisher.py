@@ -118,7 +118,7 @@ def schedule_buffer_post(post_text, channel_id=None, as_draft=False, share_now=F
         scheduling_type = "automatic"
     elif due_at:
         mode = "customScheduled"
-        scheduling_type = "scheduled"
+        scheduling_type = "automatic"
     else:
         mode = "addToQueue"
         scheduling_type = "automatic"
