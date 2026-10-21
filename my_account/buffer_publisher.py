@@ -16,10 +16,74 @@ GRAPHQL_URL = "https://api.buffer.com/graphql"
 
 
 def load_config():
-    if not os.path.exists(CONFIG_FILE):
-        return None
-    with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    cfg = {}
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, "r", encoding="utf-8") as f:
+                cfg = json.load(f)
+        except Exception:
+            pass
+
+    # Overlay environment variables (GitHub Actions secrets)
+    buf_token = os.environ.get("BUFFER_ACCESS_TOKEN")
+    buf_profile = os.environ.get("BUFFER_PROFILE_ID")
+    buf_org = os.environ.get("BUFFER_ORGANIZATION_ID")
+
+    if "buffer" not in cfg:
+        cfg["buffer"] = {}
+    if buf_token and not buf_token.startswith("YOUR_"):
+        cfg["buffer"]["access_token"] = buf_token
+    if buf_profile and not buf_profile.startswith("YOUR_"):
+        cfg["buffer"]["profile_id"] = buf_profile
+    if buf_org and not buf_org.startswith("YOUR_"):
+        cfg["buffer"]["organization_id"] = buf_org
+
+    return cfg
+
+
+def get_buffer_posts(organization_id=None, access_token=None):
+    """Fetches recent posts from Buffer GraphQL API."""
+    cfg = load_config()
+    if not organization_id and cfg and "buffer" in cfg:
+        organization_id = cfg["buffer"].get("organization_id")
+    if not organization_id:
+        res = execute_graphql("""
+        query {
+          account {
+            organizations {
+              id
+            }
+          }
+        }
+        """, access_token=access_token)
+        orgs = res.get("data", {}).get("account", {}).get("organizations", []) if res else []
+        if orgs:
+            organization_id = orgs[0]["id"]
+
+    if not organization_id:
+        return []
+
+    q = f"""
+    query {{
+      posts(input: {{ organizationId: "{organization_id}" }}) {{
+        edges {{
+          node {{
+            id
+            status
+            dueAt
+            text
+            channel {{
+              id
+              name
+            }}
+          }}
+        }}
+      }}
+    }}
+    """
+    res = execute_graphql(q, access_token=access_token)
+    edges = res.get("data", {}).get("posts", {}).get("edges", []) if res else []
+    return [e["node"] for e in edges]
 
 
 def execute_graphql(query, variables=None, access_token=None):

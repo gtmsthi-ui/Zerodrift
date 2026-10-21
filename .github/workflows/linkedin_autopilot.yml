@@ -1,16 +1,22 @@
-name: LinkedIn Cloud Autopilot
+name: LinkedIn Cloud Autopilot & Queue Replenisher
 
 on:
   schedule:
-    # Runs Tuesday, Thursday, Friday, Saturday at 02:45 UTC (8:15 AM IST) and Sunday at 11:00 UTC (4:30 PM IST)
+    # Runs daily at 02:00 UTC (7:30 AM IST) - checks and replenishes Buffer queue
+    - cron: '0 2 * * *'
+    # Also runs at posting times: Tue, Thu, Fri, Sat at 02:45 UTC (8:15 AM IST) and Sun at 11:00 UTC (4:30 PM IST)
     - cron: '45 2 * * 2,4,5,6'
     - cron: '0 11 * * 0'
   workflow_dispatch:
     inputs:
-      dry_run:
-        description: 'Dry run (send Telegram alert without publishing to LinkedIn)'
-        type: boolean
-        default: false
+      min_threshold:
+        description: 'Minimum Buffer queue threshold before synthesizing new posts'
+        required: false
+        default: '3'
+      target_stock:
+        description: 'Target Buffer queue stock'
+        required: false
+        default: '4'
 
 permissions:
   contents: write
@@ -29,20 +35,63 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run Cloud Autopilot
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
-          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
-          BUFFER_PROFILE_ID: ${{ secrets.BUFFER_PROFILE_ID }}
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+      - name: Install System Fonts & Dependencies
         run: |
-          python scripts/cloud_autopilot.py
+          sudo apt-get update
+          sudo apt-get install -y fonts-dejavu-core fonts-liberation
+          python -m pip install --upgrade pip
+          pip install pillow requests
 
-      - name: Commit and Push Log Updates
+      - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Synthesize Posts & Generate Visual Cards
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_PROFILE_ID: ${{ secrets.BUFFER_PROFILE_ID }}
+          BUFFER_ORGANIZATION_ID: ${{ secrets.BUFFER_ORGANIZATION_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          THRESHOLD="${{ github.event.inputs.min_threshold || '3' }}"
+          TARGET="${{ github.event.inputs.target_stock || '4' }}"
+          python scripts/online_queue_autopilot.py --prepare --threshold=$THRESHOLD --target=$TARGET
+
+      - name: Commit and Push New Assets to GitHub
+        run: |
+          git add my_account/
+          if git diff --staged --quiet; then
+            echo "No new assets to commit."
+          else
+            git commit -m "chore(autopilot): synthesize posts and visual cards [skip ci]"
+            git push
+          fi
+
+      - name: Schedule to Buffer & Sync Queue
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_PROFILE_ID: ${{ secrets.BUFFER_PROFILE_ID }}
+          BUFFER_ORGANIZATION_ID: ${{ secrets.BUFFER_ORGANIZATION_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python scripts/online_queue_autopilot.py --sync-and-schedule
+
+      - name: Run Legacy Queue Check & Status Sync
+        env:
+          BUFFER_ACCESS_TOKEN: ${{ secrets.BUFFER_ACCESS_TOKEN }}
+          BUFFER_PROFILE_ID: ${{ secrets.BUFFER_PROFILE_ID }}
+          BUFFER_ORGANIZATION_ID: ${{ secrets.BUFFER_ORGANIZATION_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python scripts/cloud_autopilot.py
+
+      - name: Commit Final Buffer Queue State
+        run: |
           git add my_account/
           if git diff --staged --quiet; then
             echo "No status changes to commit."

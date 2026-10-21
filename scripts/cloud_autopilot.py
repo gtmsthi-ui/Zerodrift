@@ -202,12 +202,12 @@ def main():
 
     print(f"[*] Starting LinkedIn Cloud Autopilot (DryRun: {is_dry_run})...")
 
-    # Dynamic Auto-Replenishment: Ensure queue is never empty
+    # Dynamic Auto-Replenishment & Buffer Queue Maintenance
     try:
-        from auto_replenish import check_and_replenish
-        check_and_replenish(min_threshold=2)
+        from online_queue_autopilot import run_full_autopilot
+        run_full_autopilot(min_threshold=3, target_stock=4)
     except Exception as e:
-        print(f"[*] Auto-replenishment check: {e}")
+        print(f"[*] Online autopilot check: {e}")
 
     post_files = sorted(glob.glob(os.path.join(POSTS_DIR, "*.md")))
     if not post_files:

@@ -25,13 +25,39 @@ COLOR_EMERALD = (52, 211, 153)    # Emerald #34d399
 COLOR_AMBER = (251, 191, 36)      # Amber #fbbf24
 
 
-def get_font(name="segoeuib.ttf", size=24):
-    path = os.path.join(FONTS_DIR, name)
-    if os.path.exists(path):
-        try:
-            return ImageFont.truetype(path, size)
-        except Exception:
-            pass
+def get_font(name="segoeuib.ttf", size=24, is_bold=False):
+    candidates = []
+    if FONTS_DIR and os.path.exists(FONTS_DIR):
+        candidates.append(os.path.join(FONTS_DIR, name))
+
+    is_bold_request = is_bold or ("b.ttf" in name.lower()) or ("bold" in name.lower())
+    if is_bold_request:
+        candidates.extend([
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+            r"C:\Windows\Fonts\segoeuib.ttf",
+            r"C:\Windows\Fonts\arialbd.ttf",
+            "/System/Library/Fonts/SFProText-Bold.ttf",
+            "/Library/Fonts/Arial Bold.ttf",
+        ])
+    else:
+        candidates.extend([
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+            "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+            r"C:\Windows\Fonts\segoeui.ttf",
+            r"C:\Windows\Fonts\arial.ttf",
+            "/System/Library/Fonts/SFProText-Regular.ttf",
+            "/Library/Fonts/Arial.ttf",
+        ])
+
+    for path in candidates:
+        if os.path.exists(path):
+            try:
+                return ImageFont.truetype(path, size)
+            except Exception:
+                pass
     return ImageFont.load_default()
 
 

@@ -4,10 +4,11 @@ title: "The $42k Cloud Mistake That Changed How I Talk to CFOs"
 day: "Sunday 4:30 PM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#3 Mistake Confession"
-status: "scheduled"
+status: "published"
 score: "76.7"
 scheduled_at: "2026-10-18T11:00:00.000Z"
 buffer_post_id: "6ad0910c675f058f0b406b9a"
+published_at: "2026-10-18T11:00:00.000Z"
 ---
 
 A CFO doesn't care about your Kubernetes pods. They care about risk, burn rate, and gross margin.

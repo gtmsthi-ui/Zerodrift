@@ -4,10 +4,11 @@ title: "The Multi-Agent Swarm Illusion: When Loops Become Enterprise Debt"
 day: "Tuesday 8:30 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#1 Contrarian Thesis"
-status: "scheduled"
+status: "published"
 score: "74.6"
 scheduled_at: "2026-10-20T03:00:00.000Z"
 buffer_post_id: "6ad0912fde79014f82c768d1"
+published_at: "2026-10-20T03:00:00.000Z"
 ---
 
 The multi-agent swarm demo is the most dangerous architecture pattern in AI right now.
