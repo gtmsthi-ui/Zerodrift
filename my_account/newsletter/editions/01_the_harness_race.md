@@ -7,7 +7,7 @@ role: "AI Enthusiast"
 date: "2026-10-15"
 slug: "the-model-race-is-over-the-harness-race-just-began"
 pillar: "Practical AI & System Architecture"
-status: "ready"
+status: "published"
 tags: ["SoftwareArchitecture", "AIReliability", "SystemsEngineering", "StaffPlus", "EnterpriseAI"]
 ---
 

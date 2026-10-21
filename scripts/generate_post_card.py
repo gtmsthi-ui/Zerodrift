@@ -24,6 +24,9 @@ COLOR_CYAN = (56, 189, 248)       # Sky/Cyan #38bdf8
 COLOR_EMERALD = (52, 211, 153)    # Emerald #34d399
 COLOR_AMBER = (251, 191, 36)      # Amber #fbbf24
 
+sys.path.insert(0, HERE)
+from generate_multi_style_assets import create_modern_canvas, draw_glass_panel
+
 
 def get_font(name="segoeuib.ttf", size=24, is_bold=False):
     candidates = []
@@ -64,11 +67,11 @@ def get_font(name="segoeuib.ttf", size=24, is_bold=False):
 def create_post_02_card():
     """Generates Card for Post 02: Senior vs Architect: The 3 Core Shifts."""
     width, height = 1200, 675
-    img = Image.new("RGB", (width, height), COLOR_BG)
+    img = create_modern_canvas(width, height, "Senior Engineer vs Software Architect Leadership")
     draw = ImageDraw.Draw(img)
 
     # Top Category Badge
-    draw.rounded_rectangle([60, 45, 340, 80], radius=8, fill=(15, 45, 75), outline=COLOR_CYAN, width=1)
+    draw_glass_panel(img, [60, 45, 340, 80], fill=(15, 45, 75, 230), border_color=COLOR_CYAN, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), "STAFF+ TECHNICAL LEADERSHIP", fill=COLOR_CYAN, font=f_badge)
 
@@ -85,7 +88,7 @@ def create_post_02_card():
 
     # Card 1: Senior Engineer
     c1_x = 60
-    draw.rounded_rectangle([c1_x, card_y, c1_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=2)
+    draw_glass_panel(img, [c1_x, card_y, c1_x + card_w, card_y + card_h], fill=(24, 32, 48, 220), border_color=COLOR_CARD_BORDER, radius=14, border_width=1)
     draw.rectangle([c1_x, card_y, c1_x + card_w, card_y + 8], fill=(100, 116, 139))
     
     f_card_hdr = get_font("segoeuib.ttf", 24)
@@ -108,7 +111,7 @@ def create_post_02_card():
 
     # Card 2: Software Architect
     c2_x = 625
-    draw.rounded_rectangle([c2_x, card_y, c2_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CYAN, width=2)
+    draw_glass_panel(img, [c2_x, card_y, c2_x + card_w, card_y + card_h], fill=(18, 36, 58, 225), border_color=COLOR_CYAN, radius=14, border_width=1)
     draw.rectangle([c2_x, card_y, c2_x + card_w, card_y + 8], fill=COLOR_CYAN)
 
     draw.text((c2_x + 30, card_y + 30), "Software Architect Focus", fill=COLOR_CYAN, font=f_card_hdr)
@@ -258,11 +261,11 @@ def create_post_03_card():
 def create_post_04_card():
     """Generates Card for Post 04: The 4-Section ADR Architecture Framework."""
     width, height = 1200, 675
-    img = Image.new("RGB", (width, height), COLOR_BG)
+    img = create_modern_canvas(width, height, "ADR Architecture Decision Record")
     draw = ImageDraw.Draw(img)
 
     # Top Badge
-    draw.rounded_rectangle([60, 45, 340, 80], radius=8, fill=(15, 45, 75), outline=COLOR_CYAN, width=1)
+    draw_glass_panel(img, [60, 45, 340, 80], fill=(15, 45, 75, 230), border_color=COLOR_CYAN, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), "STAFF+ TECHNICAL LEADERSHIP", fill=COLOR_CYAN, font=f_badge)
 
@@ -331,12 +334,12 @@ def create_post_04_card():
 def create_custom_card(post_key, category_badge, headline, subtitle, box1_title, box1_lines, box2_title, box2_lines, out_name=None):
     """Generates a modular, high-res 1200x675 architecture card for any auto-replenished post."""
     width, height = 1200, 675
-    img = Image.new("RGB", (width, height), COLOR_BG)
+    img = create_modern_canvas(width, height, f"{category_badge} {headline} {subtitle}")
     draw = ImageDraw.Draw(img)
 
     # Top Category Badge
     badge_w = min(500, max(260, len(category_badge) * 11 + 40))
-    draw.rounded_rectangle([60, 45, 60 + badge_w, 80], radius=8, fill=(15, 45, 75), outline=COLOR_CYAN, width=1)
+    draw_glass_panel(img, [60, 45, 60 + badge_w, 80], fill=(15, 45, 75, 230), border_color=COLOR_CYAN, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), category_badge.upper(), fill=COLOR_CYAN, font=f_badge)
 

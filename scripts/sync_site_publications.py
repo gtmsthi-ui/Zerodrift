@@ -95,6 +95,8 @@ def generate_publications_html():
     for wf in whitepaper_files:
         meta, body = parse_markdown_file(wf)
         ed_num = int(meta.get("edition", len(whitepapers) + 1))
+        # Status check: only published or edition 1 are publicly available for reading
+        status = meta.get("status", "scheduled" if ed_num > 1 else "published")
         whitepapers.append({
             "num": ed_num,
             "id": f"wp{ed_num}",
@@ -104,6 +106,7 @@ def generate_publications_html():
             "date": meta.get("date", "October 2026"),
             "tags": meta.get("tags", ["#SoftwareArchitecture"]),
             "pillar": meta.get("pillar", "Practical AI & System Architecture"),
+            "status": status,
             "body_html": markdown_to_html(body)
         })
 
@@ -132,6 +135,22 @@ def generate_publications_html():
     wp_cards = []
     for wp in whitepapers:
         tags_markup = "".join([f'<span class="tag">#{t.lstrip("#")}</span>' for t in wp["tags"][:4]])
+        if wp["status"] == "published":
+            action_markup = f"""
+            <span class="status-badge status-ready">Available to Read</span>
+            <a class="read-btn" onclick="openModal('{wp['id']}')">Read Whitepaper →</a>
+            """
+        else:
+            action_markup = f"""
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+            """
         wp_cards.append(f"""
         <!-- Whitepaper {wp['num']:02d} -->
         <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="{wp['pillar']}">
@@ -145,16 +164,29 @@ def generate_publications_html():
             {tags_markup}
           </div>
           <div class="card-actions">
-            <span class="status-badge status-ready">Available to Read</span>
-            <a class="read-btn" onclick="openModal('{wp['id']}')">Read Whitepaper →</a>
+            {action_markup.strip()}
           </div>
         </article>
         """)
 
     dispatch_cards = []
     for dp in dispatches:
-        status_lbl = "Published on LinkedIn" if dp["status"] == "published" else "Scheduled in Buffer"
-        status_cls = "status-ready" if dp["status"] == "published" else "status-queued"
+        if dp["status"] == "published":
+            action_markup = f"""
+            <span class="status-badge status-ready">Published on LinkedIn</span>
+            <a class="read-btn" onclick="openModal('{dp['id']}')">Read Breakdown →</a>
+            """
+        else:
+            action_markup = f"""
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled in Buffer
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              {dp['day']}
+            </span>
+            """
         dispatch_cards.append(f"""
         <!-- Dispatch {dp['id']} -->
         <article class="card spotlight-card pub-item pub-dispatch" data-category="dispatch" data-pillar="{dp['pillar']}">
@@ -170,16 +202,16 @@ def generate_publications_html():
             <span class="tag">#StaffPlus</span>
           </div>
           <div class="card-actions">
-            <span class="status-badge {status_cls}">{status_lbl}</span>
-            <a class="read-btn" onclick="openModal('{dp['id']}')">Read Breakdown →</a>
+            {action_markup.strip()}
           </div>
         </article>
         """)
 
-    # Render Reader Modals HTML
+    # Render Reader Modals HTML ONLY for Published items
     modals = []
     for wp in whitepapers:
-        modals.append(f"""
+        if wp["status"] == "published":
+            modals.append(f"""
   <!-- Modal Reader for Whitepaper {wp['num']:02d} -->
   <div id="{wp['id']}-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="{wp['id']}-heading" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
@@ -198,10 +230,11 @@ def generate_publications_html():
       </div>
     </div>
   </div>
-        """)
+            """)
 
     for dp in dispatches:
-        modals.append(f"""
+        if dp["status"] == "published":
+            modals.append(f"""
   <!-- Modal Reader for Dispatch {dp['id']} -->
   <div id="{dp['id']}-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="{dp['id']}-heading" onclick="closeModal(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
@@ -220,7 +253,7 @@ def generate_publications_html():
       </div>
     </div>
   </div>
-        """)
+            """)
 
     all_cards = "".join(wp_cards) + "".join(dispatch_cards)
     all_modals = "".join(modals)

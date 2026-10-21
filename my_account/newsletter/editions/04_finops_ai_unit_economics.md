@@ -7,7 +7,7 @@ role: "AI Enthusiast"
 date: "2026-10-21"
 slug: "finops-for-autonomous-ai-pipelines"
 pillar: "Practical AI & System Architecture"
-status: "ready"
+status: "scheduled"
 tags: ["FinOps", "CloudArchitecture", "UnitEconomics", "EnterpriseAI", "StaffPlus"]
 ---
 

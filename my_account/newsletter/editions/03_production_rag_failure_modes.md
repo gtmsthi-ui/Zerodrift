@@ -7,7 +7,7 @@ role: "AI Enthusiast"
 date: "2026-10-20"
 slug: "production-rag-failures-fallback-state-machines"
 pillar: "Practical AI & System Architecture"
-status: "ready"
+status: "scheduled"
 tags: ["RAGArchitecture", "VectorDatabases", "AIReliability", "SystemDesign", "SRE"]
 ---
 

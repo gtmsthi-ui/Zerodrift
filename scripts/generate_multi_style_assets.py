@@ -69,15 +69,74 @@ def get_font(name="segoeuib.ttf", size=24, is_bold=False):
 
 
 # ==============================================================================
+# CUTTING-EDGE 2026 3D AI VISUAL CANVAS & GLASSMORPHIC COMPOSITING
+# ==============================================================================
+def create_modern_canvas(width, height, topic_hint="", scrim_alpha=205):
+    """
+    Creates a cutting-edge 2026 canvas with 3D photorealistic glassmorphic AI imagery backdrop,
+    with an obsidian dark glass scrim to provide hyper-legible contrast.
+    """
+    hint = str(topic_hint).lower()
+    selected_backdrop = None
+    if any(k in hint for k in ["database", "datastore", "downtime", "migration", "expand", "shard"]):
+        selected_backdrop = "ai_distributed_db.jpg"
+    elif any(k in hint for k in ["agent", "orchestrat", "neural", "leadership", "career", "cfo", "staff"]):
+        selected_backdrop = "ai_agent_orchestrator.jpg"
+    elif any(k in hint for k in ["pipeline", "harness", "latency", "eval", "rag", "prototype", "token"]):
+        selected_backdrop = "ai_quantum_pipeline.jpg"
+    else:
+        selected_backdrop = "ai_system_architecture.jpg"
+
+    backdrop_path = os.path.join(ASSETS_DIR, selected_backdrop)
+    if not os.path.exists(backdrop_path):
+        for candidate in ["ai_quantum_pipeline.jpg", "ai_system_architecture.jpg", "ai_distributed_db.jpg", "ai_agent_orchestrator.jpg"]:
+            c_path = os.path.join(ASSETS_DIR, candidate)
+            if os.path.exists(c_path):
+                backdrop_path = c_path
+                break
+
+    if os.path.exists(backdrop_path):
+        try:
+            bg_raw = Image.open(backdrop_path).convert("RGB")
+            bg_w, bg_h = bg_raw.size
+            scale = max(width / bg_w, height / bg_h)
+            new_w = int(bg_w * scale)
+            new_h = int(bg_h * scale)
+            bg_resized = bg_raw.resize((new_w, new_h), Image.Resampling.LANCZOS)
+            left = (new_w - width) // 2
+            top = (new_h - height) // 2
+            bg_cropped = bg_resized.crop((left, top, left + width, top + height)).convert("RGBA")
+
+            # Semi-transparent dark obsidian glass scrim overlay to preserve contrast
+            scrim = Image.new("RGBA", (width, height), (10, 16, 30, scrim_alpha))
+            canvas_rgba = Image.alpha_composite(bg_cropped, scrim)
+            return canvas_rgba.convert("RGB")
+        except Exception:
+            pass
+
+    return Image.new("RGB", (width, height), COLOR_BG)
+
+
+def draw_glass_panel(img, bbox, fill=(22, 33, 54, 215), border_color=COLOR_CYAN, radius=14, border_width=1):
+    """Draws a frosted glassmorphic card panel with translucent background and luminous border."""
+    overlay = Image.new("RGBA", img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(overlay)
+    d.rounded_rectangle(bbox, radius=radius, fill=fill, outline=border_color, width=border_width)
+    img_rgba = img.convert("RGBA")
+    composite = Image.alpha_composite(img_rgba, overlay)
+    img.paste(composite.convert("RGB"))
+
+
+# ==============================================================================
 # STYLE A: 2-Box Comparison Grid (Flawed Approach vs Production Pattern)
 # ==============================================================================
-def render_style_comparison_grid(post_key, badge, headline, subtitle, box1_title, box1_lines, box2_title, box2_lines, out_name=None):
-    img = Image.new("RGB", (W_CARD, H_CARD), COLOR_BG)
+def render_style_comparison_grid(post_key, badge, headline, subtitle, box1_title, box1_lines, box2_title, box2_lines, out_name=None, backdrop=None):
+    img = create_modern_canvas(W_CARD, H_CARD, backdrop or f"{badge} {headline} {subtitle}")
     draw = ImageDraw.Draw(img)
 
     # Category Badge
     badge_w = min(500, max(260, len(badge) * 11 + 40))
-    draw.rounded_rectangle([60, 45, 60 + badge_w, 80], radius=8, fill=(15, 45, 75), outline=COLOR_CYAN, width=1)
+    draw_glass_panel(img, [60, 45, 60 + badge_w, 80], fill=(15, 45, 75, 230), border_color=COLOR_CYAN, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), badge.upper(), fill=COLOR_CYAN, font=f_badge)
 
@@ -93,7 +152,7 @@ def render_style_comparison_grid(post_key, badge, headline, subtitle, box1_title
 
     # Box 1 (Amber / Flawed)
     c1_x = 60
-    draw.rounded_rectangle([c1_x, card_y, c1_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    draw_glass_panel(img, [c1_x, card_y, c1_x + card_w, card_y + card_h], fill=(24, 32, 48, 220), border_color=(251, 191, 36, 180), radius=14, border_width=1)
     draw.line([(c1_x + 25, card_y + 65), (c1_x + card_w - 25, card_y + 65)], fill=COLOR_CARD_BORDER, width=1)
     f_hdr = get_font("segoeuib.ttf", 20)
     draw.text((c1_x + 30, card_y + 25), box1_title, fill=COLOR_AMBER, font=f_hdr)
@@ -107,7 +166,7 @@ def render_style_comparison_grid(post_key, badge, headline, subtitle, box1_title
 
     # Box 2 (Cyan / Production)
     c2_x = 625
-    draw.rounded_rectangle([c2_x, card_y, c2_x + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CYAN, width=1)
+    draw_glass_panel(img, [c2_x, card_y, c2_x + card_w, card_y + card_h], fill=(18, 36, 58, 225), border_color=COLOR_CYAN, radius=14, border_width=1)
     draw.line([(c2_x + 25, card_y + 65), (c2_x + card_w - 25, card_y + 65)], fill=COLOR_CARD_BORDER, width=1)
     draw.text((c2_x + 30, card_y + 25), box2_title, fill=COLOR_CYAN, font=f_hdr)
 
@@ -133,16 +192,16 @@ def render_style_comparison_grid(post_key, badge, headline, subtitle, box1_title
 # ==============================================================================
 # STYLE B: 3-Stage Sequential Pipeline Flowchart
 # ==============================================================================
-def render_style_pipeline_flow(post_key, badge, headline, subtitle, stages, out_name=None):
+def render_style_pipeline_flow(post_key, badge, headline, subtitle, stages, out_name=None, backdrop=None):
     """
     Renders 3 horizontal sequential pipeline nodes with arrow connectors:
     stages: list of 3 dicts: [{'num': '01', 'title': '...', 'badge': '...', 'points': [...]}, ...]
     """
-    img = Image.new("RGB", (W_CARD, H_CARD), COLOR_BG)
+    img = create_modern_canvas(W_CARD, H_CARD, backdrop or f"{badge} {headline} {subtitle}")
     draw = ImageDraw.Draw(img)
 
     # Top Badge & Titles
-    draw.rounded_rectangle([60, 45, 420, 80], radius=8, fill=(15, 50, 40), outline=COLOR_EMERALD, width=1)
+    draw_glass_panel(img, [60, 45, 420, 80], fill=(15, 50, 40, 230), border_color=COLOR_EMERALD, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), badge.upper(), fill=COLOR_EMERALD, font=f_badge)
 
@@ -164,8 +223,8 @@ def render_style_pipeline_flow(post_key, badge, headline, subtitle, stages, out_
         cx = start_x + i * (card_w + spacing)
         c_accent = colors[i % len(colors)]
 
-        # Box
-        draw.rounded_rectangle([cx, card_y, cx + card_w, card_y + card_h], radius=14, fill=COLOR_CARD_BG, outline=c_accent, width=1)
+        # Glass Box
+        draw_glass_panel(img, [cx, card_y, cx + card_w, card_y + card_h], fill=(18, 30, 50, 225), border_color=c_accent, radius=14, border_width=1)
         # Top Accent stripe
         draw.rounded_rectangle([cx, card_y, cx + card_w, card_y + 8], radius=8, fill=c_accent)
 
@@ -177,7 +236,7 @@ def render_style_pipeline_flow(post_key, badge, headline, subtitle, stages, out_
 
         # Metric / SLA Pill
         if s.get("badge"):
-            draw.rounded_rectangle([cx + 25, card_y + 90, cx + card_w - 25, card_y + 118], radius=6, fill=(15, 23, 42), outline=COLOR_CARD_BORDER, width=1)
+            draw_glass_panel(img, [cx + 25, card_y + 90, cx + card_w - 25, card_y + 118], fill=(12, 20, 36, 230), border_color=COLOR_CARD_BORDER, radius=6, border_width=1)
             f_pill = get_font("segoeui.ttf", 13)
             draw.text((cx + 35, card_y + 95), s["badge"], fill=c_accent, font=f_pill)
 
@@ -211,16 +270,16 @@ def render_style_pipeline_flow(post_key, badge, headline, subtitle, stages, out_
 # ==============================================================================
 # STYLE C: SRE Metric & Benchmark Dashboard Card
 # ==============================================================================
-def render_style_metric_dashboard(post_key, badge, headline, subtitle, metrics, key_takeaways, out_name=None):
+def render_style_metric_dashboard(post_key, badge, headline, subtitle, metrics, key_takeaways, out_name=None, backdrop=None):
     """
     Renders big bold numerical metric callouts + key architectural takeaways:
     metrics: list of 3 dicts: [{'val': '640ms', 'lbl': 'p99 Tail Latency', 'sub': '-84% reduction', 'color': COLOR_EMERALD}, ...]
     """
-    img = Image.new("RGB", (W_CARD, H_CARD), COLOR_BG)
+    img = create_modern_canvas(W_CARD, H_CARD, backdrop or f"{badge} {headline} {subtitle}")
     draw = ImageDraw.Draw(img)
 
     # Top Category Badge
-    draw.rounded_rectangle([60, 45, 380, 80], radius=8, fill=(35, 20, 55), outline=COLOR_PURPLE, width=1)
+    draw_glass_panel(img, [60, 45, 380, 80], fill=(35, 20, 55, 230), border_color=COLOR_PURPLE, radius=8, border_width=1)
     f_badge = get_font("segoeuib.ttf", 15)
     draw.text((80, 52), badge.upper(), fill=COLOR_PURPLE, font=f_badge)
 
@@ -240,7 +299,7 @@ def render_style_metric_dashboard(post_key, badge, headline, subtitle, metrics, 
         mx = start_x + i * (m_w + spacing)
         c_box = m.get("color", COLOR_CYAN)
 
-        draw.rounded_rectangle([mx, m_y, mx + m_w, m_y + m_h], radius=14, fill=COLOR_CARD_BG, outline=c_box, width=1)
+        draw_glass_panel(img, [mx, m_y, mx + m_w, m_y + m_h], fill=(18, 30, 50, 225), border_color=c_box, radius=14, border_width=1)
         
         # Big Stat
         f_val = get_font("segoeuib.ttf", 44)
@@ -255,7 +314,7 @@ def render_style_metric_dashboard(post_key, badge, headline, subtitle, metrics, 
     # Lower Architectural Insights Panel
     p_y = 360
     p_h = 205
-    draw.rounded_rectangle([60, p_y, W_CARD - 60, p_y + p_h], radius=14, fill=COLOR_CARD_BG, outline=COLOR_CARD_BORDER, width=1)
+    draw_glass_panel(img, [60, p_y, W_CARD - 60, p_y + p_h], fill=(16, 26, 46, 225), border_color=COLOR_CARD_BORDER, radius=14, border_width=1)
     
     f_p_hdr = get_font("segoeuib.ttf", 20)
     draw.text((90, p_y + 22), "PRODUCTION ARCHITECTURAL TAKEAWAYS", fill=COLOR_CYAN, font=f_p_hdr)

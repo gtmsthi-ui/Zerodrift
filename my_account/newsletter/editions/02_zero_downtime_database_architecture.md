@@ -7,7 +7,7 @@ role: "AI Enthusiast"
 date: "2026-10-18"
 slug: "zero-downtime-database-architecture-expand-contract"
 pillar: "Practical AI & System Architecture"
-status: "ready"
+status: "scheduled"
 tags: ["DatabaseArchitecture", "ZeroDowntime", "DistributedSystems", "SRE", "StaffPlus"]
 ---
 

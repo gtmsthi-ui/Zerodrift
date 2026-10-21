@@ -7,7 +7,7 @@ role: "AI Enthusiast"
 date: "2026-10-21"
 slug: "staff-plus-technical-governance-negative-adrs"
 pillar: "Staff+ Career & Technical Leadership"
-status: "ready"
+status: "scheduled"
 tags: ["StaffPlus", "TechnicalLeadership", "ArchitectureGovernance", "ADR", "CareerGrowth"]
 ---
 
