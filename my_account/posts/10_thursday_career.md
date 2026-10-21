@@ -4,10 +4,10 @@ title: "The First 90 Days as a Staff+ Engineer: Influence Without Authority"
 day: "Thursday 8:30 AM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#17 Time Anchor"
-status: "prepared"
+status: "scheduled"
 score: "81.2"
 scheduled_at: "2026-10-29T03:00:00.000Z"
-buffer_post_id: ""
+buffer_post_id: "6ad876d772c278511466be7d"
 image_url: "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/post_10_card.png"
 ---
 

@@ -4,10 +4,10 @@ title: "Zero-Downtime Database Migrations: The 3-Phase Expand/Contract Pattern"
 day: "Tuesday 8:30 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#1 Contrarian Thesis"
-status: "prepared"
+status: "scheduled"
 score: "80.2"
 scheduled_at: "2026-10-27T03:00:00.000Z"
-buffer_post_id: ""
+buffer_post_id: "6ad876c57143aca6ab03d171"
 image_url: "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/post_09_card.png"
 ---
 
