@@ -90,12 +90,16 @@ jobs:
         run: |
           python scripts/cloud_autopilot.py
 
-      - name: Commit Final Buffer Queue State
+      - name: Synchronize Website Publications Hub
         run: |
-          git add my_account/
+          python scripts/sync_site_publications.py
+
+      - name: Commit Final Buffer Queue State & Website Hub
+        run: |
+          git add my_account/ docs/
           if git diff --staged --quiet; then
             echo "No status changes to commit."
           else
-            git commit -m "chore: update LinkedIn post queue and publishing log [skip ci]"
+            git commit -m "chore: update LinkedIn post queue, logs, and website hub [skip ci]"
             git push
           fi

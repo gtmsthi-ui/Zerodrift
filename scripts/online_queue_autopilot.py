@@ -36,6 +36,13 @@ if HERE not in sys.path:
 sys.path.insert(0, os.path.join(PROJECT_ROOT, "my_account"))
 
 from generate_post_card import create_custom_card
+from generate_multi_style_assets import (
+    render_style_comparison_grid,
+    render_style_pipeline_flow,
+    render_style_metric_dashboard,
+    render_style_document_carousel
+)
+from sync_site_publications import sync_docs_index
 from buffer_publisher import schedule_buffer_post, get_buffer_posts, execute_graphql, load_config
 from cloud_autopilot import send_telegram, get_env_or_config, run_detect, parse_post_file, append_to_log
 from db_tracker import init_db, get_db, record_log
@@ -722,19 +729,61 @@ def prepare_new_posts(min_threshold=3, target_buffer_stock=4):
         passed, score, _ = run_detect(body)
         print(f"[*] Humanizer Score: {score:.1f} (Passed: {passed})")
 
-        # Generate Visual Card
-        out_card = create_custom_card(
-            post_key=post_id,
-            category_badge=card_info["badge"],
-            headline=card_info["headline"],
-            subtitle=card_info["subtitle"],
-            box1_title=card_info["box1_title"],
-            box1_lines=card_info["box1_lines"],
-            box2_title=card_info["box2_title"],
-            box2_lines=card_info["box2_lines"]
-        )
+        # Determine rotating visual style to prevent feed monotony:
+        pref_style = topic_item.get("style")
+        if not pref_style:
+            if day_name == "Tuesday":
+                pref_style = "pipeline_flow" if "stages" in topic_item else "comparison_grid"
+            elif day_name == "Thursday":
+                pref_style = "carousel_pdf" if "slides" in topic_item else "comparison_grid"
+            elif day_name == "Friday":
+                pref_style = "metric_dashboard" if "metrics" in topic_item else "comparison_grid"
+            else:
+                pref_style = "comparison_grid"
 
-        image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{post_id}_card.png"
+        doc_url = None
+        if pref_style == "pipeline_flow" and "stages" in topic_item:
+            out_card = render_style_pipeline_flow(
+                post_key=post_id,
+                badge=card_info.get("badge", pillar),
+                headline=card_info.get("headline", title),
+                subtitle=card_info.get("subtitle", ""),
+                stages=topic_item["stages"]
+            )
+            image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(out_card)}"
+        elif pref_style == "metric_dashboard" and "metrics" in topic_item:
+            out_card = render_style_metric_dashboard(
+                post_key=post_id,
+                badge=card_info.get("badge", pillar),
+                headline=card_info.get("headline", title),
+                subtitle=card_info.get("subtitle", ""),
+                metrics=topic_item["metrics"],
+                key_takeaways=topic_item.get("key_takeaways", [])
+            )
+            image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(out_card)}"
+        elif pref_style == "carousel_pdf" and "slides" in topic_item:
+            out_pdf, thumb = render_style_document_carousel(
+                post_key=post_id,
+                category=card_info.get("badge", pillar),
+                title=title,
+                hook_subtitle=card_info.get("subtitle", ""),
+                slides_content=topic_item["slides"]
+            )
+            doc_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(out_pdf)}"
+            image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(thumb)}"
+            out_card = out_pdf
+        else:
+            out_card = render_style_comparison_grid(
+                post_key=post_id,
+                badge=card_info.get("badge", pillar),
+                headline=card_info.get("headline", title),
+                subtitle=card_info.get("subtitle", ""),
+                box1_title=card_info.get("box1_title", "The Flawed Approach"),
+                box1_lines=card_info.get("box1_lines", []),
+                box2_title=card_info.get("box2_title", "Production Pattern"),
+                box2_lines=card_info.get("box2_lines", [])
+            )
+            image_url = f"https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/{os.path.basename(out_card)}"
 
         # Save markdown file as 'prepared'
         target_path = os.path.join(POSTS_DIR, post_file)
@@ -749,6 +798,7 @@ score: "{score:.1f}"
 scheduled_at: "{due_at_iso}"
 buffer_post_id: ""
 image_url: "{image_url}"
+document_url: "{doc_url or ''}"
 ---
 
 {body.strip()}
@@ -818,23 +868,28 @@ def schedule_prepared_to_buffer():
             if not due_at:
                 continue
 
-            print(f"[*] Pushing {post_id} ('{title}') to Buffer for {due_at}...")
-
-            # Check if image URL is live on raw.githubusercontent.com
+            doc_url = meta.get("document_url", "")
             attach_url = image_url
-            if attach_url and not is_url_accessible(attach_url):
-                print(f"[!] Warning: Image URL {attach_url} returned non-200. Testing if asset committed...")
-                # Still try if URL exists or fallback to card
             
-            buf_res = schedule_buffer_post(
-                post_text=body,
-                due_at=due_at,
-                image_url=attach_url
-            )
+            if doc_url and doc_url.startswith("https://"):
+                print(f"[*] Pushing post {post_id} with attached PDF Document Carousel: {doc_url}...")
+                buf_res = schedule_buffer_post(
+                    post_text=body,
+                    due_at=due_at,
+                    document_url=doc_url,
+                    document_title=title,
+                    thumbnail_url=attach_url
+                )
+            else:
+                buf_res = schedule_buffer_post(
+                    post_text=body,
+                    due_at=due_at,
+                    image_url=attach_url
+                )
 
-            # Fallback if image failed
-            if not buf_res and attach_url:
-                print("[*] Retrying Buffer push without image URL fallback...")
+            # Fallback if image/doc failed
+            if not buf_res and (attach_url or doc_url):
+                print("[*] Retrying Buffer push without media attachment fallback...")
                 buf_res = schedule_buffer_post(
                     post_text=body,
                     due_at=due_at,
@@ -895,9 +950,13 @@ def schedule_prepared_to_buffer():
 
 
 def run_full_autopilot(min_threshold=3, target_stock=4):
-    """Runs prepare, followed by buffer sync & schedule."""
+    """Runs prepare, followed by buffer sync & schedule, then site sync."""
     prep = prepare_new_posts(min_threshold=min_threshold, target_buffer_stock=target_stock)
     sched = schedule_prepared_to_buffer()
+    try:
+        sync_docs_index()
+    except Exception as e:
+        print(f"[*] Website sync: {e}")
     return prep, sched
 
 
