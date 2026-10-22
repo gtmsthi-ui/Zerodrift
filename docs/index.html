@@ -3607,6 +3607,12 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     <!-- ==========================================================================
          SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
          ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
     <section class="container lazy-reveal" id="whitepapers">
       <div class="section-title">
         <h3>Architectural Whitepapers & Technical Dispatches</h3>
@@ -3852,14 +3858,8 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
             <span class="tag">#StaffPlus</span>
           </div>
           <div class="card-actions">
-            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              Scheduled in Buffer
-            </span>
-            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Thursday 8:30 AM
-            </span>
+            <span class="status-badge status-ready">Published on LinkedIn</span>
+            <a class="read-btn" onclick="openModal('post_06')">Read Breakdown →</a>
           </div>
         </article>
         
@@ -4032,6 +4032,8 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     </div>
   </div>
 
+  
+  
   
   
   
@@ -4434,6 +4436,60 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
           <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">View on LinkedIn →</a>
           <button class="btn-outline" onclick="closeModalDirect('post_05')" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">Close Dispatch</button>
+        </div>
+      </div>
+    </div>
+  </div>
+            
+  <!-- Modal Reader for Dispatch post_06 -->
+  <div id="post_06-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="post_06-heading" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModalDirect('post_06')" aria-label="Close dialog">&times;</button>
+      <div class="article-body">
+        <span class="card-num" style="color: var(--emerald-glow);">POST_06 · ARCHITECTURE DISPATCH</span>
+        <h1 id="post_06-heading" style="margin-top: 0.5rem; color: #fff;">How to Price an AI Agent Run Before Your CFO Pages You</h1>
+        <div class="article-meta">Gautam Sethi · Schedule Slot: Thursday 8:30 AM · Humanizer Quality: 73.5/100 PASS</div>
+        <div class="modal-inner-text" style="margin-top: 1.5rem; line-height: 1.75; color: var(--text-main);">
+          <p>Most engineering teams don't price an AI feature until the end of the month.</p>
+
+<p>That's the fastest way to get your project killed by finance.</p>
+
+<p>Three months ago, an engineering director asked me why their new agentic feature was getting paused despite glowing user reviews.</p>
+<p>The reason was simple: every query cost the company $0.42, while the SaaS seat price was only $29 per month.</p>
+<p>At 100 queries a day per user, each active customer was generating a $1,260 monthly cloud deficit.</p>
+
+<p>When you're an AI Enthusiast and technical leader, FinOps isn't an afterthought. It's a foundational architectural constraint.</p>
+
+<p>Here's the 3-part formula I require our teams to calculate before approving any AI feature into staging:</p>
+
+<p>1. The Maximum Branching Cost Ceiling</p>
+<p>An agent run is rarely a single API call.</p>
+<p>Multiply your baseline prompt tokens by the worst-case branching factor:</p>
+<p>Max Cost = (Base Prompt + Retrieval Tokens) <em> (Max Tree Depth) </em> (Cost per 1k tokens)</p>
+<p>If your worst-case branching exceeds 4x baseline, you need a deterministic heuristic gate before the branch.</p>
+
+<p>2. The 30% Rework Overhead Buffer</p>
+<p>Models fail on edge cases. If your system automatically retries or corrects schemas, add a 30% rework multiplier to your unit economics model.</p>
+<p>Never model your cloud costs on the happy path.</p>
+
+<p>3. The Cache Hit-Rate Floor</p>
+<p>If your feature doesn't achieve at least a 45% semantic cache hit rate within the first 14 days, your unit margins will bleed as usage scales.</p>
+<p>We enforce deterministic local caches for common queries before routing to the LLM.</p>
+
+<p>The result of this financial governance?</p>
+<p>Our feature passed CFO review in 15 minutes, and our unit margins stayed above 78% during a 4x traffic surge.</p>
+
+<p>I've mapped out the full FinOps unit-economics equation in the visual card below.</p>
+
+<p>Read our complete architectural leadership playbook at ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/</p>
+
+<p>How does your team calculate AI unit economics before shipping to customers?</p>
+
+<p>#FinOps #CloudArchitecture #Leadership #SystemDesign</p>
+        </div>
+        <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+          <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">View on LinkedIn →</a>
+          <button class="btn-outline" onclick="closeModalDirect('post_06')" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">Close Dispatch</button>
         </div>
       </div>
     </div>
