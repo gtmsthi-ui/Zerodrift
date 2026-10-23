@@ -7,3 +7,4 @@
 - **[2026-10-21 13:43]** The Multi-Agent Swarm Illusion: When Loops Become Enterprise Debt (`Practical AI & System Architecture`) | Score: 74.6 PASS | File: `05_tuesday_ai.md`
 - **[2026-10-21 13:43]** The $42k Cloud Mistake That Changed How I Talk to CFOs (`Staff+ Career & Technical Leadership`) | Score: 76.7 PASS | File: `04_sunday_career.md`
 - **[2026-10-22 07:01]** How to Price an AI Agent Run Before Your CFO Pages You (`Staff+ Career & Technical Leadership`) | Score: 73.5 PASS | File: `06_thursday_career.md`
+- **[2026-10-23 06:53]** Unit Tests Don't Work on Probabilistic Systems: The CI/CD Eval Pipeline That Does (`Practical AI & System Architecture`) | Score: 77.8 PASS | File: `07_friday_ai.md`

@@ -4,10 +4,11 @@ title: "Unit Tests Don't Work on Probabilistic Systems: The CI/CD Eval Pipeline 
 day: "Friday 8:30 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#2 Contrarian Thesis"
-status: "scheduled"
+status: "published"
 score: "77.8"
 scheduled_at: "2026-10-23T03:00:00.000Z"
 buffer_post_id: "6ad091316295ecc932f66e5c"
+published_at: "2026-10-23T03:00:00.000Z"
 ---
 
 You can't test an LLM pipeline with assert output == expected.
