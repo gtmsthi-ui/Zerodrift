@@ -3619,6 +3619,12 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     <!-- ==========================================================================
          SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
          ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
     <section class="container lazy-reveal" id="whitepapers">
       <div class="section-title">
         <h3>Architectural Whitepapers & Technical Dispatches</h3>
@@ -3883,14 +3889,8 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
             <span class="tag">#StaffPlus</span>
           </div>
           <div class="card-actions">
-            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-              Scheduled in Buffer
-            </span>
-            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Friday 8:30 AM
-            </span>
+            <span class="status-badge status-ready">Published on LinkedIn</span>
+            <a class="read-btn" onclick="openModal('post_07')">Read Breakdown →</a>
           </div>
         </article>
         
@@ -4038,6 +4038,8 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     </div>
   </div>
 
+  
+  
   
   
   
@@ -4498,6 +4500,58 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
           <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">View on LinkedIn →</a>
           <button class="btn-outline" onclick="closeModalDirect('post_06')" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">Close Dispatch</button>
+        </div>
+      </div>
+    </div>
+  </div>
+            
+  <!-- Modal Reader for Dispatch post_07 -->
+  <div id="post_07-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="post_07-heading" onclick="closeModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close" onclick="closeModalDirect('post_07')" aria-label="Close dialog">&times;</button>
+      <div class="article-body">
+        <span class="card-num" style="color: var(--emerald-glow);">POST_07 · ARCHITECTURE DISPATCH</span>
+        <h1 id="post_07-heading" style="margin-top: 0.5rem; color: #fff;">Unit Tests Don't Work on Probabilistic Systems: The CI/CD Eval Pipeline That Does</h1>
+        <div class="article-meta">Gautam Sethi · Schedule Slot: Friday 8:30 AM · Humanizer Quality: 77.8/100 PASS</div>
+        <div class="modal-inner-text" style="margin-top: 1.5rem; line-height: 1.75; color: var(--text-main);">
+          <p>You can't test an LLM pipeline with assert output == expected.</p>
+
+<p>Yet thousands of engineering teams I talk with still try to jam probabilistic models into traditional deterministic unit test suites.</p>
+
+<p>The result? Either flaky tests that break every CI run, or watered-down assertions that let massive semantic hallucinations slip into production.</p>
+
+<p>Here's the 3-tier eval architecture we use in our CI/CD pipelines to catch regressions before they hit customer traffic:</p>
+
+<p>1. Golden Dataset Schema Gates</p>
+<p>We maintain a version-controlled dataset of 300 real customer queries with strict ground-truth constraints.</p>
+<p>Every PR validates that output conforms strictly to JSON schemas, latency stays within p95 SLA (sub-800ms), and token counts don't drift by more than 10%.</p>
+<p>If token bloat spikes on a PR, our build automatically blocks the merge.</p>
+
+<p>2. Out-of-Band Semantic Assertion Workers</p>
+<p>We don't run slow evaluators synchronously inside the build pipeline.</p>
+<p>Instead, our test workers spin up asynchronous containers that run semantic similarity embeddings against golden reference vectors.</p>
+<p>It costs us $0.15 per CI build and finishes in under two minutes.</p>
+
+<p>3. Shadow Traffic Canary Verification</p>
+<p>Before any model upgrade or prompt refactor goes live to all users, it receives 5% of shadow production traffic.</p>
+<p>Our observability layer compares semantic drift and user feedback in real time against the control cluster.</p>
+<p>If drift exceeds 2.5%, the canary terminates instantly.</p>
+
+<p>The real engineering results: we caught 14 silent prompt regressions before staging, reduced flaky build failures from 18% to zero, and kept model response determinism at 99.4%.</p>
+
+<p>Probabilistic systems require statistical verification, not binary assertions.</p>
+
+<p>I put together the complete CI/CD eval pipeline workflow in the visual summary below.</p>
+
+<p>You can also read the breakdown in ZeroDrift Systems: https://gtmsthi-ui.github.io/Zerodrift/</p>
+
+<p>How is your engineering team testing LLM prompt changes before merging PRs?</p>
+
+<p>#DevOps #SoftwareEngineering #CloudArchitecture #SystemDesign</p>
+        </div>
+        <div style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+          <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">View on LinkedIn →</a>
+          <button class="btn-outline" onclick="closeModalDirect('post_07')" style="font-size: 0.85rem; padding: 0.6rem 1.2rem;">Close Dispatch</button>
         </div>
       </div>
     </div>
