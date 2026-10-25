@@ -4,10 +4,11 @@ title: "The Technical Debt You Inherited Wasn't an Accident: It Was a Feature"
 day: "Sunday 4:30 PM"
 pillar: "Staff+ Career & Technical Leadership"
 hook_formula: "#8 Paradox"
-status: "scheduled"
+status: "published"
 score: "80.4"
 scheduled_at: "2026-10-25T11:00:00.000Z"
 buffer_post_id: "6ad091326295ecc932f66e8a"
+published_at: "2026-10-25T11:00:00.000Z"
 ---
 
 The quickest way to destroy your credibility as a new technical leader is to look at the existing codebase and say:
