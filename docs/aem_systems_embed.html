@@ -1214,7 +1214,7 @@ function runClientAEMScan(code) {
   }
 
   // Rule 3: Missing gracePeriod in dispatcher config
-  if (code.includes("/cache") && !code.includes("/gracePeriod")) {
+  if (code.includes("/cache") && !/\/gracePeriod\s+["']?\d+["']?/.test(code)) {
     findings.push({
       ruleId: "DSP-02",
       severity: "WARNING",
@@ -1238,7 +1238,7 @@ function runClientAEMScan(code) {
   }
 
   // Rule 5: Inline script block in HTL
-  if (code.includes("<script") && !code.includes("src=")) {
+  if (/<script(?![^>]*\bsrc=)[^>]*>/i.test(code)) {
     findings.push({
       ruleId: "HTL-01",
       severity: "WARNING",
@@ -1352,7 +1352,40 @@ function runClientRAGQuery(query) {
 }
 
 // ============================================================================
-// 3. UI BINDING & EVENT LISTENERS
+// 3. CONTENT REPURPOSER PRESETS (TOP-LEVEL SCOPE)
+// ============================================================================
+const CONTENT_PRESETS = {
+  dispatcher: {
+    title: "Zero-Downtime Dispatcher Cache Invalidation",
+    category: "AEM Architecture",
+    points: [
+      "Elevating /statfileslevel to 3 prevents full-site cache wiping during localized market authoring.",
+      "Serving stale cache for 2 seconds via /gracePeriod avoids publisher CPU exhaustion spikes.",
+      "Moving clientlib hashes into the file path rather than query string unlocks edge CDN caching."
+    ]
+  },
+  cloud_migration: {
+    title: "Migrating Legacy AEM to Cloud Service: The Read-Only /apps Paradigm",
+    category: "Cloud Migration",
+    points: [
+      "Immutable /apps and /libs trees require strict separation of mutable /content and /conf JCR paths.",
+      "Deprecated foundation components fail Cloud Manager quality gates immediately.",
+      "All OSGi configurations must reside in repository runmode folders, not JCR Web Console changes."
+    ]
+  },
+  core_components: {
+    title: "Proxy Component Pattern & Core Web Vitals",
+    category: "Frontend & HTL",
+    points: [
+      "Always proxy Adobe WCM Core Components under /apps/mybrand/components rather than copying code.",
+      "Enforce responsive image presets in DAM to eliminate layout shifts (CLS < 0.1).",
+      "Adopt versioned clientlibs with async/defer script attributes to cut TBT by 65%."
+    ]
+  }
+};
+
+// ============================================================================
+// 4. UI BINDING & EVENT LISTENERS
 // ============================================================================
 
 function initWorkbench() {
@@ -1466,38 +1499,8 @@ function initWorkbench() {
   }
 
   // ============================================================================
-  // 3. CONTENT REPURPOSER & ASSET PIPELINE (CLIENT-SIDE)
+  // 3. CONTENT REPURPOSER UI & ASSET PIPELINE
   // ============================================================================
-  const CONTENT_PRESETS = {
-    dispatcher: {
-      title: "Zero-Downtime Dispatcher Cache Invalidation",
-      category: "AEM Architecture",
-      points: [
-        "Elevating /statfileslevel to 3 prevents full-site cache wiping during localized market authoring.",
-        "Serving stale cache for 2 seconds via /gracePeriod avoids publisher CPU exhaustion spikes.",
-        "Moving clientlib hashes into the file path rather than query string unlocks edge CDN caching."
-      ]
-    },
-    cloud_migration: {
-      title: "Migrating Legacy AEM to Cloud Service: The Read-Only /apps Paradigm",
-      category: "Cloud Migration",
-      points: [
-        "Immutable /apps and /libs trees require strict separation of mutable /content and /conf JCR paths.",
-        "Deprecated foundation components fail Cloud Manager quality gates immediately.",
-        "All OSGi configurations must reside in repository runmode folders, not JCR Web Console changes."
-      ]
-    },
-    core_components: {
-      title: "Proxy Component Pattern & Core Web Vitals",
-      category: "Frontend & HTL",
-      points: [
-        "Always proxy Adobe WCM Core Components under /apps/mybrand/components rather than copying code.",
-        "Enforce responsive image presets in DAM to eliminate layout shifts (CLS < 0.1).",
-        "Adopt versioned clientlibs with async/defer script attributes to cut TBT by 65%."
-      ]
-    }
-  };
-
   const contentSelector = document.getElementById("content-preset-select");
   const contentRunBtn = document.getElementById("btn-run-content-pipeline");
   const contentPostOutput = document.getElementById("content-post-output");
@@ -1546,18 +1549,23 @@ function initWorkbench() {
       const selected = contentSelector ? contentSelector.value : "dispatcher";
       executeContentPipeline(selected);
     });
+  }
 
-    document.querySelectorAll("[data-content-preset]").forEach(btn => {
+  const contentPresetBtns = document.querySelectorAll("[data-content-preset]");
+  if (contentPresetBtns.length > 0) {
+    contentPresetBtns.forEach(btn => {
       btn.addEventListener("click", () => {
-        document.querySelectorAll("[data-content-preset]").forEach(b => b.classList.remove("active"));
+        contentPresetBtns.forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         const key = btn.getAttribute("data-content-preset");
         if (contentSelector) contentSelector.value = key;
         executeContentPipeline(key);
       });
     });
+  }
 
-    // Run initial content generation
+  // Run initial content generation if outputs exist
+  if (contentPostOutput || contentCarouselOutput || contentCsvOutput) {
     executeContentPipeline("dispatcher");
   }
 
@@ -1580,10 +1588,12 @@ function initWorkbench() {
   });
 }
 
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initWorkbench);
-} else {
-  initWorkbench();
+if (typeof document !== "undefined") {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initWorkbench);
+  } else {
+    initWorkbench();
+  }
 }
 
   // Embed Tab Switching
