@@ -1,10 +1,11 @@
 # LinkedIn Content & Growth Plan: AI Enthusiast
 
-## Weekly Rhythm: 4 Posts / Week (Alternating Pillars)
+## Weekly Rhythm: 5 Posts / Week (3 Core Pillars)
 
 | Day | Pillar | Hook Formula | Topic / Working Angle |
 | :--- | :--- | :--- | :--- |
 | **Tuesday** (8:15 AM) | **Pillar 1: Practical AI** | #1 Contrarian Take | Why most LLM prototypes fail in staging (context & deterministic guardrails) |
+| **Wednesday** (8:15 AM) | **Pillar 3: AEM & Enterprise Web** | #1 Contrarian Thesis | Why naive AEM Dispatcher flushing kills cache hit rates (and how to fix TTFB) |
 | **Thursday** (8:30 AM) | **Pillar 2: Career / Leadership** | #17 Time Anchor | The shift from Senior to Staff/Architect: writing ADRs vs writing code |
 | **Friday** (8:00 AM) | **Pillar 1: Practical AI** | #21 Direct Value | The 3-layer architecture pattern we use to make LLM outputs production-safe |
 | **Sunday** (4:30 PM) | **Pillar 2: Career / Leadership** | #3 Mistake Confession | The $40k cloud mistake that taught me how to talk to finance executives |

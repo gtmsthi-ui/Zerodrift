@@ -50,11 +50,13 @@ from db_tracker import init_db, get_db, record_log
 
 # Posting Rhythm (UTC):
 # Tuesday 03:00 UTC (8:30 AM IST) - Pillar 1: Practical AI & System Architecture
+# Wednesday 03:00 UTC (8:30 AM IST) - Pillar 3: AEM & Enterprise Web Architecture
 # Thursday 03:00 UTC (8:30 AM IST) - Pillar 2: Staff+ Career & Technical Leadership
 # Friday 03:00 UTC (8:30 AM IST) - Pillar 1: Practical AI & System Architecture
 # Sunday 11:00 UTC (4:30 PM IST) - Pillar 2: Staff+ Career & Technical Leadership
 SLOT_CONFIG = [
     {"weekday": 1, "hour": 3, "minute": 0, "day_name": "Tuesday", "pillar": "Practical AI & System Architecture"},
+    {"weekday": 2, "hour": 3, "minute": 0, "day_name": "Wednesday", "pillar": "AEM & Enterprise Web Architecture"},
     {"weekday": 3, "hour": 3, "minute": 0, "day_name": "Thursday", "pillar": "Staff+ Career & Technical Leadership"},
     {"weekday": 4, "hour": 3, "minute": 0, "day_name": "Friday", "pillar": "Practical AI & System Architecture"},
     {"weekday": 6, "hour": 11, "minute": 0, "day_name": "Sunday", "pillar": "Staff+ Career & Technical Leadership"},
@@ -461,6 +463,244 @@ How do you handle scope negotiations when product deadlines feel impossible?
                 "Preserve engineering velocity and team sanity"
             ]
         }
+    },
+    {
+        "id": "post_09b",
+        "file": "09b_wednesday_aem.md",
+        "title": "Why Naive AEM Dispatcher Invalidation Kills TTFB: The 3-Layer Cache Hierarchy",
+        "pillar": "AEM & Enterprise Web Architecture",
+        "hook_formula": "#1 Contrarian Thesis",
+        "body": """Flushing an entire AEM Dispatcher cache every time someone hits publish is the fastest way I know to kill a website.
+
+We learned this the hard way five years back on an enterprise commerce rollout.
+Every weekday at 2:00 PM sharp, our Time to First Byte jumped from 45ms to 3.8 seconds.
+Brutal.
+Our infra leads blamed sudden visitor spikes, while our marketing team blamed our large hero images.
+They were all looking in the wrong place.
+
+The real culprit?
+Someone left statfileslevel set to 0.
+When an editor updated one bio on /content/corporate/about-us, our replication agent touched the root .stat file.
+In less than a second, our Dispatcher invalidated cached HTML across 14 language sites and 45,000 URLs.
+Forty-five thousand live user requests bypassed Apache and hit our 4 publish JVMs at once.
+CPU pinned at 98%.
+Dead.
+The whole cluster choked.
+
+If you run enterprise AEM at scale, you can't treat cache invalidation like a sledgehammer. You've got to protect your publish tier.
+
+Here's how we fixed our caching architecture to lock in a 96% hit ratio:
+
+1. Tune statfileslevel to match your tree
+Don't leave statfileslevel at 0 or 1.
+If your repository path is /content/brand/country/language, set statfileslevel to 4.
+When we publish /content/brand/us/en/news/article-1, only files in that exact en folder invalidate, while our UK, German, and Japanese pages stay warm. Simple.
+
+2. Put stale-while-revalidate at the CDN edge
+You shouldn't let incoming visitors wait on an origin re-render.
+We set up Fastly with stale-while-revalidate=86400.
+When our cache clears, the CDN serves the existing page to visitors while one single background thread fetches fresh HTML from AEM.
+Nobody feels the rebuild lag.
+
+3. Strip campaign tags before cache lookup
+Marketers attach tracking parameters like ?utm_source or ?gclid to everything.
+Default Dispatcher rules see those query strings and treat them as unique uncached pages.
+We rewrote our Dispatcher filters to discard marketing params before checking cache on disk.
+
+What that gave us:
+- Cache hit ratio rose from 61% to 96.8%
+- We cut peak publish cluster CPU down to 18%
+- Global p95 TTFB stayed under 65ms during our largest Black Friday launch
+
+Good web architecture isn't about paying for bigger cloud servers. It's about making sure your origin barely knows visitors exist.
+
+I've sketched out our exact Dispatcher invalidation hierarchy in the visual below.
+
+Read our complete web architecture guide at The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
+
+What's the nastiest cache invalidation bug you've had to solve in AEM?
+
+#AdobeExperienceManager #WebPerformance""",
+        "card": {
+            "badge": "AEM ARCHITECTURE & WEB PERFORMANCE",
+            "headline": "AEM Dispatcher Cache Invalidation",
+            "subtitle": "How to prevent publish cluster crashes and lock in 96%+ CDN cache hit ratios:",
+            "box1_title": "Naive Dispatcher Invalidation",
+            "box1_lines": [
+                "statfileslevel set to 0 flushes entire site",
+                "Single author publish purges 45,000 URLs",
+                "45,000 requests bypass cache and hit publish",
+                "CPU spikes to 98% & thread pool exhaustion",
+                "Dynamic query tags (?utm_*) bypass cache"
+            ],
+            "box2_title": "Production Invalidation Architecture",
+            "box2_lines": [
+                "statfileslevel set to 4 matches domain tree",
+                "Fastly/Cloudflare stale-while-revalidate (86400s)",
+                "Zero-downtime background re-renders for origin",
+                "Dispatcher rewrites strip non-functional params",
+                "96.8% cache hit ratio & sub-65ms global p95 TTFB"
+            ]
+        }
+    },
+    {
+        "id": "post_aem_02",
+        "file": "15_wednesday_aem.md",
+        "title": "Edge Delivery Services (EDS) vs. Traditional AEM Sites: The 100/100 Core Web Vitals Reality",
+        "pillar": "AEM & Enterprise Web Architecture",
+        "hook_formula": "#1 Contrarian Thesis",
+        "body": """If your enterprise site takes 4 seconds to load because your CMS has to traverse 12 levels of JCR nodes, you don't have a content problem.
+
+You've got an architecture problem.
+
+For fifteen years, our playbook for Adobe Experience Manager was always the same:
+We built heavy OSGi components, layered HTL templates on top of Sling Models, rendered HTML on Java publish servers, and prayed our Dispatcher cache held during marketing sales.
+Most enterprise sites we worked on ended up with mobile Lighthouse scores around 35.
+Sluggish.
+LCP took 4.2 seconds.
+First Input Delay was painful to watch.
+
+Then Adobe introduced Edge Delivery Services (EDS), what many of us knew as Project Franklin.
+When our engineering team first evaluated EDS, I'll admit we were skeptical.
+Authoring directly in Google Docs or Microsoft SharePoint?
+Publishing plain HTML and markdown straight to Cloudflare edge workers without touching a heavy JCR?
+It sounded like a toy.
+
+Until we built our first proof of concept and ran real synthetic benchmarks:
+
+1. Sub-500ms Largest Contentful Paint (LCP)
+Because EDS serves static HTML directly from the CDN edge without hitting a Java publish instance, your server response time drops under 30ms.
+No Sling models executing. No database connection pools waiting.
+
+2. Zero client-side framework bloat
+Traditional enterprise sites ship 2.5MB of JavaScript before a user can even click a link.
+With EDS, we write components in modular vanilla JavaScript and modern CSS. Total payload: under 120KB.
+Our mobile Lighthouse score went straight to 100/100.
+
+3. Authoring speed without CMS headaches
+Our content editors don't fight complex touch UI dialogs or broken replication queues anymore.
+They write in Google Docs, organize in folders, and preview in real time with the sidekick browser extension.
+Publishing takes 3 seconds instead of 10-minute workflow approvals.
+
+What we measured in production:
+- Mobile Lighthouse score jumped from 38 to 99
+- We cut Largest Contentful Paint down from 4.2s to 640ms
+- Monthly cloud infrastructure bills fell by 68%
+
+Modern web architecture is shifting back to simplicity at the edge. If you're still clinging to monolithic server-side rendering, you'll spend the next three years wondering why your SEO rankings tanked.
+
+I've compared the architecture of Traditional AEM vs Edge Delivery Services in the visual below.
+
+Read our full enterprise web analysis at The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
+
+Has your team tested Edge Delivery Services yet, or are you still maintaining traditional AEM Sites?
+
+#AdobeExperienceManager #WebPerformance""",
+        "card": {
+            "badge": "ENTERPRISE WEB & EDGE CMS",
+            "headline": "Traditional AEM vs Edge Delivery",
+            "subtitle": "Why enterprise content architecture is shifting from heavy JCR to the edge:",
+            "box1_title": "Traditional AEM Sites Monolith",
+            "box1_lines": [
+                "Heavy OSGi bundles & complex Sling models",
+                "2.5MB client JavaScript bundle bloat",
+                "Multi-second server-side JCR traversal",
+                "Mobile Lighthouse score pinned at 35",
+                "Expensive publish cluster infrastructure"
+            ],
+            "box2_title": "Edge Delivery Services (EDS)",
+            "box2_lines": [
+                "Static HTML rendered directly at CDN edge",
+                "Vanilla JS & CSS components (<120KB total)",
+                "Sub-30ms edge worker response times",
+                "100/100 Mobile Lighthouse & sub-650ms LCP",
+                "68% reduction in cloud hosting overhead"
+            ]
+        }
+    },
+    {
+        "id": "post_aem_04",
+        "file": "25_wednesday_aem.md",
+        "title": "Sling ResourceResolver Leaks & Oak Index Traversal: The AEM Production Incident Playbook",
+        "pillar": "AEM & Enterprise Web Architecture",
+        "hook_formula": "#3 Mistake Confession",
+        "body": """The two most dangerous lines of backend code in an enterprise AEM application look completely harmless in your pull request.
+
+Here's the first one:
+Opening a Sling ResourceResolver inside an OSGi event listener and forgetting to close it in your finally block.
+Here's the second:
+Running a JCR SQL2 query on /content without an explicit propertyIndex in your oak:index definition.
+
+Four years back, an e-commerce platform our team supported crashed every Saturday night at 11:30 PM.
+No traffic spikes. No new deployments.
+Just a silent, creeping memory leak that pinned our JVM heap at 100% until the Linux OOM killer terminated the Java process.
+We spent two weeks debugging thread dumps before we found where our memory was going.
+
+An OSGi event handler was listening for page modification events.
+Every time an event fired, it grabbed a service ResourceResolver.
+Because we didn't use try-with-resources, each invocation leaked an active JCR session and an underlying Oak session context.
+After 180,000 authoring events over six days, the unclosed sessions consumed 14GB of heap.
+Dead.
+
+The second killer is JCR query traversal.
+If you query nodes without a matching Oak index, Oak falls back to traversing every child node in your repository tree.
+Once it traverses 100,000 nodes, it throws an unrecoverable TraversalPruningException and blocks your worker threads.
+
+Here's the 3-part backend checklist we mandate for every AEM OSGi service we build:
+
+1. Always use try-with-resources on ResourceResolvers
+Never manage resolver lifecycles manually.
+Always wrap your calls:
+try (ResourceResolver resolver = resolverFactory.getServiceResourceResolver(authMap)) {
+  // your business logic here
+}
+When your block exits, the JCR session closes deterministically. You get zero leaked sessions.
+
+2. Define custom Lucene oak:index entries for every query you write
+Never rely on the default nodetype index for custom search.
+Create a custom Lucene index definition under /oak:index with explicit property rules and async indexing.
+Your queries will use B-tree index lookups in 4ms instead of traversing 80,000 nodes.
+
+3. Lower traversal thresholds in your staging environments
+In production, Oak warns at 10,000 nodes and fails at 100,000.
+In our staging environments, we lower the fail limit to 5,000 nodes.
+If an engineer on our team writes an unindexed query, the build breaks in CI/CD before it ever gets near our live production cluster.
+
+What that discipline bought us:
+- Zero JVM memory leaks across 18 months
+- Average JCR query response time dropped from 320ms to 8ms
+- We achieved 100% uptime through 4 major holiday traffic surges
+
+Enterprise CMS reliability isn't an accident. It's built on rigorous resource hygiene that you enforce daily.
+
+I've mapped out our OSGi ResourceResolver and Oak indexing cheat sheet in the card below.
+
+Read our complete AEM backend guide at The Pragmatic Architect: https://gtmsthi-ui.github.io/Zerodrift/
+
+What's the hardest AEM JVM or Oak indexing bug you've had to diagnose?
+
+#AdobeExperienceManager #Java""",
+        "card": {
+            "badge": "AEM BACKEND & SLING ARCHITECTURE",
+            "headline": "Preventing JCR Traversal & Leaks",
+            "subtitle": "The 2 silent backend bugs that crash enterprise AEM publish instances:",
+            "box1_title": "The Silent Failure Traps",
+            "box1_lines": [
+                "Unclosed ResourceResolvers in OSGi listeners",
+                "JCR session pool exhaustion and memory leaks",
+                "Queries without lucene property indexes",
+                "Oak traversal limit warnings (100,000+ nodes)",
+                "Heap exhaustion & JVM OutOfMemoryError crashes"
+            ],
+            "box2_title": "Production OSGi Architecture",
+            "box2_lines": [
+                "Try-with-resources on every ResourceResolver",
+                "Custom oak:index definitions with async property indexes",
+                "Enforced 5,000 query limit fail-fast in staging",
+                "Service users with least-privilege system permissions",
+                "Zero memory leaks and sub-10ms JCR lookups"
+            ]
+        }
     }
 ]
 
@@ -557,14 +797,15 @@ def generate_with_gemini(pillar, target_day):
     if not api_key:
         return None
 
-    prompt = f"""You are Gautam Sethi, an AI Enthusiast and Distributed Systems Architect writing a high-signal LinkedIn post for Staff/Principal engineers and CTOs.
+    prompt = f"""You are Gautam Sethi, an AI Enthusiast, Distributed Systems & Enterprise Web / Adobe Experience Manager (AEM) Architect writing a high-signal LinkedIn post for Staff/Principal engineers, enterprise web leads, and CTOs.
 Domain: {pillar}
 Schedule Slot: {target_day}
 
 Voice Guidelines:
 - Practitioner tone: built and broken real production systems. Empathic, concrete, zero corporate fluff.
+- If domain is AEM & Enterprise Web Architecture: focus on hard-won Adobe Experience Manager lessons (AEM Sites, AEMaaCS, Edge Delivery Services/EDS, Dispatcher caching, Sling/OSGi, JCR indexing, headless Content Fragments & GraphQL persisted queries, Core Web Vitals).
 - NEVER use buzzwords: no 'delve', 'game-changer', 'leverage', 'seamless', 'tapestry', 'revolutionize'.
-- Include concrete metrics: latency numbers, AWS bill percentages, SRE failover seconds.
+- Include concrete metrics: latency numbers, cache hit rates, AWS/cloud bill percentages, SRE failover seconds.
 - Format: short paragraphs (1-3 lines max), clean spacing, sharp mobile-first hook.
 - Use natural contractions (don't, can't, it's, we've, here's) and personal pronouns.
 - Include 2-3 targeted hashtags at the very bottom.
@@ -734,6 +975,8 @@ def prepare_new_posts(min_threshold=3, target_buffer_stock=4):
         if not pref_style:
             if day_name == "Tuesday":
                 pref_style = "pipeline_flow" if "stages" in topic_item else "comparison_grid"
+            elif day_name == "Wednesday":
+                pref_style = "comparison_grid"
             elif day_name == "Thursday":
                 pref_style = "carousel_pdf" if "slides" in topic_item else "comparison_grid"
             elif day_name == "Friday":

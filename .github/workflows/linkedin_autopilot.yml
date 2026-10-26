@@ -4,8 +4,8 @@ on:
   schedule:
     # Runs daily at 02:00 UTC (7:30 AM IST) - checks and replenishes Buffer queue
     - cron: '0 2 * * *'
-    # Also runs at posting times: Tue, Thu, Fri, Sat at 02:45 UTC (8:15 AM IST) and Sun at 11:00 UTC (4:30 PM IST)
-    - cron: '45 2 * * 2,4,5,6'
+    # Also runs at posting times: Tue, Wed, Thu, Fri, Sat at 02:45 UTC (8:15 AM IST) and Sun at 11:00 UTC (4:30 PM IST)
+    - cron: '45 2 * * 2,3,4,5,6'
     - cron: '0 11 * * 0'
   workflow_dispatch:
     inputs:
