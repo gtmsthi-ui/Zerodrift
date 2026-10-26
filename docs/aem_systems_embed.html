@@ -981,9 +981,23 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <!-- Header Banner -->
     <div class="embed-banner">
       <div class="embed-banner-left">
-        <div class="embed-avatar">GS</div>
+        <div class="embed-avatar" style="background: linear-gradient(135deg, rgba(10,16,32,0.95), rgba(5,8,16,0.98)); border: 1px solid rgba(0,242,254,0.45); box-shadow: 0 0 20px rgba(0,242,254,0.3); display: flex; align-items: center; justify-content: center;">
+          <svg width="24" height="24" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="embBannerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f2fe"/>
+                <stop offset="100%" stop-color="#6366f1"/>
+              </linearGradient>
+            </defs>
+            <path d="M18 3L32 10.5V25.5L18 33L4 25.5V10.5L18 3Z" stroke="url(#embBannerGrad)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M18 8L27 13.5V22.5L18 28L9 22.5V13.5L18 8Z" fill="url(#embBannerGrad)" fill-opacity="0.2" stroke="#00f2fe" stroke-width="1.5"/>
+            <circle cx="18" cy="18" r="3" fill="#00f2fe"/>
+          </svg>
+        </div>
         <div>
-          <div class="embed-banner-title">Gautam Sethi · AEM + AI Systems Studio</div>
+          <div class="embed-banner-title" style="font-weight: 800; letter-spacing: -0.02em;">
+            Gautam Sethi <span style="color: var(--cyan); font-weight: 400; margin: 0 0.2rem;">·</span> <span style="background: linear-gradient(135deg, #00f2fe 0%, #38bdf8 60%, #818cf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">AEM + AI Systems Studio</span>
+          </div>
           <div class="embed-banner-sub">Enterprise Content Platform Architect · 100% Offline-First</div>
         </div>
       </div>
