@@ -4,10 +4,10 @@ title: "Why Naive AEM Dispatcher Invalidation Kills TTFB: The 3-Layer Cache Hier
 day: "Wednesday 8:30 AM"
 pillar: "AEM & Enterprise Web Architecture"
 hook_formula: "#1 Contrarian Thesis"
-status: "prepared"
+status: "scheduled"
 score: "77.6"
 scheduled_at: "2026-10-28T03:00:00.000Z"
-buffer_post_id: ""
+buffer_post_id: "6adefb4ce4fd2be3e658cc18"
 image_url: "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/post_09b_card.png"
 ---
 
