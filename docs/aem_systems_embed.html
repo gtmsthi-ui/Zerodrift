@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AEM + AI Systems Studio | ZeroDrift Sandbox</title>
+  <title>AEM + AI Systems Studio | Gautam Sethi</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -867,77 +867,146 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 }
 
 
-    /* Embedded Sandbox Overrides */
+    /* Embedded Sandbox Modern Styling */
     body {
-      background: #020409 !important;
-      padding: 0.85rem !important;
+      background: #03060f !important;
+      padding: 1rem !important;
       min-height: auto !important;
+      color: #f8fafc !important;
     }
     .embed-card {
-      background: rgba(10, 14, 26, 0.95);
-      border: 1px solid var(--border-glow);
-      border-radius: 12px;
+      background: rgba(10, 15, 30, 0.95);
+      border: 1px solid rgba(0, 242, 254, 0.4);
+      border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85), 0 0 25px rgba(0, 242, 254, 0.15);
+    }
+    .embed-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 1.25rem;
+      background: linear-gradient(90deg, rgba(0, 242, 254, 0.12), rgba(99, 102, 241, 0.08));
+      border-bottom: 1px solid rgba(0, 242, 254, 0.25);
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .embed-banner-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .embed-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #00f2fe, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1rem;
+      color: #03060f;
+      font-family: var(--font-mono);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+    }
+    .embed-banner-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+    .embed-banner-sub {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      font-family: var(--font-mono);
+    }
+    .embed-banner-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
     .embed-tabs {
       display: flex;
-      background: rgba(5, 7, 13, 0.95);
-      border-bottom: 1px solid var(--border-subtle);
-      padding: 0.5rem 0.75rem;
-      gap: 0.4rem;
+      background: rgba(5, 8, 18, 0.98);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.6rem 0.85rem;
+      gap: 0.5rem;
       overflow-x: auto;
     }
     .embed-tab-btn {
       background: transparent;
       border: 1px solid transparent;
-      color: var(--text-muted);
-      padding: 0.45rem 0.85rem;
-      border-radius: 6px;
-      font-size: 0.78rem;
+      color: #94a3b8;
+      padding: 0.5rem 0.95rem;
+      border-radius: 7px;
+      font-size: 0.8rem;
       font-family: var(--font-mono);
       font-weight: 700;
       cursor: pointer;
       white-space: nowrap;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
     }
     .embed-tab-btn:hover {
-      color: var(--text-main);
-      background: rgba(56, 189, 248, 0.08);
+      color: #ffffff;
+      background: rgba(0, 242, 254, 0.08);
     }
     .embed-tab-btn.active {
-      background: rgba(56, 189, 248, 0.15);
-      border-color: rgba(56, 189, 248, 0.4);
-      color: var(--cyan-bright);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+      background: rgba(0, 242, 254, 0.18);
+      border-color: rgba(0, 242, 254, 0.6);
+      color: #00f2fe;
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.3);
     }
     .embed-tab-content {
       display: none;
-      padding: 1.25rem;
+      padding: 1.35rem;
       animation: fadeIn 0.2s ease-in;
     }
     .embed-tab-content.active {
       display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
 
   <div class="embed-card">
+    <!-- Header Banner -->
+    <div class="embed-banner">
+      <div class="embed-banner-left">
+        <div class="embed-avatar">GS</div>
+        <div>
+          <div class="embed-banner-title">Gautam Sethi · AEM + AI Systems Studio</div>
+          <div class="embed-banner-sub">AEMaaCS & Sites Tech Lead · 100% Offline-First Execution</div>
+        </div>
+      </div>
+      <div class="embed-banner-actions">
+        <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">GitHub Repo ↗</a>
+        <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">@gtmsthi-ui ↗</a>
+      </div>
+    </div>
+
     <!-- Embed Tab Header -->
     <div class="embed-tabs" role="tablist">
       <button class="embed-tab-btn active" data-tab-target="tab-aem" role="tab">⚡ 01. AEM Health Inspector</button>
       <button class="embed-tab-btn" data-tab-target="tab-rag" role="tab">🧠 02. Grounded Architecture RAG</button>
       <button class="embed-tab-btn" data-tab-target="tab-content" role="tab">⚙️ 03. Content Pipeline</button>
-      <button class="embed-tab-btn" data-tab-target="tab-services" role="tab">💼 04. Fixed-Scope Sprints</button>
+      <button class="embed-tab-btn" data-tab-target="tab-profile" role="tab">👤 04. Architect Profile</button>
+      <button class="embed-tab-btn" data-tab-target="tab-services" role="tab">💼 05. Productized Sprints</button>
     </div>
 
     <!-- TAB 1: AEM Health Inspector -->
     <div class="embed-tab-content active" id="tab-aem" role="tabpanel">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
         <div>
-          <span class="section-label" style="margin-bottom: 0;">Static Analyzer</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">Audits Dispatcher invalidation, HTL security, and Core Components</span>
+          <span class="section-label" style="margin-bottom: 0;">Interactive AST & Regex Scanner</span>
+          <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">Audits Dispatcher invalidation, HTL security, and Core Components</span>
         </div>
         <span id="aem-score-badge" class="status-badge live">Score: 100/100</span>
       </div>
@@ -951,8 +1020,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <textarea class="code-editor-area" id="aem-code-input" spellcheck="false" style="height: 125px;"></textarea>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-        <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.45rem 0.95rem; font-size: 0.8rem;">Run Live Inspection ⚡</button>
-        <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.75rem;">GitHub Engine Repo ↗</a>
+        <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.5rem 1.1rem; font-size: 0.82rem;">Run Live Inspection ⚡</button>
+        <div style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">Real-time Client-Side Execution</div>
       </div>
 
       <div class="live-output-panel" id="aem-scan-output" style="margin-top: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
@@ -964,8 +1033,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div class="embed-tab-content" id="tab-rag" role="tabpanel">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
         <div>
-          <span class="section-label" style="margin-bottom: 0;">Grounded Vector Search</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">In-memory TF-IDF with strict citation provenance</span>
+          <span class="section-label" style="margin-bottom: 0;">Grounded Technical Retrieval</span>
+          <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">CPU-based TF-IDF vector similarity with strict citations</span>
         </div>
         <span class="status-badge live">Offline CPU</span>
       </div>
@@ -973,15 +1042,15 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <div style="display: flex; gap: 0.4rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
         <button class="btn-preset" data-rag-prompt="What is the recommended statfileslevel for multi-tenant trees?">Dispatcher statfileslevel?</button>
         <button class="btn-preset" data-rag-prompt="What happens if code writes to /apps in AEM Cloud Service?">Writing to /apps in Cloud?</button>
-        <button class="btn-preset" data-rag-prompt="How to bake sourdough bread?">Refusal Test</button>
+        <button class="btn-preset" data-rag-prompt="How to bake sourdough bread?">Refusal Protocol Test</button>
       </div>
 
       <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
-        <input type="text" id="rag-query-input" placeholder="Type technical question (e.g. statfileslevel, core components, /apps)..." style="width: 100%; background: #020408; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); color: var(--text-main); padding: 0.5rem 0.75rem; font-family: var(--font-mono); font-size: 0.8rem;">
-        <button class="btn btn-secondary" id="btn-run-rag-query" style="padding: 0.45rem 0.85rem; font-size: 0.8rem;">Ask</button>
+        <input type="text" id="rag-query-input" placeholder="Type architecture question (e.g. statfileslevel, core components, /apps)..." style="width: 100%; background: #020408; border: 1px solid rgba(56,189,248,0.25); border-radius: var(--radius-sm); color: #fff; padding: 0.55rem 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+        <button class="btn btn-secondary" id="btn-run-rag-query" style="padding: 0.55rem 1rem; font-size: 0.82rem;">Ask</button>
       </div>
 
-      <div class="live-output-panel" id="rag-query-output" style="min-height: 120px; font-size: 0.8rem;">
+      <div class="live-output-panel" id="rag-query-output" style="min-height: 120px; font-size: 0.82rem;">
         <span style="color: var(--text-dim);">Select a question above or enter an AEM query.</span>
       </div>
     </div>
@@ -990,8 +1059,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     <div class="embed-tab-content" id="tab-content" role="tabpanel">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
         <div>
-          <span class="section-label" style="margin-bottom: 0;">Technical Content Repurposer</span>
-          <span style="font-size: 0.8rem; color: var(--text-muted); margin-left: 0.5rem;">Transforms architectural notes into LinkedIn & carousel drafts</span>
+          <span class="section-label" style="margin-bottom: 0;">Technical Content Pipeline</span>
+          <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">Transforms architectural notes into LinkedIn & carousel drafts</span>
         </div>
         <span class="status-badge live">Multi-Channel</span>
       </div>
@@ -1002,36 +1071,55 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <button class="btn-preset" data-content-preset="core_components">Proxy Component Pattern</button>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem;">
         <div>
-          <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.3rem;">LinkedIn Technical Post</div>
-          <textarea id="content-post-output" class="code-editor-area" style="height: 140px; font-size: 0.75rem;" readonly></textarea>
+          <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.3rem;">LinkedIn Technical Post Draft</div>
+          <textarea id="content-post-output" class="code-editor-area" style="height: 150px; font-size: 0.78rem;" readonly></textarea>
         </div>
         <div>
-          <div style="font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.3rem;">Carousel Breakdown</div>
-          <div id="content-carousel-output" style="display: flex; flex-direction: column; gap: 0.35rem; height: 140px; overflow-y: auto;"></div>
+          <div style="font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.3rem;">4-Slide Educational Carousel</div>
+          <div id="content-carousel-output" style="display: flex; flex-direction: column; gap: 0.4rem; height: 150px; overflow-y: auto;"></div>
         </div>
       </div>
-      <div style="margin-top: 0.75rem; background: #020408; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 0.5rem 0.75rem;">
-        <div style="font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.2rem;">CSV Log Record</div>
-        <div id="content-csv-output" style="font-size: 0.75rem; color: var(--cyan); word-break: break-all;"></div>
+      <div style="margin-top: 0.75rem; background: #020408; border: 1px solid rgba(56,189,248,0.2); border-radius: var(--radius-sm); padding: 0.6rem 0.85rem;">
+        <div style="font-size: 0.65rem; color: #64748b; text-transform: uppercase; font-family: var(--font-mono); margin-bottom: 0.2rem;">CSV Log Record</div>
+        <div id="content-csv-output" style="font-size: 0.78rem; color: #00f2fe; word-break: break-all;"></div>
       </div>
     </div>
 
-    <!-- TAB 4: Advisory Packages & Pricing -->
+    <!-- TAB 4: Architect Profile (Gautam Sethi) -->
+    <div class="embed-tab-content" id="tab-profile" role="tabpanel">
+      <div style="display: flex; gap: 1.25rem; align-items: flex-start; flex-wrap: wrap;">
+        <div class="embed-avatar" style="width: 64px; height: 64px; font-size: 1.6rem; border-radius: 12px; flex-shrink: 0;">GS</div>
+        <div style="flex: 1; min-width: 260px;">
+          <h3 style="font-size: 1.2rem; color: #fff; font-weight: 800; margin-bottom: 0.2rem;">Gautam Sethi</h3>
+          <div style="color: #00f2fe; font-family: var(--font-mono); font-size: 0.85rem; font-weight: 700; margin-bottom: 0.6rem;">AEM Tech Lead &amp; Enterprise Content Systems Architect</div>
+          <p style="font-size: 0.85rem; color: #94a3b8; line-height: 1.6; margin-bottom: 1rem;">
+            Specializing in Adobe Experience Manager (AEM Sites, AEMaaCS, Dispatcher caching topologies), multi-brand MSM governance, and offline-first local AI engineering. Focused on deterministic reliability, zero-cloud API overhead, and sub-second page performance.
+          </p>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem;">GitHub Profile (@gtmsthi-ui) ↗</a>
+            <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.78rem; padding: 0.4rem 0.85rem;">AEM Reliability Toolkit Repo ↗</a>
+            <a href="https://gtmsthi-ui.github.io/Zerodrift/" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.78rem; padding: 0.4rem 0.85rem;">ZeroDrift Research Portal ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: Advisory Packages & Pricing -->
     <div class="embed-tab-content" id="tab-services" role="tabpanel">
       <div class="section-label" style="margin-bottom: 0.5rem;">Productized Sprints</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem;">
-        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="color: var(--text-main); font-size: 0.9rem;">AEM Technical Review</h4>
-          <div style="font-size: 1.15rem; font-weight: 800; color: var(--cyan-bright); margin: 0.2rem 0;">₹35,000 <span style="font-size: 0.7rem; color: var(--text-dim); font-weight: 400;">/ $450 USD</span></div>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Deep-dive code & cache audit with 45-min Zoom debrief.</p>
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(56,189,248,0.2); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="color: #ffffff; font-size: 0.9rem;">AEM Technical Review</h4>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #00f2fe; margin: 0.2rem 0;">₹35,000 <span style="font-size: 0.7rem; color: #64748b; font-weight: 400;">/ $450 USD</span></div>
+          <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem;">Deep-dive code &amp; cache audit with 45-min Zoom debrief.</p>
           <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;">Review Specs ↗</a>
         </div>
-        <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border-glow); border-radius: 8px; padding: 0.85rem;">
-          <h4 style="color: var(--text-main); font-size: 0.9rem;">Architecture Advisory</h4>
-          <div style="font-size: 1.15rem; font-weight: 800; color: var(--emerald-glow); margin: 0.2rem 0;">Custom Scope</div>
-          <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">Cloud Service migration, multi-brand MSM & Core Web Vitals.</p>
+        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(0,242,254,0.4); border-radius: 8px; padding: 0.85rem;">
+          <h4 style="color: #ffffff; font-size: 0.9rem;">Architecture Advisory</h4>
+          <div style="font-size: 1.15rem; font-weight: 800; color: #10b981; margin: 0.2rem 0;">Custom Scope</div>
+          <p style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.5rem;">Cloud Service migration, multi-brand MSM &amp; Core Web Vitals.</p>
           <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; font-size: 0.75rem; padding: 0.35rem;">Connect on GitHub ↗</a>
         </div>
       </div>
@@ -1082,7 +1170,7 @@ const AEM_PRESETS = {
     <!-- Warning: Inline script tag with unquoted dynamic property -->
     <script>
         console.log("Tracking ID: " + "\${properties.trackingId}");
-    </script>
+    <\/script>
 </div>`
   },
   clean_proxy: {

@@ -3452,6 +3452,30 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         <p>Embedded isolated runtime executing ZeroDrift eBPF probes, syscall telemetry, memory bounds, and fault-injection simulations with zero parent contamination. Powered by native iframe isolation, lazy-load observer, and live responsive viewports.</p>
       </div>
 
+      <!-- Prominent Studio Switcher Banner -->
+      <div style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.12)); border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
+            <span style="background: #00f2fe; color: #020409; font-weight: 900; font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); text-transform: uppercase;">Interactive Integration</span>
+            <strong style="color: #ffffff; font-size: 1.05rem;">AEM + AI Systems Studio by Gautam Sethi</strong>
+          </div>
+          <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
+            Toggle between the eBPF kernel security runtime and the live AEM code auditor, offline RAG retrieval, and content automation engine.
+          </p>
+        </div>
+        <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+          <button id="bannerBtnAem" onclick="switchSandboxRuntime('aem')" style="background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #03060f; border: none; font-weight: 800; font-size: 0.85rem; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); transition: all 0.2s;">
+            ⚡ Launch AEM + AI Studio
+          </button>
+          <button id="bannerBtnEbpf" onclick="switchSandboxRuntime('ebpf')" style="background: rgba(255, 255, 255, 0.05); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 700; font-size: 0.85rem; padding: 0.65rem 1.1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+            🛡️ eBPF Agent Sandbox
+          </button>
+          <a href="aem_systems_embed.html" target="_blank" style="color: #00f2fe; text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); font-weight: 700; padding: 0.5rem 0.75rem; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 8px; background: rgba(0, 242, 254, 0.05);">
+            ↗ Full Window
+          </a>
+        </div>
+      </div>
+
       <div class="iframe-container-card spotlight-card">
         <div class="iframe-top-bar">
           <div class="iframe-dots">
@@ -4766,7 +4790,54 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
   </div>
 
   <!-- Footer -->
-  <footer>
+      <!-- ==========================================================================
+         ARCHITECT PROFILE: GAUTAM SETHI
+         ========================================================================== -->
+    <section class="container lazy-reveal" id="architect-profile" style="margin-top: 5rem; margin-bottom: 5rem;">
+      <div style="background: rgba(10, 15, 30, 0.85); border: 1px solid rgba(0, 242, 254, 0.35); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);">
+        <div style="position: absolute; top: -50px; right: -50px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%); pointer-events: none;"></div>
+        
+        <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
+          <div style="width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg, #00f2fe, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; color: #03060f; font-family: var(--font-mono); box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); flex-shrink: 0;">
+            GS
+          </div>
+          
+          <div style="flex: 1; min-width: 300px;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+              <span class="pill pill-cyan"><span class="pill-dot"></span> Systems Architect</span>
+              <span class="pill pill-emerald">AEM Tech Lead</span>
+              <span class="pill pill-purple">Open Research</span>
+            </div>
+            
+            <h3 style="font-size: 1.8rem; font-weight: 900; color: #ffffff; letter-spacing: -0.02em; margin-bottom: 0.3rem;">
+              Gautam Sethi
+            </h3>
+            
+            <div style="color: #00f2fe; font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">
+              Lead Architect · ZeroDrift Systems Group &amp; AEM Enterprise Engineering
+            </div>
+            
+            <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; max-width: 850px;">
+              Enterprise architect leading Adobe Experience Manager (AEM Sites, AEMaaCS, Dispatcher caching topologies), multi-brand governance, and offline-first local AI engineering. Creator of ZeroDrift eBPF forensic execution research and the open-source AEM Reliability Toolkit. Focusing on zero cloud subscription overhead, test-driven deterministic software, and sub-second web delivery.
+            </p>
+            
+            <div style="display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: center;">
+              <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #020409; font-weight: 800; border-radius: 8px; text-decoration: none;">
+                GitHub Profile (@gtmsthi-ui) ↗
+              </a>
+              <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 700; border-radius: 8px; text-decoration: none;">
+                AEM Reliability Toolkit ↗
+              </a>
+              <a href="aem_systems_embed.html" target="_blank" class="btn btn-outline" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.4); font-weight: 700; border-radius: 8px; text-decoration: none; background: rgba(0, 242, 254, 0.08);">
+                Launch AEM Studio Fullscreen ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
     <div class="footer-inner">
       <div>
         <strong style="color: #fff; font-size: 1rem;">ZeroDrift Systems Research Group</strong>
@@ -6225,6 +6296,54 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       document.body.style.overflow = '';
     }
     
-  </script>
+  
+    // Global Runtime Switcher: eBPF vs AEM Systems Studio
+    window.switchSandboxRuntime = function(mode) {
+      console.log('Switching sandbox runtime to:', mode);
+      const iframe = document.getElementById('sandboxRuntimeIframe');
+      const popout = document.getElementById('sandboxPopoutLink');
+      const btnEbpf = document.getElementById('btnRuntimeEbpf');
+      const btnAem = document.getElementById('btnRuntimeAem');
+      const bannerAem = document.getElementById('bannerBtnAem');
+      const bannerEbpf = document.getElementById('bannerBtnEbpf');
+      const pill = document.querySelector('.iframe-url-pill');
+
+      if (mode === 'aem') {
+        if (iframe) iframe.src = 'aem_systems_embed.html';
+        if (popout) popout.href = 'aem_systems_embed.html';
+        if (btnAem) btnAem.classList.add('active');
+        if (btnEbpf) btnEbpf.classList.remove('active');
+        if (bannerAem) {
+          bannerAem.style.background = 'linear-gradient(135deg, #00f2fe, #38bdf8)';
+          bannerAem.style.color = '#03060f';
+        }
+        if (bannerEbpf) {
+          bannerEbpf.style.background = 'rgba(255,255,255,0.05)';
+          bannerEbpf.style.color = '#f8fafc';
+        }
+        if (pill) pill.textContent = '🔒 zerodrift://aem-systems-studio/v1.0-gautam-sethi';
+      } else {
+        if (iframe) iframe.src = 'sandbox_embed.html';
+        if (popout) popout.href = 'sandbox_embed.html';
+        if (btnEbpf) btnEbpf.classList.add('active');
+        if (btnAem) btnAem.classList.remove('active');
+        if (bannerEbpf) {
+          bannerEbpf.style.background = 'linear-gradient(135deg, #00f2fe, #38bdf8)';
+          bannerEbpf.style.color = '#03060f';
+        }
+        if (bannerAem) {
+          bannerAem.style.background = 'rgba(255,255,255,0.05)';
+          bannerAem.style.color = '#f8fafc';
+        }
+        if (pill) pill.textContent = '🔒 zerodrift://sandbox-runtime/v2.4-ebpf-isolated';
+      }
+
+      // Smooth scroll to sandbox if triggered from top nav
+      const sandboxEl = document.getElementById('sandbox-lab');
+      if (sandboxEl) {
+        sandboxEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+</script>
 </body>
 </html>
