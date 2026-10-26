@@ -2783,6 +2783,299 @@
       .timeline-stream { grid-template-columns: 1fr; }
       .btn-cmd-k { display: none; }
     }
+
+    /* ==========================================================================
+       EXPERT DECLUTTERED TOP NAV & RIGHT-HAND ARCHITECT PROFILE WIDGET
+       ========================================================================== */
+    .nav-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-right: auto;
+      margin-left: 1.5rem;
+    }
+
+    .nav-links .nav-link {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-decoration: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      white-space: nowrap;
+    }
+
+    .nav-links .nav-link:hover {
+      color: #ffffff;
+      background: rgba(56, 189, 248, 0.1);
+      box-shadow: 0 0 15px rgba(0, 242, 254, 0.15);
+    }
+
+    .nav-links .nav-highlight-aem {
+      color: #00f2fe !important;
+      font-weight: 800 !important;
+      background: rgba(0, 242, 254, 0.12) !important;
+      border: 1px solid rgba(0, 242, 254, 0.5) !important;
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.25) !important;
+    }
+
+    .nav-links .nav-highlight-aem:hover {
+      background: rgba(0, 242, 254, 0.25) !important;
+      box-shadow: 0 0 25px rgba(0, 242, 254, 0.45) !important;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    /* Compact Developer Tool Cluster */
+    .nav-tool-cluster {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.25rem 0.4rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .compact-cmd-k {
+      background: transparent !important;
+      border: none !important;
+      color: var(--text-muted) !important;
+      padding: 0.35rem 0.55rem !important;
+      border-radius: 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 0.35rem !important;
+      cursor: pointer;
+      font-size: 0.75rem !important;
+      transition: all 0.2s ease;
+    }
+    .compact-cmd-k:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .compact-theme-btn, .compact-audio-btn {
+      width: 32px;
+      height: 32px;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: 6px !important;
+      background: transparent !important;
+      border: none !important;
+      color: var(--text-muted) !important;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .compact-theme-btn:hover, .compact-audio-btn:hover {
+      color: #ffffff !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+
+    .nav-icon-link {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .nav-icon-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-actions-divider {
+      width: 1px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 0.25rem;
+    }
+
+    /* RIGHT-HAND CORNER ARCHITECT PROFILE BUTTON & INTERACTIVE HOVER CARD */
+    .architect-header-dropdown {
+      position: relative;
+    }
+
+    .architect-nav-trigger {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      background: linear-gradient(135deg, rgba(16, 24, 44, 0.95), rgba(10, 15, 30, 0.98));
+      border: 1px solid rgba(52, 211, 153, 0.45);
+      padding: 0.32rem 0.85rem 0.32rem 0.45rem;
+      border-radius: 24px;
+      text-decoration: none;
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+      box-shadow: 0 0 18px rgba(52, 211, 153, 0.2);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .architect-nav-trigger:hover {
+      border-color: rgba(52, 211, 153, 0.8);
+      background: linear-gradient(135deg, rgba(20, 32, 60, 0.98), rgba(12, 20, 40, 1));
+      box-shadow: 0 0 25px rgba(52, 211, 153, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .architect-avatar-chip {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #34d399, #00f2fe);
+      color: #03060f;
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
+    }
+
+    .architect-trigger-text {
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 0.84rem;
+    }
+
+    .architect-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 8px #34d399;
+      animation: beaconPulse 2s infinite ease-in-out;
+    }
+
+    /* Interactive Hover Popover Card */
+    .architect-hover-card {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      width: 340px;
+      background: rgba(8, 12, 24, 0.97);
+      backdrop-filter: blur(24px) saturate(190%);
+      -webkit-backdrop-filter: blur(24px) saturate(190%);
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 14px;
+      padding: 1.25rem;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85), 0 0 30px rgba(52, 211, 153, 0.2);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .architect-header-dropdown:hover .architect-hover-card {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .hover-card-header {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .hover-card-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #00f2fe, #6366f1);
+      color: #03060f;
+      font-family: var(--font-mono);
+      font-weight: 900;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 16px rgba(0, 242, 254, 0.4);
+      flex-shrink: 0;
+    }
+
+    .hover-card-name {
+      font-weight: 900;
+      font-size: 1.05rem;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .hover-card-role {
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      color: #34d399;
+      font-weight: 700;
+      margin-top: 3px;
+    }
+
+    .hover-card-bio {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 0.85rem;
+    }
+
+    .hover-card-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .h-pill {
+      font-size: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #e2e8f0;
+    }
+
+    .hover-card-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 0.65rem;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      color: #00f2fe;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
   </style>
 </head>
 <body>
@@ -2799,6 +3092,7 @@
     <div id="scrollProgressBar" class="scroll-progress-bar" aria-hidden="true"></div>
 
     <div class="nav-container">
+      <!-- 1. Left: Brand Logo & Stylish Name -->
       <a href="#" class="brand" aria-label="ZeroDrift Home">
         <div class="brand-icon-wrap">
           <div class="brand-icon">
@@ -2835,90 +3129,120 @@
           <div class="brand-meta-row">
             <span class="brand-pulse-beacon" aria-hidden="true"></span>
             <span class="brand-subline">Deterministic Systems</span>
-            <span id="headerPersonaBadge" class="theme-persona-badge">CYBER</span>
           </div>
         </div>
       </a>
 
-      <!-- Primary Desktop Navigation (Clean 5-Item Core Menu) -->
+      <!-- 2. Center: Minimal Clean Navigation (Only 3 essential core destinations) -->
       <nav aria-label="Primary Navigation" class="nav-links">
-        <a href="#sandbox-lab" onclick="switchSandboxRuntime('aem');" class="nav-link nav-highlight-aem" id="navLinkAemStudio">⚡ AEM Studio</a>
+        <a href="#sandbox-lab" onclick="switchSandboxRuntime('aem');" class="nav-link nav-highlight-aem" id="navLinkAemStudio">⚡ AEM + AI Studio</a>
         <a href="#bento" class="nav-link">Architecture Lab</a>
         <a href="#sandbox-lab" class="nav-link">Runtime Sandbox</a>
-        <a href="#architect-profile" class="nav-link nav-highlight-architect" id="navLinkArchitect">👤 Architect</a>
-        <a href="#advisory" class="nav-link">Advisory &amp; Sprints</a>
       </nav>
 
+      <!-- 3. Right: Utility Controls & Architect Profile in Right Hand Corner -->
       <div class="nav-actions">
-        <!-- Multi-Theme Dropdown Selector -->
-        <div class="theme-picker-wrap">
-          <button class="btn-theme-toggle" id="themePickerBtn" onclick="toggleThemeDropdown()" aria-label="Select Visual Theme" aria-haspopup="true" aria-expanded="false" title="Switch Visual Theme">
-            <span id="themePickerIcon">🌌</span>
-            <span id="themePickerLabel">Cyber</span>
-            <svg width="10" height="10" fill="currentColor" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        <!-- Compact Developer Tool Cluster -->
+        <div class="nav-tool-cluster">
+          <!-- ⌘K Search Pill -->
+          <button class="btn-cmd-k compact-cmd-k" onclick="openCmdPalette()" title="Search Systems (⌘K)" aria-label="Open Command Palette">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+            <span class="kbd-shortcut">⌘K</span>
           </button>
-          <div class="theme-dropdown-menu" id="themeDropdownMenu" role="menu">
-            <div class="theme-opt active" onclick="setTheme('cyber')" role="menuitem">
-              <span class="theme-dot" style="background: #00f2fe; color: #00f2fe;"></span>
-              <span>Cyber Obsidian</span>
-              <span class="theme-tag">Default</span>
+
+          <!-- Multi-Theme Dropdown Toggle (Compact) -->
+          <div class="theme-picker-wrap">
+            <button class="btn-theme-toggle compact-theme-btn" id="themePickerBtn" onclick="toggleThemeDropdown()" aria-label="Select Visual Theme" title="Switch Theme">
+              <span id="themePickerIcon">🌌</span>
+            </button>
+            <div class="theme-dropdown-menu" id="themeDropdownMenu" role="menu">
+              <div class="theme-opt active" onclick="setTheme('cyber')" role="menuitem">
+                <span class="theme-dot" style="background: #00f2fe; color: #00f2fe;"></span>
+                <span>Cyber Obsidian</span>
+                <span class="theme-tag">Default</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('matrix')" role="menuitem">
+                <span class="theme-dot" style="background: #22c55e; color: #22c55e;"></span>
+                <span>Matrix Terminal</span>
+                <span class="theme-tag">Left Rail</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('cyberdeck')" role="menuitem">
+                <span class="theme-dot" style="background: #00ffcc; color: #00ffcc;"></span>
+                <span>Cyberdeck HUD</span>
+                <span class="theme-tag">Bottom Dock</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('bios')" role="menuitem">
+                <span class="theme-dot" style="background: #ffff55; color: #ffff55;"></span>
+                <span>Retro BIOS</span>
+                <span class="theme-tag">Split Screen</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('amber')" role="menuitem">
+                <span class="theme-dot" style="background: #f59e0b; color: #f59e0b;"></span>
+                <span>Amber Flare</span>
+                <span class="theme-tag">Solar Rail</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('nebula')" role="menuitem">
+                <span class="theme-dot" style="background: #a855f7; color: #a855f7;"></span>
+                <span>Deep Nebula</span>
+                <span class="theme-tag">Cosmic</span>
+              </div>
+              <div class="theme-opt" onclick="setTheme('cleanroom')" role="menuitem">
+                <span class="theme-dot" style="background: #2563eb; color: #2563eb;"></span>
+                <span>Cleanroom Light</span>
+                <span class="theme-tag">Day Mode</span>
+              </div>
             </div>
-            <div class="theme-opt" onclick="setTheme('matrix')" role="menuitem">
-              <span class="theme-dot" style="background: #22c55e; color: #22c55e;"></span>
-              <span>Matrix Terminal</span>
-              <span class="theme-tag">Left Rail</span>
+          </div>
+
+          <!-- Audio HUD FX Toggle (Compact) -->
+          <button class="btn-audio-toggle compact-audio-btn" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD FX" aria-label="Toggle Audio HUD Sound Effects">
+            <span class="audio-waves" id="audioWaveVisualizer">
+              <span class="audio-bar"></span>
+              <span class="audio-bar"></span>
+              <span class="audio-bar"></span>
+            </span>
+          </button>
+
+          <!-- GitHub Icon Link -->
+          <a href="https://github.com/gtmsthi-ui/Zerodrift" target="_blank" class="nav-icon-link" aria-label="GitHub Repository" title="GitHub (@gtmsthi-ui)">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+
+        <div class="nav-actions-divider" aria-hidden="true"></div>
+
+        <!-- Dedicated Right-Hand Corner Architect Profile Button with Hover Details Card -->
+        <div class="architect-header-dropdown" id="architectHeaderProfile">
+          <a href="#architect-profile" class="architect-nav-trigger" id="headerArchitectBtn" aria-label="Gautam Sethi Architect Profile">
+            <div class="architect-avatar-chip">GS</div>
+            <span class="architect-trigger-text">Architect</span>
+            <span class="architect-status-dot" title="Available for Architecture Advisory & Review"></span>
+          </a>
+
+          <!-- Interactive Hover Popover Card -->
+          <div class="architect-hover-card" id="architectHoverCard" role="tooltip">
+            <div class="hover-card-header">
+              <div class="hover-card-avatar">GS</div>
+              <div>
+                <div class="hover-card-name">Gautam Sethi</div>
+                <div class="hover-card-role">Enterprise Systems Architect · Tech Lead</div>
+              </div>
             </div>
-            <div class="theme-opt" onclick="setTheme('cyberdeck')" role="menuitem">
-              <span class="theme-dot" style="background: #00ffcc; color: #00ffcc;"></span>
-              <span>Cyberdeck HUD</span>
-              <span class="theme-tag">Bottom Dock</span>
+            <p class="hover-card-bio">
+              Architecting multi-brand AEM platforms, Dispatcher caching topologies, eBPF telemetry, and offline-first deterministic AI systems.
+            </p>
+            <div class="hover-card-pills">
+              <span class="h-pill">⚡ AEMaaCS</span>
+              <span class="h-pill">🛡️ ZeroDrift eBPF</span>
+              <span class="h-pill">🧠 Offline RAG</span>
+              <span class="h-pill">💼 ₹35k Sprints</span>
             </div>
-            <div class="theme-opt" onclick="setTheme('bios')" role="menuitem">
-              <span class="theme-dot" style="background: #ffff55; color: #ffff55;"></span>
-              <span>Retro 1990s BIOS</span>
-              <span class="theme-tag">Split Screen</span>
-            </div>
-            <div class="theme-opt" onclick="setTheme('amber')" role="menuitem">
-              <span class="theme-dot" style="background: #f59e0b; color: #f59e0b;"></span>
-              <span>Amber Flare</span>
-              <span class="theme-tag">Solar Rail</span>
-            </div>
-            <div class="theme-opt" onclick="setTheme('nebula')" role="menuitem">
-              <span class="theme-dot" style="background: #a855f7; color: #a855f7;"></span>
-              <span>Deep Nebula</span>
-              <span class="theme-tag">Cosmic</span>
-            </div>
-            <div class="theme-opt" onclick="setTheme('cleanroom')" role="menuitem">
-              <span class="theme-dot" style="background: #2563eb; color: #2563eb;"></span>
-              <span>Cleanroom Light</span>
-              <span class="theme-tag">Day Mode</span>
+            <div class="hover-card-footer">
+              <span>View full systems portfolio & credentials</span>
+              <span>→</span>
             </div>
           </div>
         </div>
-
-        <!-- Command Palette Trigger (⌘K) -->
-        <button class="btn-cmd-k" onclick="openCmdPalette()" title="Press ⌘K or Ctrl+K" aria-label="Open Command Palette">
-          <span>Search Systems...</span>
-          <span class="kbd-shortcut">⌘K</span>
-        </button>
-
-        <!-- Audio HUD Synthesizer Toggle -->
-        <button class="btn-audio-toggle" id="audioToggleBtn" onclick="toggleAudio()" title="Toggle Web Audio HUD Sound Effects" aria-label="Toggle Audio HUD Sound Effects">
-          <span class="audio-waves" id="audioWaveVisualizer">
-            <span class="audio-bar"></span>
-            <span class="audio-bar"></span>
-            <span class="audio-bar"></span>
-          </span>
-          <span id="audioBtnText">HUD FX: ON</span>
-        </button>
-
-        <a href="https://github.com/gtmsthi-ui/Zerodrift" target="_blank" class="btn-outline">
-          <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub
-        </a>
-        <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" class="btn-primary">
-          Connect with Gautam
-        </a>
 
         <!-- Mobile Hamburger Button -->
         <button class="btn-hamburger" id="hamburgerBtn" onclick="toggleMobileMenu()" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileNavDrawer">
@@ -4920,45 +5244,125 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       <!-- ==========================================================================
          ARCHITECT PROFILE: GAUTAM SETHI
          ========================================================================== -->
-    <section class="container lazy-reveal" id="architect-profile" style="margin-top: 5rem; margin-bottom: 5rem;">
-      <div style="background: rgba(10, 15, 30, 0.85); border: 1px solid rgba(0, 242, 254, 0.35); border-radius: 16px; padding: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);">
-        <div style="position: absolute; top: -50px; right: -50px; width: 220px; height: 220px; background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%); pointer-events: none;"></div>
-        
-        <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap;">
-          <div style="width: 80px; height: 80px; border-radius: 16px; background: linear-gradient(135deg, #00f2fe, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 2.2rem; font-weight: 900; color: #03060f; font-family: var(--font-mono); box-shadow: 0 0 30px rgba(0, 242, 254, 0.4); flex-shrink: 0;">
+    <section class="container" id="architect-profile" style="margin-top: 6rem; margin-bottom: 6rem; opacity: 1 !important; visibility: visible !important; display: block !important;">
+      <div style="background: rgba(10, 16, 32, 0.94); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: 20px; padding: 3rem 2.5rem; position: relative; overflow: hidden; box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 242, 254, 0.15);">
+        <!-- Ambient radial glow -->
+        <div style="position: absolute; top: -60px; right: -60px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(0, 242, 254, 0.18) 0%, transparent 70%); pointer-events: none;"></div>
+        <div style="position: absolute; bottom: -60px; left: -60px; width: 320px; height: 320px; background: radial-gradient(circle, rgba(52, 211, 153, 0.12) 0%, transparent 70%); pointer-events: none;"></div>
+
+        <!-- 1. Executive Identity Header -->
+        <div style="display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; margin-bottom: 2.5rem;">
+          <div style="width: 88px; height: 88px; border-radius: 18px; background: linear-gradient(135deg, #00f2fe, #6366f1); display: flex; align-items: center; justify-content: center; font-size: 2.4rem; font-weight: 900; color: #03060f; font-family: var(--font-mono); box-shadow: 0 0 35px rgba(0, 242, 254, 0.5); flex-shrink: 0;">
             GS
           </div>
-          
-          <div style="flex: 1; min-width: 300px;">
-            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+
+          <div style="flex: 1; min-width: 320px;">
+            <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
               <span class="pill pill-cyan"><span class="pill-dot"></span> Systems Architect</span>
               <span class="pill pill-emerald">AEM Tech Lead</span>
-              <span class="pill pill-purple">Open Research</span>
+              <span class="pill pill-purple">eBPF Telemetry</span>
+              <span class="pill" style="background: rgba(245,158,11,0.12); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3);">Offline-First AI</span>
             </div>
-            
-            <h3 style="font-size: 1.8rem; font-weight: 900; color: #ffffff; letter-spacing: -0.02em; margin-bottom: 0.3rem;">
+
+            <h2 style="font-size: 2.2rem; font-weight: 900; color: #ffffff; letter-spacing: -0.03em; margin-bottom: 0.35rem;">
               Gautam Sethi
-            </h3>
-            
-            <div style="color: #00f2fe; font-family: var(--font-mono); font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem;">
-              Lead Architect · ZeroDrift Systems Group &amp; AEM Enterprise Engineering
+            </h2>
+
+            <div style="color: #00f2fe; font-family: var(--font-mono); font-size: 1rem; font-weight: 700; margin-bottom: 1rem;">
+              Lead Architect · ZeroDrift Systems Group &amp; Enterprise Content Systems
             </div>
-            
-            <p style="color: #94a3b8; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; max-width: 850px;">
-              Enterprise architect leading Adobe Experience Manager (AEM Sites, AEMaaCS, Dispatcher caching topologies), multi-brand governance, and offline-first local AI engineering. Creator of ZeroDrift eBPF forensic execution research and the open-source AEM Reliability Toolkit. Focusing on zero cloud subscription overhead, test-driven deterministic software, and sub-second web delivery.
+
+            <p style="color: #94a3b8; font-size: 0.98rem; line-height: 1.75; max-width: 920px; margin-bottom: 1.25rem;">
+              Specializing in the intersection of high-concurrency enterprise web platforms, kernel-level observability, and deterministic AI automation. Rather than siloed single-tool consulting, my work integrates the complete systems lifecycle: from multi-tenant Dispatcher caching topologies and zero-downtime AEM Cloud Service migrations to offline-first vector retrieval, automated knowledge supply chains, and ₹0 cloud overhead.
             </p>
-            
-            <div style="display: flex; gap: 0.85rem; flex-wrap: wrap; align-items: center;">
+
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
               <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #020409; font-weight: 800; border-radius: 8px; text-decoration: none;">
                 GitHub Profile (@gtmsthi-ui) ↗
               </a>
               <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; background: rgba(255, 255, 255, 0.05); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 700; border-radius: 8px; text-decoration: none;">
-                AEM Reliability Toolkit ↗
+                AEM Reliability Toolkit Repo ↗
               </a>
-              <a href="aem_systems_embed.html" target="_blank" class="btn btn-outline" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; color: #00f2fe; border: 1px solid rgba(0, 242, 254, 0.4); font-weight: 700; border-radius: 8px; text-decoration: none; background: rgba(0, 242, 254, 0.08);">
-                Launch AEM Studio Fullscreen ↗
+              <a href="https://www.linkedin.com/in/gautam-sethi-1b944324" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="padding: 0.55rem 1.25rem; font-size: 0.85rem; color: #34d399; border: 1px solid rgba(52, 211, 153, 0.5); font-weight: 700; border-radius: 8px; text-decoration: none; background: rgba(52, 211, 153, 0.08);">
+                Connect on LinkedIn ↗
               </a>
             </div>
+          </div>
+        </div>
+
+        <!-- 2. Common Portfolio: 4 Unified Core Solutions Grid -->
+        <div style="margin-bottom: 2.5rem;">
+          <div style="font-size: 0.75rem; font-family: var(--font-mono); color: #38bdf8; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800; margin-bottom: 0.85rem;">
+            Unified Systems Architecture &amp; Solutions Portfolio
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+            <!-- Pillar 1 -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(56,189,248,0.25); border-radius: 12px; padding: 1.35rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #00f2fe; font-weight: 800;">PILLAR 01</span>
+                <span class="status-badge live" style="font-size: 0.65rem;">Production</span>
+              </div>
+              <h4 style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">Enterprise AEM &amp; Cache Topologies</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6;">
+                Architecting multi-market Dispatcher farms, localized statfileslevel invalidation, immutable /apps Cloud Service migration, and Core Component proxy patterns.
+              </p>
+            </div>
+
+            <!-- Pillar 2 -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(52,211,153,0.25); border-radius: 12px; padding: 1.35rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #34d399; font-weight: 800;">PILLAR 02</span>
+                <span class="status-badge live" style="font-size: 0.65rem; color: #34d399; border-color: rgba(52,211,153,0.4);">Research</span>
+              </div>
+              <h4 style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">ZeroDrift eBPF Systems Forensics</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6;">
+                Zero-overhead kernel probe instrumentation, deterministic execution replay, and differential legacy modernization without production code changes.
+              </p>
+            </div>
+
+            <!-- Pillar 3 -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(168,85,247,0.3); border-radius: 12px; padding: 1.35rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #a855f7; font-weight: 800;">PILLAR 03</span>
+                <span class="status-badge live" style="font-size: 0.65rem; color: #a855f7; border-color: rgba(168,85,247,0.4);">Offline CPU</span>
+              </div>
+              <h4 style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">Offline-First Practical AI (Zero-Cloud)</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6;">
+                Deterministic RAG with exact line-level markdown citations, zero data leakage, strict hallucination refusal protocols, and in-browser edge execution.
+              </p>
+            </div>
+
+            <!-- Pillar 4 -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(245,158,11,0.3); border-radius: 12px; padding: 1.35rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                <span style="font-size: 0.72rem; font-family: var(--font-mono); color: #f59e0b; font-weight: 800;">PILLAR 04</span>
+                <span class="status-badge live" style="font-size: 0.65rem; color: #f59e0b; border-color: rgba(245,158,11,0.4);">Automated</span>
+              </div>
+              <h4 style="color: #ffffff; font-size: 1.05rem; font-weight: 800; margin-bottom: 0.4rem;">Knowledge Supply Chain &amp; SRE Gates</h4>
+              <p style="font-size: 0.82rem; color: #94a3b8; line-height: 1.6;">
+                Automated content supply chains turning architecture notes into carousels &amp; posts, concurrent SQLite ledgers, and 61 passing regression tests.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Key Reliability Impact Metrics -->
+        <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.25rem 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; text-align: center;">
+          <div>
+            <div style="font-size: 1.85rem; font-weight: 900; color: #00f2fe; font-family: var(--font-mono);">10+</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Years Architecture Lead</div>
+          </div>
+          <div>
+            <div style="font-size: 1.85rem; font-weight: 900; color: #34d399; font-family: var(--font-mono);">61 / 61</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Automated Unit Tests</div>
+          </div>
+          <div>
+            <div style="font-size: 1.85rem; font-weight: 900; color: #a855f7; font-family: var(--font-mono);">96%+</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Dispatcher Hit Ratio</div>
+          </div>
+          <div>
+            <div style="font-size: 1.85rem; font-weight: 900; color: #f59e0b; font-family: var(--font-mono);">₹0</div>
+            <div style="font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; font-weight: 700;">Cloud API Overhead</div>
           </div>
         </div>
       </div>
