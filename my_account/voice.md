@@ -7,7 +7,7 @@
 - **Goal:** Build authority, share hard-won architectural lessons across AI, cloud, and enterprise web platforms, grow a high-caliber peer network, and open senior consulting/leadership advisory opportunities.
 
 ## Core Content Pillars
-1. **Practical AI & Architecture:** Moving beyond toy LLM wrappers into reliable production systems, local developer agents, latency/cost trade-offs, and practical automation.
+1. **Practical AI & Systems Architecture (Frontier & Production-Grade):** Moving beyond toy LLM wrappers into reliable production systems: Model Context Protocol (MCP), prompt caching & KV-cache reuse vs naive vector RAG, reasoning models (DeepSeek-R1, o1, Gemini Thinking) with test-time compute budgets, dynamic SLM gateway routing, deterministic agent guardrails, and autonomous agentic workflows.
 2. **Staff+ Career & Technical Leadership:** How senior engineers actually become Architects/Staff+, influencing cross-functional teams without authority, navigating tech debt, writing ADRs that stick, and making executive business cases.
 3. **AEM & Modern Enterprise Web Architecture (Weekly Tech Add-on):** Deep technical breakdowns of Adobe Experience Manager (AEM as a Cloud Service, Edge Delivery Services / EDS, Dispatcher caching & invalidation, CDN edge rules, Headless GraphQL & Content Fragments, Sling Models/OSGi resource management, JCR indexing, and sub-second Core Web Vitals at enterprise scale).
 
