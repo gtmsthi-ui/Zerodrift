@@ -2716,7 +2716,8 @@
         <a href="#pipeline" class="nav-link">Kernel Flow</a>
         <a href="#workbench" class="nav-link">Workbench</a>
         <a href="#sandbox-lab" class="nav-link">Runtime Sandbox</a>
-        <a href="#sandbox-lab" onclick="switchSandboxRuntime('aem')" class="nav-link" id="navLinkAemStudio" style="color: #00f2fe; font-weight: 800; border: 1px solid rgba(0, 242, 254, 0.4); border-radius: 6px; padding: 0.25rem 0.65rem; background: rgba(0, 242, 254, 0.1); margin-left: 0.35rem;">⚡ AEM + AI Studio</a>
+        <a href="#sandbox-lab" onclick="switchSandboxRuntime('aem');" class="nav-link" id="navLinkAemStudio" style="color: #00f2fe; font-weight: 800; border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 6px; padding: 0.25rem 0.65rem; background: rgba(0, 242, 254, 0.12); margin-left: 0.35rem;">⚡ AEM + AI Studio</a>
+        <a href="#architect-profile" class="nav-link" id="navLinkArchitect" style="color: #34d399; font-weight: 800; border: 1px solid rgba(52, 211, 153, 0.4); border-radius: 6px; padding: 0.25rem 0.65rem; background: rgba(52, 211, 153, 0.1); margin-left: 0.35rem;">👤 Architect</a>
         <a href="#compare" class="nav-link">Matrix</a>
         <a href="#whitepapers" class="nav-link">Whitepapers</a>
         <a href="#advisory" class="nav-link">Advisory</a>
@@ -3453,24 +3454,24 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       </div>
 
       <!-- Prominent Studio Switcher Banner -->
-      <div style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.15), rgba(99, 102, 241, 0.12)); border: 1px solid rgba(0, 242, 254, 0.5); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+      <div style="background: linear-gradient(135deg, rgba(0, 242, 254, 0.2), rgba(99, 102, 241, 0.15)); border: 2px solid #00f2fe; border-radius: 14px; padding: 1.35rem 1.75rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; box-shadow: 0 10px 35px rgba(0, 242, 254, 0.25);">
         <div>
           <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-            <span style="background: #00f2fe; color: #020409; font-weight: 900; font-size: 0.68rem; padding: 0.15rem 0.5rem; border-radius: 4px; font-family: var(--font-mono); text-transform: uppercase;">Interactive Integration</span>
-            <strong style="color: #ffffff; font-size: 1.05rem;">AEM + AI Systems Studio by Gautam Sethi</strong>
+            <span style="background: #00f2fe; color: #020409; font-weight: 900; font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em;">Interactive Lab</span>
+            <strong style="color: #ffffff; font-size: 1.15rem;">AEM + AI Systems Studio by Gautam Sethi</strong>
           </div>
-          <p style="color: #94a3b8; font-size: 0.85rem; margin: 0; line-height: 1.5;">
-            Toggle between the eBPF kernel security runtime and the live AEM code auditor, offline RAG retrieval, and content automation engine.
+          <p style="color: #94a3b8; font-size: 0.88rem; margin: 0; line-height: 1.5;">
+            Click below to toggle between the eBPF kernel security runtime and the live AEM code auditor, offline RAG retrieval, and content automation engine.
           </p>
         </div>
         <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
-          <button id="bannerBtnAem" onclick="switchSandboxRuntime('aem')" style="background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #03060f; border: none; font-weight: 800; font-size: 0.85rem; padding: 0.65rem 1.25rem; border-radius: 8px; cursor: pointer; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); transition: all 0.2s;">
+          <button id="bannerBtnAem" onclick="switchSandboxRuntime('aem');" style="background: linear-gradient(135deg, #00f2fe, #38bdf8); color: #03060f; border: none; font-weight: 900; font-size: 0.9rem; padding: 0.75rem 1.4rem; border-radius: 8px; cursor: pointer; box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); transition: all 0.2s;">
             ⚡ Launch AEM + AI Studio
           </button>
-          <button id="bannerBtnEbpf" onclick="switchSandboxRuntime('ebpf')" style="background: rgba(255, 255, 255, 0.05); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 700; font-size: 0.85rem; padding: 0.65rem 1.1rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+          <button id="bannerBtnEbpf" onclick="switchSandboxRuntime('ebpf');" style="background: rgba(255, 255, 255, 0.08); color: #f8fafc; border: 1px solid rgba(255, 255, 255, 0.25); font-weight: 700; font-size: 0.9rem; padding: 0.75rem 1.25rem; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
             🛡️ eBPF Agent Sandbox
           </button>
-          <a href="aem_systems_embed.html" target="_blank" style="color: #00f2fe; text-decoration: none; font-size: 0.82rem; font-family: var(--font-mono); font-weight: 700; padding: 0.5rem 0.75rem; border: 1px solid rgba(0, 242, 254, 0.3); border-radius: 8px; background: rgba(0, 242, 254, 0.05);">
+          <a href="aem_systems_embed.html" target="_blank" style="color: #00f2fe; text-decoration: none; font-size: 0.85rem; font-family: var(--font-mono); font-weight: 700; padding: 0.65rem 0.95rem; border: 1px solid rgba(0, 242, 254, 0.4); border-radius: 8px; background: rgba(0, 242, 254, 0.08);">
             ↗ Full Window
           </a>
         </div>
@@ -6298,8 +6299,11 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
     
   
     // Global Runtime Switcher: eBPF vs AEM Systems Studio
+    
+
+    // Global Runtime Switcher: eBPF vs AEM Systems Studio
     window.switchSandboxRuntime = function(mode) {
-      console.log('Switching sandbox runtime to:', mode);
+      console.log('[ZeroDrift] Switching sandbox runtime to:', mode);
       const iframe = document.getElementById('sandboxRuntimeIframe');
       const popout = document.getElementById('sandboxPopoutLink');
       const btnEbpf = document.getElementById('btnRuntimeEbpf');
@@ -6307,38 +6311,56 @@ pub fn verify_token_stream(token: &str, keyset: &KeyCache) -> Result<Claims, Aut
       const bannerAem = document.getElementById('bannerBtnAem');
       const bannerEbpf = document.getElementById('bannerBtnEbpf');
       const pill = document.querySelector('.iframe-url-pill');
+      const wrap = document.getElementById('iframeViewportWrap');
+
+      if (!iframe) {
+        console.error('[ZeroDrift] sandboxRuntimeIframe not found!');
+        return;
+      }
+
+      iframe.style.opacity = '0.25';
+      iframe.style.transition = 'opacity 0.2s ease';
 
       if (mode === 'aem') {
-        if (iframe) iframe.src = 'aem_systems_embed.html';
+        iframe.src = 'aem_systems_embed.html?v=' + Date.now();
         if (popout) popout.href = 'aem_systems_embed.html';
         if (btnAem) btnAem.classList.add('active');
         if (btnEbpf) btnEbpf.classList.remove('active');
         if (bannerAem) {
           bannerAem.style.background = 'linear-gradient(135deg, #00f2fe, #38bdf8)';
           bannerAem.style.color = '#03060f';
+          bannerAem.style.boxShadow = '0 0 25px rgba(0, 242, 254, 0.6)';
         }
         if (bannerEbpf) {
-          bannerEbpf.style.background = 'rgba(255,255,255,0.05)';
+          bannerEbpf.style.background = 'rgba(255,255,255,0.08)';
           bannerEbpf.style.color = '#f8fafc';
+          bannerEbpf.style.boxShadow = 'none';
         }
         if (pill) pill.textContent = '🔒 zerodrift://aem-systems-studio/v1.0-gautam-sethi';
+        if (wrap) wrap.style.height = '620px';
       } else {
-        if (iframe) iframe.src = 'sandbox_embed.html';
+        iframe.src = 'sandbox_embed.html?r=' + Date.now();
         if (popout) popout.href = 'sandbox_embed.html';
         if (btnEbpf) btnEbpf.classList.add('active');
         if (btnAem) btnAem.classList.remove('active');
         if (bannerEbpf) {
           bannerEbpf.style.background = 'linear-gradient(135deg, #00f2fe, #38bdf8)';
           bannerEbpf.style.color = '#03060f';
+          bannerEbpf.style.boxShadow = '0 0 25px rgba(0, 242, 254, 0.6)';
         }
         if (bannerAem) {
-          bannerAem.style.background = 'rgba(255,255,255,0.05)';
+          bannerAem.style.background = 'rgba(255,255,255,0.08)';
           bannerAem.style.color = '#f8fafc';
+          bannerAem.style.boxShadow = 'none';
         }
         if (pill) pill.textContent = '🔒 zerodrift://sandbox-runtime/v2.4-ebpf-isolated';
+        if (wrap) wrap.style.height = '480px';
       }
 
-      // Smooth scroll to sandbox if triggered from top nav
+      setTimeout(() => {
+        iframe.style.opacity = '1';
+      }, 250);
+
       const sandboxEl = document.getElementById('sandbox-lab');
       if (sandboxEl) {
         sandboxEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
