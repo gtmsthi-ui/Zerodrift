@@ -3461,11 +3461,14 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
           </div>
 
           <div class="iframe-controls" role="group" aria-label="Device Viewport Switcher">
+            <button class="iframe-btn active" id="btnRuntimeEbpf" onclick="switchSandboxRuntime('ebpf')" title="ZeroDrift eBPF Hardened Agent Runtime" style="font-weight: 700;">🛡️ eBPF Runtime</button>
+            <button class="iframe-btn" id="btnRuntimeAem" onclick="switchSandboxRuntime('aem')" title="AEM + AI Systems Studio by Gautam Sethi" style="font-weight: 700; color: #00f2fe;">⚡ AEM + AI Studio</button>
+            <span style="color: rgba(255,255,255,0.25); margin: 0 4px; display: inline-flex; align-items: center;">|</span>
             <button class="iframe-btn active" id="devBtnDesktop" onclick="setIframeDevice('desktop')" aria-label="Desktop View">🖥️ Desktop</button>
             <button class="iframe-btn" id="devBtnTablet" onclick="setIframeDevice('tablet')" aria-label="Tablet View">📱 Tablet (768px)</button>
             <button class="iframe-btn" id="devBtnMobile" onclick="setIframeDevice('mobile')" aria-label="Mobile View">📱 Mobile (390px)</button>
             <button class="iframe-btn" onclick="reloadSandboxIframe()" title="Reboot Sandbox Runtime" aria-label="Reboot Sandbox Runtime">🔄 Reboot</button>
-            <a href="sandbox_embed.html" target="_blank" class="iframe-btn" title="Open in New Window" style="text-decoration: none; display: inline-flex; align-items: center;">↗ Popout</a>
+            <a href="sandbox_embed.html" id="sandboxPopoutLink" target="_blank" class="iframe-btn" title="Open in New Window" style="text-decoration: none; display: inline-flex; align-items: center;">↗ Popout</a>
           </div>
         </div>
 
