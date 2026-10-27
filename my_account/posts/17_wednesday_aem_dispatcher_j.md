@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-11-25T03:00:00.000Z"
 solution_tool: "AEM Health Inspector (Rule DSP-03)"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae04f324c0869d0f8d78478"
 ---
 
 A single '/0003 { /type "allow" /glob "*.json" }' in your Dispatcher filter section opens your entire JCR repository to data traversal.

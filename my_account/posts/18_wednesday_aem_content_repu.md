@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-12-02T03:00:00.000Z"
 solution_tool: "Technical Content Repurposing Pipeline"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae04f32ab50f19da36401cd"
 ---
 
 The biggest bottleneck in engineering organizations isn't writing technical solutions—it's disseminating architectural knowledge across distributed teams.

@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-10-28T03:00:00.000Z"
 solution_tool: "AEM Health Inspector (Rule DSP-01)"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae04f2efece4f641371582f"
 ---
 
 Flushing an entire AEM Dispatcher cache every time someone hits publish is the fastest way to bring down an enterprise website.

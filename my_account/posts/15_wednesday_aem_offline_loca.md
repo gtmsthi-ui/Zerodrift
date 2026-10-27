@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-11-11T03:00:00.000Z"
 solution_tool: "Grounded Architecture RAG Engine"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae04f304c0869d0f8d7842f"
 ---
 
 You don't need a 70-billion parameter cloud model or a $1,200/month OpenAI API bill to give enterprise architects grounded technical answers.

@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-11-18T03:00:00.000Z"
 solution_tool: "AEM Health Inspector (Rule DSP-02)"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae04f30da2ca338b1501e78"
 ---
 
 Most AEM publisher thread exhaustion spikes aren't caused by sudden visitor traffic. They're caused by the invalidation gap.
