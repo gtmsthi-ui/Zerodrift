@@ -4,11 +4,12 @@ title: "Why Model Context Protocol (MCP) Is Killing Custom AI Tool Glue: The 3 G
 day: "Tuesday 8:30 AM"
 pillar: "Practical AI & System Architecture"
 hook_formula: "#1 Contrarian Thesis"
-status: "scheduled"
+status: "published"
 score: "75.4"
 scheduled_at: "2026-10-27T03:00:00.000Z"
 buffer_post_id: "6ad876c57143aca6ab03d171"
 image_url: "https://raw.githubusercontent.com/gtmsthi-ui/Zerodrift/main/my_account/assets/post_09_card.png"
+published_at: "2026-10-27T03:00:00.000Z"
 ---
 
 If your engineering team is still writing custom point-to-point Python wrappers for every API your AI agent touches, you're building massive technical debt.

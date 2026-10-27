@@ -9,3 +9,4 @@
 - **[2026-10-22 07:01]** How to Price an AI Agent Run Before Your CFO Pages You (`Staff+ Career & Technical Leadership`) | Score: 73.5 PASS | File: `06_thursday_career.md`
 - **[2026-10-23 06:53]** Unit Tests Don't Work on Probabilistic Systems: The CI/CD Eval Pipeline That Does (`Practical AI & System Architecture`) | Score: 77.8 PASS | File: `07_friday_ai.md`
 - **[2026-10-25 14:48]** The Technical Debt You Inherited Wasn't an Accident: It Was a Feature (`Staff+ Career & Technical Leadership`) | Score: 80.4 PASS | File: `08_sunday_career.md`
+- **[2026-10-27 07:13]** Why Model Context Protocol (MCP) Is Killing Custom AI Tool Glue: The 3 Gateway Bottlenecks (`Practical AI & System Architecture`) | Score: 75.4 PASS | File: `09_tuesday_ai.md`
