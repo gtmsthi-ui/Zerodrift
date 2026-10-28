@@ -10,3 +10,5 @@
 - **[2026-10-23 06:53]** Unit Tests Don't Work on Probabilistic Systems: The CI/CD Eval Pipeline That Does (`Practical AI & System Architecture`) | Score: 77.8 PASS | File: `07_friday_ai.md`
 - **[2026-10-25 14:48]** The Technical Debt You Inherited Wasn't an Accident: It Was a Feature (`Staff+ Career & Technical Leadership`) | Score: 80.4 PASS | File: `08_sunday_career.md`
 - **[2026-10-27 07:13]** Why Model Context Protocol (MCP) Is Killing Custom AI Tool Glue: The 3 Gateway Bottlenecks (`Practical AI & System Architecture`) | Score: 75.4 PASS | File: `09_tuesday_ai.md`
+- **[2026-10-28 07:53]** Why statfileslevel 0 Is the Most Dangerous Line in Enterprise AEM (`AEM & Enterprise Web Architecture`) | Score: 85.0 PASS | File: `13_wednesday_aem_dispatcher_s.md`
+- **[2026-10-28 07:53]** Why Naive AEM Dispatcher Invalidation Kills TTFB: The 3-Layer Cache Hierarchy (`AEM & Enterprise Web Architecture`) | Score: 77.6 PASS | File: `09b_wednesday_aem.md`
