@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-12-16T03:00:00.000Z"
 solution_tool: "Productized Advisory Sprints"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae1a9dff2db54e878cba5ff"
 ---
 
 Hiring an agency for an open-ended 3-month discovery phase to diagnose slow page speeds is an outdated consulting playbook.

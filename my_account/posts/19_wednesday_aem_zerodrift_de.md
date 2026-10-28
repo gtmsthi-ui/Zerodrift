@@ -9,6 +9,7 @@ score: "85.0"
 scheduled_at: "2026-12-09T03:00:00.000Z"
 solution_tool: "ZeroDrift Systems Sandbox & Test Harness"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
+buffer_post_id: "6ae1a9de3ca4e5ab3b2d38ec"
 ---
 
 The tech industry spent the last two years wrapping non-deterministic LLM APIs in web dashboards and calling them enterprise solutions.
