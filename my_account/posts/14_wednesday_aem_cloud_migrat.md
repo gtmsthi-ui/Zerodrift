@@ -4,12 +4,13 @@ title: "Why 70% of Legacy AEM Codebases Fail Their First Cloud Manager Pipeline"
 day: "Wednesday 8:30 AM"
 pillar: "AEM Cloud Service & Modernization"
 hook_formula: "The Read-Only /apps Paradigm Shift"
-status: "scheduled"
+status: "published"
 score: "85.0"
 scheduled_at: "2026-11-04T03:00:00.000Z"
 solution_tool: "AEM Health Inspector (Rule HTL-02) & Proxy Pattern"
 live_demo_url: "https://gtmsthi-ui.github.io/Zerodrift/aem_systems_embed.html"
 buffer_post_id: "6ae04f2fda2ca338b1501e39"
+published_at: "2026-11-04T03:00:00.000Z"
 ---
 
 If your AEM codebase still references foundation/components or writes to /apps at runtime, Cloud Manager will terminate your deployment before it even starts.
