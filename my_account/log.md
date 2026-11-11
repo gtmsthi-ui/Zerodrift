@@ -13,3 +13,4 @@
 - **[2026-10-28 07:53]** Why statfileslevel 0 Is the Most Dangerous Line in Enterprise AEM (`AEM & Enterprise Web Architecture`) | Score: 85.0 PASS | File: `13_wednesday_aem_dispatcher_s.md`
 - **[2026-10-28 07:53]** Why Naive AEM Dispatcher Invalidation Kills TTFB: The 3-Layer Cache Hierarchy (`AEM & Enterprise Web Architecture`) | Score: 77.6 PASS | File: `09b_wednesday_aem.md`
 - **[2026-11-04 08:32]** Why 70% of Legacy AEM Codebases Fail Their First Cloud Manager Pipeline (`AEM Cloud Service & Modernization`) | Score: 85.0 PASS | File: `14_wednesday_aem_cloud_migrat.md`
+- **[2026-11-11 08:47]** Why We Built an Offline-First Technical Architecture RAG with Zero Cloud Tokens (`Practical AI Systems Architecture`) | Score: 85.0 PASS | File: `15_wednesday_aem_offline_loca.md`
