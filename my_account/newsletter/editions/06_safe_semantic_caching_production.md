@@ -145,3 +145,4 @@ Before you enable semantic caching on customer-facing enterprise APIs, verify th
 - [ ] **Negative Cache Circuit Breaking:** If an upstream model generates a fallback or error response, is it blocked from entering the cache?
 
 Cost efficiency is only an optimization if it preserves deterministic system reliability. Build the harness first.
+
