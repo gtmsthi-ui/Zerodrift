@@ -1001,9 +1001,19 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
           <div class="embed-banner-sub">Enterprise Content Platform Architect · 100% Offline-First</div>
         </div>
       </div>
-      <div class="embed-banner-actions">
+      <div class="embed-banner-actions" style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <!-- Studio Global LLM Gateway Bar -->
+        <div style="display: flex; gap: 0.35rem; align-items: center; background: rgba(15,23,42,0.8); border: 1px solid rgba(56,189,248,0.3); border-radius: 6px; padding: 0.25rem 0.5rem;">
+          <span style="font-size: 0.7rem; color: #94a3b8; font-family: var(--font-mono);">⚡ Runtime LLM:</span>
+          <select id="global-llm-engine" style="background: #020408; border: 1px solid #1e3a8a; border-radius: 4px; color: #00f2fe; padding: 0.2rem 0.4rem; font-size: 0.72rem; font-family: var(--font-mono); cursor: pointer;">
+            <option value="gemini">♊ Gemini 2.0 Flash (Default - Live Runtime)</option>
+            <option value="openrouter">🌐 OpenRouter Gateway (DeepSeek / Claude)</option>
+            <option value="corpus">💻 Pure Deterministic Rules (Offline Fallback)</option>
+          </select>
+          <input type="password" id="global-llm-key" placeholder="API Key (AIzaSy... / sk-or-...)" style="width: 140px; background: #020408; border: 1px solid #1e3a8a; border-radius: 4px; color: #fff; padding: 0.2rem 0.4rem; font-size: 0.7rem; font-family: var(--font-mono);" title="Stored only in your browser localStorage">
+          <button id="btn-save-global-key" class="btn btn-outline" style="padding: 0.2rem 0.5rem; font-size: 0.7rem;">Save</button>
+        </div>
         <a href="https://github.com/gtmsthi-ui/aem-reliability-toolkit" target="_blank" rel="noopener noreferrer" class="btn btn-outline" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">GitHub Repo ↗</a>
-        <a href="https://github.com/gtmsthi-ui" target="_blank" rel="noopener noreferrer" class="btn btn-secondary" style="font-size: 0.75rem; padding: 0.35rem 0.75rem;">@gtmsthi-ui ↗</a>
       </div>
     </div>
 
@@ -1035,8 +1045,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
       <textarea class="code-editor-area" id="aem-code-input" spellcheck="false" style="height: 125px;"></textarea>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-        <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.5rem 1.1rem; font-size: 0.82rem;">Run Live Inspection ⚡</button>
-        <div style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">Real-time Client-Side Execution</div>
+        <div style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.5rem 1.1rem; font-size: 0.82rem;">Run AST Rule Engine ⚡</button>
+          <button class="btn btn-secondary" id="btn-run-aem-llm" style="padding: 0.5rem 1.1rem; font-size: 0.82rem; background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(16,185,129,0.3)); border-color: #3b82f6;">Deep LLM Code Audit 🧠</button>
+        </div>
+        <div style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">Paste any arbitrary Dispatcher, HTL, OSGi, or Java code snippet</div>
       </div>
 
       <div class="live-output-panel" id="aem-scan-output" style="margin-top: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
@@ -1061,15 +1074,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         </div>
       </div>
 
-      <!-- Optional API Key Accordion -->
-      <div id="llm-key-container" style="display: none; margin-bottom: 0.75rem; background: rgba(59,130,246,0.06); border: 1px solid rgba(59,130,246,0.25); border-radius: 6px; padding: 0.6rem 0.85rem;">
-        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
-          <label for="llm-api-key" style="font-size: 0.75rem; color: #93c5fd; font-family: var(--font-mono);">Enter API Key (Kept strictly in browser memory / localStorage):</label>
-          <input type="password" id="llm-api-key" placeholder="AIzaSy... or sk-or-v1-..." style="flex: 1; min-width: 200px; background: #020408; border: 1px solid #1e3a8a; border-radius: 4px; color: #fff; padding: 0.35rem 0.6rem; font-size: 0.75rem; font-family: var(--font-mono);">
-          <button id="btn-save-llm-key" class="btn btn-outline" style="padding: 0.35rem 0.75rem; font-size: 0.72rem;">Save Key</button>
-        </div>
-        <div style="font-size: 0.7rem; color: #64748b; margin-top: 0.3rem;">Zero cloud storage. Queries are grounded with your actual architecture corpus before reaching the model.</div>
-      </div>
+
 
       <div style="display: flex; gap: 0.4rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
         <button class="btn-preset" data-rag-prompt="What is the recommended statfileslevel for multi-tenant trees?">Dispatcher statfileslevel</button>
@@ -1092,18 +1097,25 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
     <!-- TAB 3: Content Repurposing Pipeline -->
     <div class="embed-tab-content" id="tab-content" role="tabpanel">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
         <div>
-          <span class="section-label" style="margin-bottom: 0;">Technical Content Pipeline</span>
-          <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">Transforms architectural notes into LinkedIn & carousel drafts</span>
+          <span class="section-label" style="margin-bottom: 0;">Runtime Technical Content Supply Chain</span>
+          <span style="font-size: 0.8rem; color: #94a3b8; margin-left: 0.5rem;">Transforms any architectural topic into LinkedIn posts & 4-slide carousels at runtime</span>
         </div>
-        <span class="status-badge live">Multi-Channel</span>
+        <span class="status-badge live">LLM-Powered</span>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; margin-bottom: 0.75rem;">
+        <input type="text" id="custom-content-topic" placeholder="Enter ANY custom architecture topic (e.g. Zero-Downtime Database Expand/Contract, Safe Semantic Caching, eBPF Tracing)..." style="width: 100%; background: #020408; border: 1px solid rgba(56,189,248,0.25); border-radius: var(--radius-sm); color: #fff; padding: 0.55rem 0.85rem; font-family: var(--font-mono); font-size: 0.82rem;">
+        <button class="btn btn-primary" id="btn-run-content-pipeline" style="padding: 0.55rem 1.1rem; font-size: 0.82rem; font-weight: 700; white-space: nowrap;">Generate Package ⚡</button>
       </div>
 
       <div style="display: flex; gap: 0.4rem; margin-bottom: 0.75rem; flex-wrap: wrap;">
-        <button class="btn-preset active" data-content-preset="dispatcher">Dispatcher Cache Note</button>
+        <button class="btn-preset active" data-content-preset="dispatcher">Dispatcher Invalidation</button>
         <button class="btn-preset" data-content-preset="cloud_migration">Cloud Service /apps</button>
         <button class="btn-preset" data-content-preset="core_components">Proxy Component Pattern</button>
+        <button class="btn-preset" data-content-preset="semantic_cache">Safe Semantic Caching</button>
+        <button class="btn-preset" data-content-preset="db_migration">Zero-Downtime DB Expand/Contract</button>
       </div>
 
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.75rem;">
@@ -1444,17 +1456,28 @@ function runClientRAGQuery(query) {
   };
 }
 
-// Live Remote LLM Grounded Generator (Gemini 2.0 Flash / OpenRouter)
-async function callLLMGroundedSynthesis(query, groundedContext, engine, apiKey) {
-  const systemPrompt = `You are Gautam Sethi, Principal Systems & Cloud Architect at ZeroDrift Systems Group.
-You write with ruthless precision: zero buzzwords, concrete metrics, exact commands, and deterministic failure modes.
-Answer the user query using the following STRICT GROUNDED PASSAGES from your published architectural manuals:
------------------
-PRIMARY PASSAGE:
-${groundedContext.answer}
-SOURCE: ${groundedContext.match ? groundedContext.match.file : "Architecture Manual"} > ${groundedContext.match ? groundedContext.match.section : "Standards"}
------------------
-Synthesize a sharp 2-paragraph technical explanation. Highlight exact metrics, configuration flags, and the architectural why.`;
+
+// ============================================================================
+// GLOBAL RUNTIME LLM GATEWAY (GEMINI 2.0 FLASH / OPENROUTER) FOR ALL TOOLS
+// ============================================================================
+
+function getGlobalLLMConfig() {
+  const engineEl = document.getElementById("global-llm-engine");
+  const keyEl = document.getElementById("global-llm-key");
+  const engine = engineEl ? engineEl.value : "gemini";
+  let apiKey = keyEl ? keyEl.value.trim() : "";
+  if (!apiKey && typeof localStorage !== "undefined") {
+    apiKey = localStorage.getItem("zerodrift_global_api_key") || localStorage.getItem("zerodrift_llm_key") || "";
+  }
+  return { engine, apiKey };
+}
+
+async function callRuntimeLLM({ systemPrompt, userPrompt, temperature = 0.2, maxTokens = 800 }) {
+  const { engine, apiKey } = getGlobalLLMConfig();
+
+  if (engine === "corpus" || !apiKey) {
+    throw new Error("NO_API_KEY_OR_CORPUS_MODE");
+  }
 
   if (engine === "gemini") {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
@@ -1462,14 +1485,12 @@ Synthesize a sharp 2-paragraph technical explanation. Highlight exact metrics, c
       contents: [
         {
           role: "user",
-          parts: [
-            { text: systemPrompt + "\n\nUser Query: " + query }
-          ]
+          parts: [{ text: systemPrompt + "\n\nTASK INPUT:\n" + userPrompt }]
         }
       ],
       generationConfig: {
-        temperature: 0.2,
-        maxOutputTokens: 600
+        temperature: temperature,
+        maxOutputTokens: maxTokens
       }
     };
 
@@ -1492,10 +1513,10 @@ Synthesize a sharp 2-paragraph technical explanation. Highlight exact metrics, c
       model: "google/gemini-2.0-flash-001",
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: query }
+        { role: "user", content: userPrompt }
       ],
-      temperature: 0.2,
-      max_tokens: 600
+      temperature: temperature,
+      max_tokens: maxTokens
     };
 
     const resp = await fetch(url, {
@@ -1517,6 +1538,25 @@ Synthesize a sharp 2-paragraph technical explanation. Highlight exact metrics, c
     const data = await resp.json();
     return data.choices[0].message.content;
   }
+}
+
+async function callLLMGroundedSynthesis(query, groundedContext, engine, apiKey) {
+  const systemPrompt = `You are Gautam Sethi, Principal Systems & Cloud Architect at ZeroDrift Systems Group.
+You write with ruthless precision: zero buzzwords, concrete metrics, exact commands, and deterministic failure modes.
+Answer the user query using the following STRICT GROUNDED PASSAGES from your published architectural manuals:
+-----------------
+PRIMARY PASSAGE:
+${groundedContext.answer}
+SOURCE: ${groundedContext.match ? groundedContext.match.file : "Architecture Manual"} > ${groundedContext.match ? groundedContext.match.section : "Standards"}
+-----------------
+Synthesize a sharp 2-paragraph technical explanation. Highlight exact metrics, configuration flags, and the architectural why.`;
+
+  return await callRuntimeLLM({
+    systemPrompt: systemPrompt,
+    userPrompt: "Query: " + query,
+    temperature: 0.2,
+    maxTokens: 600
+  });
 }
 
 
@@ -1550,6 +1590,24 @@ const CONTENT_PRESETS = {
       "Enforce responsive image presets in DAM to eliminate layout shifts (CLS < 0.1).",
       "Adopt versioned clientlibs with async/defer script attributes to cut TBT by 65%."
     ]
+  },
+  semantic_cache: {
+    title: "Safe Semantic Caching in Production & The 500ms Invalidation Race",
+    category: "AI Gateway Architecture",
+    points: [
+      "Flat 0.88 cosine similarity threshold causes cross-tenant policy and pricing leaks.",
+      "Partitioning vector lookup keys via SHA256(Tenant + Role) guarantees multi-tenant isolation.",
+      "Sub-50ms event-driven cache invalidation via Debezium CDC purges stale hallucinations before in-flight queries complete."
+    ]
+  },
+  db_migration: {
+    title: "Zero-Downtime Database Architecture: 3-Phase Expand/Contract Blueprint",
+    category: "Distributed Data Systems",
+    points: [
+      "In-place ALTER TABLE on 80M rows takes exclusive metadata locks, starving connection pools within 90 seconds.",
+      "Dual-writing across Expand and Contract phases maintains continuous forward and backward compatibility.",
+      "Throttled idempotent background backfills prevent write-ahead log (WAL) spikes on read replicas."
+    ]
   }
 };
 
@@ -1558,11 +1616,75 @@ const CONTENT_PRESETS = {
 // ============================================================================
 
 function initWorkbench() {
-  // --- AEM Inspector UI ---
+  // --- Global Key & Engine Binding ---
+  const globalEngineEl = document.getElementById("global-llm-engine");
+  const globalKeyEl = document.getElementById("global-llm-key");
+  const globalSaveBtn = document.getElementById("btn-save-global-key");
+
+  if (globalKeyEl && typeof localStorage !== "undefined") {
+    const saved = localStorage.getItem("zerodrift_global_api_key") || localStorage.getItem("zerodrift_llm_key") || "";
+    if (saved) globalKeyEl.value = saved;
+  }
+
+  if (globalSaveBtn && globalKeyEl) {
+    globalSaveBtn.addEventListener("click", () => {
+      const val = globalKeyEl.value.trim();
+      localStorage.setItem("zerodrift_global_api_key", val);
+      localStorage.setItem("zerodrift_llm_key", val);
+      globalSaveBtn.textContent = "Saved ✓";
+      setTimeout(() => { globalSaveBtn.textContent = "Save"; }, 2000);
+    });
+  }
+
+  // --- AEM Inspector UI & Deep LLM Code Audit ---
   const aemInput = document.getElementById("aem-code-input");
   const aemRunBtn = document.getElementById("btn-run-aem-scan");
+  const aemLlmBtn = document.getElementById("btn-run-aem-llm");
   const aemScoreEl = document.getElementById("aem-score-badge");
   const aemOutputEl = document.getElementById("aem-scan-output");
+
+  if (aemLlmBtn && aemInput && aemOutputEl) {
+    aemLlmBtn.addEventListener("click", async () => {
+      const code = aemInput.value.trim();
+      if (!code) return;
+
+      aemOutputEl.innerHTML = `<div style="padding: 1rem; color: #00f2fe; font-family: var(--font-mono); font-size: 0.85rem;">[+] Running runtime LLM Code Architecture Audit & AST inspection...</div>`;
+      
+      try {
+        const sysPrompt = `You are Gautam Sethi, Principal Systems Architect at ZeroDrift Systems Group.
+Audit the following arbitrary code snippet (AEM Dispatcher, HTL, OSGi, Java, SQL, or Vector Cache).
+Follow strict SRE standards:
+1. Provide an overall Architecture Health Grade (A/B/C/F) and numerical score out of 100.
+2. List all Critical, Warning, and Info findings with exact risk and remediation directives.
+3. Be brutally concrete: cite thread exhaustion, cache thrashing, lock contention, or security risks.`;
+
+        const resp = await callRuntimeLLM({
+          systemPrompt: sysPrompt,
+          userPrompt: "CODE TO AUDIT:\n```\n" + code + "\n```",
+          temperature: 0.1,
+          maxTokens: 800
+        });
+
+        aemScoreEl.textContent = "AI Audited";
+        aemScoreEl.className = "status-badge live";
+        aemOutputEl.innerHTML = `
+          <div style="border-left: 3px solid #3b82f6; background: rgba(59,130,246,0.06); padding: 1.1rem; border-radius: 6px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+              <span class="status-badge live" style="background: rgba(59,130,246,0.15); border-color: #3b82f6; color: #60a5fa;">Runtime LLM Code Audit</span>
+              <span style="font-size: 0.75rem; font-family: var(--font-mono); color: #38bdf8;">Deterministic SRE Pass</span>
+            </div>
+            <div style="font-size: 0.85rem; color: #f8fafc; line-height: 1.6; white-space: pre-wrap;">${resp}</div>
+          </div>`;
+      } catch (err) {
+        // Fallback to local rule engine
+        executeAEMScan();
+        aemOutputEl.insertAdjacentHTML("afterbegin", `
+          <div style="padding: 0.5rem 0.75rem; margin-bottom: 0.75rem; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); border-radius: 4px; font-size: 0.75rem; color: #fbbf24;">
+            💡 Note: Runtime LLM returned fallback (${err.message}). Displayed local AST rule scanner output. Enter your API key in the top header to enable live neural auditing.
+          </div>`);
+      }
+    });
+  }
 
   if (aemInput && aemRunBtn && aemOutputEl) {
     // Preset buttons
@@ -1742,47 +1864,110 @@ function initWorkbench() {
   const contentCarouselOutput = document.getElementById("content-carousel-output");
   const contentCsvOutput = document.getElementById("content-csv-output");
 
-  function executeContentPipeline(presetKey) {
-    const item = CONTENT_PRESETS[presetKey] || CONTENT_PRESETS.dispatcher;
+  const customTopicInput = document.getElementById("custom-content-topic");
+
+  async function executeContentPipeline(presetKey, customTopic = null) {
+    let title = "";
+    let category = "Systems Architecture";
+    let points = [];
+
+    if (customTopic) {
+      title = customTopic.trim();
+      category = "Custom Architecture";
+      
+      // Try live runtime LLM synthesis for ANY arbitrary topic
+      try {
+        if (contentPostOutput) contentPostOutput.value = "⚡ Synthesizing technical package via Runtime LLM for: " + title + "...";
+        if (contentCarouselOutput) contentCarouselOutput.innerHTML = `<div style="padding: 1rem; color: #00f2fe; font-family: var(--font-mono); font-size: 0.8rem;">[+] Generating 4-slide carousel blueprint via LLM...</div>`;
+
+        const sysPrompt = `You are Gautam Sethi, Principal Systems Architect at ZeroDrift Systems Group.
+Generate a structured technical content package for the given architecture topic.
+Return JSON with this exact schema:
+{
+  "title": "Exact punchy title",
+  "category": "Enterprise Architecture",
+  "post_body": "Full LinkedIn technical post draft with concrete metrics, failure modes, and architectural trade-offs. Zero buzzwords.",
+  "slides": [
+    { "slide": 1, "title": "Slide 1 Title", "desc": "Hook and failure mode" },
+    { "slide": 2, "title": "Slide 2 Title", "desc": "Root cause and concurrency bottleneck" },
+    { "slide": 3, "title": "Slide 3 Title", "desc": "Production-safe topology" },
+    { "slide": 4, "title": "Slide 4 Title", "desc": "Verification gates and measurable SLA impact" }
+  ]
+}`;
+        const rawJson = await callRuntimeLLM({
+          systemPrompt: sysPrompt,
+          userPrompt: "Topic: " + title,
+          temperature: 0.2,
+          maxTokens: 900
+        });
+
+        const cleanJsonStr = rawJson.replace(/```json/g, "").replace(/```/g, "").trim();
+        const parsed = JSON.parse(cleanJsonStr);
+
+        if (contentPostOutput) contentPostOutput.value = parsed.post_body;
+        if (contentCarouselOutput) {
+          contentCarouselOutput.innerHTML = parsed.slides.map(s => `
+            <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem;">
+              <div style="font-size: 0.7rem; color: var(--cyan); font-family: var(--font-mono); font-weight: 700;">SLIDE ${s.slide}</div>
+              <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin: 0.2rem 0;">${s.title}</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">${s.desc}</div>
+            </div>`).join("");
+        }
+        if (contentCsvOutput) {
+          const dateStr = new Date().toISOString().split("T")[0];
+          contentCsvOutput.innerHTML = `<code>CNT-${Math.floor(100 + Math.random() * 900)},"${parsed.title}","${parsed.category}",${dateStr},"LLM Runtime Generated - Ready for Review","LinkedIn, ZeroDrift, Multi-Channel"</code>`;
+        }
+        return;
+      } catch (err) {
+        // Fallback for custom topic without API key
+        points = [
+          `Architectural deep dive addressing production invariants and SLA boundaries in ${title}.`,
+          `Preventing lock contention, thread exhaustion, and latency degradation under concurrent scale.`,
+          `Verifiable test gates with deterministic negative ADR evaluation before deployment.`
+        ];
+      }
+    } else {
+      const item = CONTENT_PRESETS[presetKey] || CONTENT_PRESETS.dispatcher;
+      title = item.title;
+      category = item.category;
+      points = item.points;
+    }
     
-    // 1. Generate LinkedIn Draft
-    const postText = `Most enterprise AEM sites fail performance audits not because of Sling Models, but because of misconfigured Dispatcher invalidation.\n\nHere is how we architected "${item.title}":\n\n${item.points.map((p, i) => `${i + 1}. ${p}`).join("\n\n")}\n\nOutcome: Predictable publisher CPU loads and sub-second page delivery across multi-market architectures.\n\n#AEM #AdobeExperienceCloud #EnterpriseArchitecture #SystemDesign #SoftwareEngineering`;
+    // Standard Deterministic Fallback Generation
+    const postText = `In mission-critical enterprise systems, superficial patterns collapse the moment they face real customer SLA requirements.\n\nHere is how we architected "${title}":\n\n${points.map((p, i) => `${i + 1}. ${p}`).join("\n\n")}\n\nOutcome: Predictable system throughput, zero dropped transactions, and sub-10ms replication consistency.\n\n#SoftwareArchitecture #DistributedSystems #EngineeringLeadership #SystemsDesign`;
     
-    // 2. Generate 4-Slide Carousel
     const slides = [
-      { slide: 1, title: item.title, desc: "Architectural Deep Dive & Implementation Notes" },
-      { slide: 2, title: "1. Core Constraint", desc: item.points[0] },
-      { slide: 3, title: "2. Technical Solution", desc: item.points[1] },
-      { slide: 4, title: "3. Measurable Outcome", desc: item.points[2] }
+      { slide: 1, title: title, desc: "Architectural Deep Dive & Implementation Blueprint" },
+      { slide: 2, title: "1. Core Constraint", desc: points[0] },
+      { slide: 3, title: "2. Technical Solution", desc: points[1] },
+      { slide: 4, title: "3. Measurable Outcome", desc: points[2] }
     ];
 
-    // 3. Generate CSV Log
     const dateStr = new Date().toISOString().split("T")[0];
-    const csvRow = `CNT-${Math.floor(100 + Math.random() * 900)},"${item.title}","${item.category}",${dateStr},"Drafted - Ready for Review","LinkedIn, ZeroDrift, Tech Notes"`;
+    const csvRow = `CNT-${Math.floor(100 + Math.random() * 900)},"${title}","${category}",${dateStr},"Drafted - Ready for Review","LinkedIn, ZeroDrift, Tech Notes"`;
 
-    if (contentPostOutput) {
-      contentPostOutput.value = postText;
-    }
-
+    if (contentPostOutput) contentPostOutput.value = postText;
     if (contentCarouselOutput) {
       contentCarouselOutput.innerHTML = slides.map(s => `
         <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-subtle); border-radius: 6px; padding: 0.75rem;">
           <div style="font-size: 0.7rem; color: var(--cyan); font-family: var(--font-mono); font-weight: 700;">SLIDE ${s.slide}</div>
           <div style="font-size: 0.85rem; font-weight: 700; color: var(--text-main); margin: 0.2rem 0;">${s.title}</div>
           <div style="font-size: 0.75rem; color: var(--text-muted);">${s.desc}</div>
-        </div>
-      `).join("");
+        </div>`).join("");
     }
-
-    if (contentCsvOutput) {
-      contentCsvOutput.innerHTML = `<code>${csvRow}</code>`;
-    }
+    if (contentCsvOutput) contentCsvOutput.innerHTML = `<code>${csvRow}</code>`;
   }
 
   if (contentRunBtn) {
     contentRunBtn.addEventListener("click", () => {
-      const selected = contentSelector ? contentSelector.value : "dispatcher";
-      executeContentPipeline(selected);
+      const customVal = customTopicInput ? customTopicInput.value.trim() : "";
+      if (customVal) {
+        executeContentPipeline(null, customVal);
+      } else {
+        const activeBtn = document.querySelector("[data-content-preset].active");
+        const key = activeBtn ? activeBtn.getAttribute("data-content-preset") : "dispatcher";
+        executeContentPipeline(key);
+      }
     });
   }
 
