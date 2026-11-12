@@ -1036,23 +1036,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
         <span id="aem-score-badge" class="status-badge live">Score: 100/100</span>
       </div>
 
-      <div class="preset-selector-bar">
+      <div class="preset-selector-bar" style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.6rem;">
         <button class="btn-preset active" data-aem-preset="dispatcher_bad">Broken Farm (/statfileslevel 0)</button>
-        <button class="btn-preset" data-aem-preset="htl_bad">Vulnerable HTL</button>
-        <button class="btn-preset" data-aem-preset="clean_proxy">Valid Core Proxy</button>
+        <button class="btn-preset" data-aem-preset="htl_bad">Vulnerable HTL (XSS context='unsafe')</button>
+        <button class="btn-preset" data-aem-preset="clientlib_bad">Unproxied Clientlib (/apps without allowProxy)</button>
+        <button class="btn-preset" data-aem-preset="cloud_apps_write">Cloud Service Mutable /apps Violation</button>
+        <button class="btn-preset" data-aem-preset="clean_proxy">Valid Core Proxy Component</button>
       </div>
 
-      <textarea class="code-editor-area" id="aem-code-input" spellcheck="false" style="height: 125px;"></textarea>
+      <div style="position: relative;">
+        <textarea class="code-editor-area" id="aem-code-input" placeholder="Paste ANY AEM Dispatcher farm config, HTL template, clientlib .content.xml, OSGi config, or Java service code..." spellcheck="false" style="height: 140px; width: 100%;"></textarea>
+      </div>
 
       <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-        <div style="display: flex; gap: 0.5rem;">
-          <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.5rem 1.1rem; font-size: 0.82rem;">Run AST Rule Engine ⚡</button>
-          <button class="btn btn-secondary" id="btn-run-aem-llm" style="padding: 0.5rem 1.1rem; font-size: 0.82rem; background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(16,185,129,0.3)); border-color: #3b82f6;">Deep LLM Code Audit 🧠</button>
+        <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button class="btn btn-primary" id="btn-run-aem-scan" style="padding: 0.55rem 1.2rem; font-size: 0.82rem; font-weight: 800;">Inspect AEM Code ⚡</button>
+          <span style="font-size: 0.75rem; color: #64748b; font-family: var(--font-mono);">Runs complete 12-rule AEM Reliability Toolkit engine</span>
         </div>
-        <div style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">Paste any arbitrary Dispatcher, HTL, OSGi, or Java code snippet</div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <span id="aem-finding-count" style="font-size: 0.75rem; color: #94a3b8; font-family: var(--font-mono);">0 Violations Detected</span>
+        </div>
       </div>
 
-      <div class="live-output-panel" id="aem-scan-output" style="margin-top: 0.75rem; padding: 0.85rem; font-size: 0.8rem;">
+      <div class="live-output-panel" id="aem-scan-output" style="margin-top: 0.75rem; padding: 0.95rem; font-size: 0.82rem; min-height: 140px;">
         <!-- Live output -->
       </div>
     </div>
@@ -1241,34 +1247,63 @@ const AEM_PRESETS = {
         /filter {
             /0001 { /type "deny" /glob "*" }
             /0002 { /type "allow" /glob "* /content/*" }
-            # Risk: Permissive JSON query
+            # Critical Security Hole: Exposes internal JCR tree via .infinity.json
             /0003 { /type "allow" /glob "*.json" }
         }
         /cache {
             /docroot "/mnt/var/www/html"
-            # Critical Bug: Statfileslevel set to 0 flushes entire cache tree!
+            # Critical Bug: Statfileslevel set to 0 flushes entire 14-market cache tree on any activation!
             /statfileslevel "0"
-            # Missing /gracePeriod causes publisher CPU spikes during activations
+            # Missing /gracePeriod causes publisher CPU thread exhaustion spikes
         }
     }
 }`
   },
   htl_bad: {
-    name: "Vulnerable HTL Template (XSS & Deprecated Foundation)",
+    name: "Vulnerable HTL Template (XSS context='unsafe' & Legacy Foundation)",
     code: `<div class="legacy-hero">
-    <!-- Critical: Deprecated Foundation Component (Fails in Cloud Service) -->
+    <!-- Critical: Deprecated Foundation Component (Fails in Cloud Manager) -->
     <div data-sly-resource="\${'text' @ resourceType='foundation/components/text'}"></div>
     
     <div class="banner">
+        <!-- Critical XSS: context='unsafe' disables built-in HTL escaping -->
+        <div class="user-bio">\${properties.userBiography @ context='unsafe'}</div>
         <!-- Warning: Image missing alt attribute -->
         <img src="/content/dam/brand/hero.jpg">
     </div>
 
-    <!-- Warning: Inline script tag with unquoted dynamic property -->
+    <!-- Warning: Inline script block bypassing clientlib minification and CSP -->
     <script>
         console.log("Tracking ID: " + "\${properties.trackingId}");
     <\/script>
 </div>`
+  },
+  clientlib_bad: {
+    name: "Unproxied Clientlib (/apps without allowProxy)",
+    code: `<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:ClientLibraryFolder"
+    categories="[mybrand.site]"
+    # Critical Cloud Service Bug: Missing allowProxy="{Boolean}true"
+    # Result: Styles and JS under /apps return 404 on publish tier!
+    dependencies="[core.wcm.components.commons.site]"/>`
+  },
+  cloud_apps_write: {
+    name: "Cloud Service Mutable /apps Violation",
+    code: `@Component(service = MigrationService.class)
+public class UnsafeAssetMigrator {
+    @Reference
+    private ResourceResolverFactory resolverFactory;
+
+    public void archiveOldNode(ResourceResolver resolver) throws PersistenceException {
+        // Critical AEM Cloud Service Violation: /apps is read-only at runtime!
+        // Throws AccessControlException: Repository is read-only for /apps
+        Resource appsConfig = resolver.getResource("/apps/mybrand/config/backup");
+        Node node = appsConfig.adaptTo(Node.class);
+        node.addNode("archive_2026", "nt:unstructured");
+        resolver.commit();
+    }
+}`
   },
   clean_proxy: {
     name: "Compliant AEM Core Component Proxy",
@@ -1285,87 +1320,161 @@ function runClientAEMScan(code) {
   const findings = [];
   let score = 100;
 
-  // Rule 1: Dispatcher statfileslevel 0
-  if (/statfileslevel\s+["']?0["']?/.test(code)) {
+  // RULE 1: Dispatcher statfileslevel 0 (DSP-01)
+  if (/statfileslevel\s+["']?0["']?/i.test(code)) {
     findings.push({
       ruleId: "DSP-01",
       severity: "CRITICAL",
-      title: "Dispatcher /statfileslevel set to 0",
-      risk: "Flushes entire document root cache across all sites/locales on any page activation.",
-      fix: "Increase /statfileslevel to 2 or 3 matching tenant hierarchy (/content/tenant/country/language)."
+      category: "Dispatcher Caching",
+      title: "Dispatcher /statfileslevel Set to 0",
+      risk: "Flushes entire document root cache across all language trees (/content/tenant/country/language) on ANY page activation. Causes sudden TTFB spike from 45ms to 3.8s and publisher thread starvation under concurrency.",
+      fix: "Configure '/statfileslevel 3' in the /cache section of dispatcher.any to isolate invalidation strictly to the modified locale branch."
     });
     score -= 35;
   }
 
-  // Rule 2: Permissive JSON selector
-  if (/\/glob\s+["']\*\.json["']/.test(code)) {
+  // RULE 2: Permissive JSON selector (DSP-03)
+  if (/\/glob\s+["']\*\.json["']/.test(code) || /\/type\s+["']allow["']\s+\/glob\s+["']\*\.json["']/.test(code)) {
     findings.push({
       ruleId: "DSP-03",
       severity: "CRITICAL",
-      title: "Permissive *.json Selector Exposed",
-      risk: "Allows arbitrary JCR data traversal via default Sling JSON servlets (e.g. .infinity.json).",
-      fix: "Deny *.json by default and explicitly whitelist only vetted .model.json selectors."
+      category: "Security & Dispatcher Filters",
+      title: "Permissive *.json Selector Filter Exposed",
+      risk: "Globally allows arbitrary JCR repository tree traversal via default Sling JSON servlets (e.g., .infinity.json or .tidy.json), exposing internal user metadata and un-published JCR nodes.",
+      fix: "Deny *.json by default in filter section. Whitelist only vetted Sling Model Exporter selectors: '/0020 { /type "allow" /extension "json" /selectors "model" }'."
     });
     score -= 30;
   }
 
-  // Rule 3: Missing gracePeriod in dispatcher config
+  // RULE 3: Missing gracePeriod in dispatcher config (DSP-02)
   if (code.includes("/cache") && !/\/gracePeriod\s+["']?\d+["']?/.test(code)) {
     findings.push({
       ruleId: "DSP-02",
       severity: "WARNING",
-      title: "Missing /gracePeriod Setting",
-      risk: "Heavy concurrent traffic overwhelms publisher threads during cache invalidation.",
-      fix: "Add '/gracePeriod 2' to serve stale cache for 2 seconds while publisher regenerates the page."
+      category: "Dispatcher Resilience",
+      title: "Missing /gracePeriod Setting in /cache",
+      risk: "Without a grace period, during heavy marketing authoring activations, every in-flight client request bypasses the cache and hammers the publish JVMs simultaneously, causing CPU starvation.",
+      fix: "Add '/gracePeriod 2' to serve stale cached content for up to 2 seconds while the publisher completes regenerating the new HTML."
     });
     score -= 15;
   }
 
-  // Rule 4: Deprecated foundation components
+  // RULE 4: Deprecated foundation components (HTL-02)
   if (code.includes("foundation/components")) {
     findings.push({
       ruleId: "HTL-02",
       severity: "CRITICAL",
+      category: "Cloud Service Migration",
       title: "Deprecated Legacy Foundation Component Referenced",
-      risk: "Legacy foundation components are incompatible with AEM as a Cloud Service pipelines.",
-      fix: "Replace with proxy components inheriting from AEM WCM Core Components (/apps/core/wcm/components)."
+      risk: "Foundation components are deprecated and strictly fail Cloud Manager code quality analysis gates. They rely on outdated JSP tags and legacy clientlibs incompatible with Java 21 / AEM as a Cloud Service.",
+      fix: "Replace with proxy components inheriting from AEM WCM Core Components (/apps/core/wcm/components/v2/...) via sling:resourceSuperType."
     });
     score -= 30;
   }
 
-  // Rule 5: Inline script block in HTL
+  // RULE 5: Unsafe XSS Context (HTL-03)
+  if (code.includes("context='unsafe'") || code.includes('context="unsafe"')) {
+    findings.push({
+      ruleId: "HTL-03",
+      severity: "CRITICAL",
+      category: "HTL & Application Security",
+      title: "Unsafe XSS Context in HTL Expression (context='unsafe')",
+      risk: "Using context='unsafe' explicitly disables AEM's built-in Sightly HTML sanitization engine. Allows arbitrary Stored Cross-Site Scripting (XSS) if user or author input contains unescaped JavaScript.",
+      fix: "Use contextual escaping filters: 'context="html"' for sanitized rich text, 'context="uri"' for href links, or 'context="text"' for standard strings."
+    });
+    score -= 30;
+  }
+
+  // RULE 6: Inline Script in HTL (HTL-01)
   if (/<script(?![^>]*\bsrc=)[^>]*>/i.test(code)) {
     findings.push({
       ruleId: "HTL-01",
       severity: "WARNING",
+      category: "Content Security Policy (CSP)",
       title: "Inline Script Block in HTL Template",
-      risk: "Inline JavaScript bypasses CSP, increases XSS attack surface, and evades clientlib minification.",
-      fix: "Migrate logic into a versioned clientlib and pass data via data-* attributes."
+      risk: "Inline JavaScript violates enterprise Content Security Policy (CSP), bypasses Clientlib minification/gzip compression, and blocks edge CDN caching.",
+      fix: "Migrate JavaScript logic into a versioned client library under /apps/mybrand/clientlibs/site and pass configuration variables via data-* attributes."
     });
     score -= 15;
   }
 
-  // Rule 6: Image missing alt
+  // RULE 7: Missing allowProxy on /apps Clientlib (CLB-01)
+  if (code.includes("cq:ClientLibraryFolder") && (!code.includes("allowProxy") || !code.includes('allowProxy="{Boolean}true"'))) {
+    findings.push({
+      ruleId: "CLB-01",
+      severity: "CRITICAL",
+      category: "Clientlibs & AEM Cloud Service",
+      title: "Client Library Missing allowProxy Property",
+      risk: "In AEM as a Cloud Service, direct access to /apps is forbidden on publish instances. Without allowProxy, CSS and JS assets return 404 Not Found to end users.",
+      fix: "Add allowProxy="{Boolean}true" to the cq:ClientLibraryFolder node so assets are proxied safely through /etc.clientlibs/."
+    });
+    score -= 35;
+  }
+
+  // RULE 8: Cloud Service Mutable /apps write violation (CS-01)
+  if (/(?:getResource|create|addNode|setProperty)\(["'].*?\/apps\//.test(code) && /(?:session\.save|resolver\.commit)/.test(code)) {
+    findings.push({
+      ruleId: "CS-01",
+      severity: "CRITICAL",
+      category: "AEM Cloud Service Immutable Architecture",
+      title: "Runtime Write to Immutable Repository Path (/apps)",
+      risk: "AEM as a Cloud Service strictly partitions the repository: /apps and /libs are read-only at runtime. Any attempt to write to /apps throws an AccessControlException and halts the transaction.",
+      fix: "Relocate runtime configuration, user-generated content, or temporary states to mutable JCR paths: /conf, /content, or /var."
+    });
+    score -= 35;
+  }
+
+  // RULE 9: Custom Component Missing sling:resourceSuperType (CMP-01)
+  if (code.includes("cq:Component") && !code.includes("sling:resourceSuperType")) {
+    findings.push({
+      ruleId: "CMP-01",
+      severity: "WARNING",
+      category: "Core Components & Upgradeability",
+      title: "Custom Component Missing sling:resourceSuperType",
+      risk: "Directly cloning components without proxy inheritance forfeits future Adobe Core Component security patches, dialog improvements, and version upgrades.",
+      fix: "Add sling:resourceSuperType="core/wcm/components/[component-name]/v2/[component-name]" and override only required template fragments."
+    });
+    score -= 20;
+  }
+
+  // RULE 10: Legacy /etc/clientlibs path (CMP-02)
+  if (code.includes("/etc/clientlibs")) {
+    findings.push({
+      ruleId: "CMP-02",
+      severity: "WARNING",
+      category: "Clientlib Architecture",
+      title: "Deprecated /etc/clientlibs Path Referenced",
+      risk: "/etc/clientlibs is deprecated in Cloud Service and fails AEM Modernizer code audits.",
+      fix: "Relocate client library roots under /apps/[project]/clientlibs and enable proxy mode."
+    });
+    score -= 15;
+  }
+
+  // RULE 11: Image missing alt attribute (A11Y-01)
   if (/<img\s+(?![^>]*\balt=)[^>]*>/i.test(code)) {
     findings.push({
       ruleId: "A11Y-01",
       severity: "WARNING",
-      title: "Image Tag Missing alt Attribute",
-      risk: "Fails WCAG 2.1 AA accessibility standards and reduces SEO crawlability.",
-      fix: "Add descriptive alt=\"...\" or alt=\"\" for decorative background assets."
+      category: "Accessibility & SEO",
+      title: "Image Element Missing alt Attribute",
+      risk: "Fails WCAG 2.1 AA accessibility compliance and degrades Google Core Web Vitals SEO rankings.",
+      fix: "Add descriptive alt="${properties.imageAlt}" or alt="" for decorative background assets."
     });
     score -= 10;
   }
 
   score = Math.max(0, score);
-  let grade = "A (Clean)";
-  if (score < 50) grade = "F (High Technical Debt)";
-  else if (score < 70) grade = "C (Needs Attention)";
-  else if (score < 85) grade = "B (Good)";
+  let grade = "A (Production Ready)";
+  if (score < 50) grade = "F (Critical Debt - Fails Cloud Manager)";
+  else if (score < 70) grade = "C (Significant SLA & Security Debt)";
+  else if (score < 85) grade = "B (Good - Minor Cleanups Required)";
 
   return { score, grade, findings };
 }
 
+// ============================================================================
+// 2. IN-BROWSER GROUNDED RAG KNOWLEDGE ASSISTANT & LLM GATEWAY (GEMINI / OPENROUTER)
+// ============================================================================
 const RAG_DOCS_STORE = [{"file": "01_the_harness_race.md", "section": "The Model Race Is Over. The Enterprise H (Part 1)", "content": "The Model Race Is Over. The Enterprise Harness Race Just Began. By Gautam Sethi · AI Enthusiast --- There is a flawed way engineering teams evaluate AI progress: they screenshot model benchmark leaderboards, argue about MMLU-Pro margins on Slack, swap out API keys in their .env file, and call that an architectural upgrade. In enterprise software, the model was never the hard part. Over the past eighteen months designing enterprise AI pipelines fo", "line": 12}, {"file": "01_the_harness_race.md", "section": "1. What Is an Enterprise Agent Harness?", "content": "1. What Is an Enterprise Agent Harness? In classical systems engineering, a test harness isolates, exercises, and observes a component under controlled stress. In modern AI systems, the Harness is the entire operational runtime that wraps the stochastic model. It governs everything the model is never allowed to decide on its own: [ Inbound Request ] │ ▼ ┌───────────────────────────────────────────────────────────┐ │ ENTERPRISE AGENT HARNESS │ │ │", "line": 24}, {"file": "01_the_harness_race.md", "section": "2. The Model Ladder: Stop Sending Routine Work to Trophy Models", "content": "2. The Model Ladder: Stop Sending Routine Work to Trophy Models The single biggest design flaw in corporate AI pilots is the Single-Model Fallacy—routing every single customer interaction to the most expensive frontier model available. If your system sends simple document parsing, text extraction, status diffs, and classification tasks to a 400B-parameter reasoning model, you aren't demonstrating innovation. You are paying a 30x tax to disguise l", "line": 36}, {"file": "01_the_harness_race.md", "section": "3. The Hidden Unit Economics Nobody Puts in the Slide Deck", "content": "3. The Hidden Unit Economics Nobody Puts in the Slide Deck When teams calculate AI budgets in a spreadsheet, they calculate: $$\\text{Cost} = \\text{Input Tokens} \\times Pi + \\text{Output Tokens} \\times Po$$ Six months later, their AWS/Azure bill is 400% over forecast. Why? Because the real cost of enterprise AI is not the forward inference pass. The real cost is Harness Inefficiency: 1. Context Window Drift: Blindly re-sending the entire 60-turn c", "line": 48}, {"file": "01_the_harness_race.md", "section": "4. The Monday Test: 4 Questions for Your Architecture Review", "content": "4. The Monday Test: 4 Questions for Your Architecture Review Before your team authorizes another AI agent workflow for production deployment, run this 4-step sanity check: 1. The Blast Radius Test: What is the maximum number of tool calls, external network requests, or database mutations this agent can execute before human intervention is strictly required? 2. The Schema Gate Test: Does the agent output write directly to downstream storage, or mu", "line": 60}, {"file": "01_the_harness_race.md", "section": "The Staff+ Architect's Bottom Line", "content": "The Staff+ Architect's Bottom Line The era of prompt-and-pray AI is over. The next decade belongs to software architects who treat intelligence as an untrusted third-party dependency and work as a formal distributed system. Make your models fast. But make your harness unbreakable. --- Gautam Sethi is an AI Enthusiast writing on enterprise system design, SRE for AI agents, and Staff+ engineering leadership. Connect with Gautam on [LinkedIn](https:", "line": 72}, {"file": "02_zero_downtime_database_architecture.md", "section": "Zero-Downtime Database Architecture: The (Part 1)", "content": "Zero-Downtime Database Architecture: The 3-Phase Expand/Contract Blueprint By Gautam Sethi · AI Enthusiast --- Running ALTER TABLE on a live production table with 80 million rows is the engineering equivalent of playing Russian roulette with your customer SLA. Last year, an unvetted migration took an exclusive table lock on a primary payments table. Within 90 seconds, connection pools starved, upstream API gateways threw 504 Gateway Timeouts, and", "line": 12}, {"file": "02_zero_downtime_database_architecture.md", "section": "1. The Core Flaw of In-Place Schema Changes", "content": "1. The Core Flaw of In-Place Schema Changes Traditional database migration tooling (e.g., standard ORM migration scripts) assumes a single-tenant mental model: 1. Acquire table metadata lock. 2. Rewrite catalog definition. 3. Release lock. At scale, this mental model shatters: - Lock Contention: Even if the metadata update is nominally instant, the lock request queues behind long-running analytical or transactional reads. Every subsequent query q", "line": 24}, {"file": "02_zero_downtime_database_architecture.md", "section": "2. The 3-Phase Expand/Contract Architecture", "content": "2. The 3-Phase Expand/Contract Architecture PHASE 1: EXPAND (Additive Only) ┌──────────────────────────────────────────────────────────────┐ │ • Add new column/table as nullable or with unindexed default │ │ • Service Dual-Writes: Write to (Old + New), Read from (Old) │ │ • Zero Locks • Zero Breaking Changes • 100% Rollback-Safe │ └──────────────────────────────────────────────────────────────┘ │ ▼ PHASE 2: BOUNDED BATCH BACKFILL ┌───────────────", "line": 36}, {"file": "02_zero_downtime_database_architecture.md", "section": "3. Production Case Study: 80 Million Rows Migrated", "content": "3. Production Case Study: 80 Million Rows Migrated | Metric | Traditional In-Place ALTER | ZeroDrift Expand/Contract | | :--- | :--- | :--- | | Peak Table Lock Duration | 42 minutes (Outage) | 0.00ms (Zero Locks) | | Dropped Customer Requests | 18,400 failed transactions | 0 (100% SLA Availability) | | Replication Lag | Spiked to 184 seconds | Capped sub-10ms | | On-Call Severity Alerts | P1 Urgent Page | Zero Alerts | ---", "line": 48}, {"file": "02_zero_downtime_database_architecture.md", "section": "Key Takeaway for Technical Leaders", "content": "Key Takeaway for Technical Leaders Clean systems architecture is not about pristine theory. It is about keeping mission-critical services online while rewriting the engine at 35,000 feet. Before approving any schema PR in your engineering review cycles, ask one question: \"If this migration fails midway, can on-call roll back in 30 seconds without touching the database console?\" If the answer is no, enforce the Expand/Contract gate.", "line": 60}, {"file": "03_production_rag_failure_modes.md", "section": "Production RAG Failures & Fallback State (Part 1)", "content": "Production RAG Failures & Fallback State Machines By Gautam Sethi · AI Enthusiast --- A benchmark score is not evidence. An internal demo is not proof. Most engineering teams evaluate their Retrieval-Augmented Generation (RAG) prototype on 20 clean, well-formatted PDF documents. They run 50 curated queries, observe a 92% retrieval score, and declare victory to executive stakeholders. Then they ship it to live enterprise customers. Within 72 hours", "line": 12}, {"file": "03_production_rag_failure_modes.md", "section": "1. Silent Failure Mode #1: Chunk Boundary Contamination", "content": "1. Silent Failure Mode 1: Chunk Boundary Contamination The Problem When naive token-based chunking (e.g., recursive splitting at 512 tokens) bisects an architectural table, policy document, or conditional clause: - Cosine similarity vector search still matches the fragment with a high similarity score (0.88 - 0.92). - The critical qualifying clause (e.g., \"Except in jurisdiction X, where refunds are strictly non-permissible\") was split into the p", "line": 24}, {"file": "03_production_rag_failure_modes.md", "section": "2. Silent Failure Mode #2: The Re-Ranking Latency Tax", "content": "2. Silent Failure Mode 2: The Re-Ranking Latency Tax The Problem Teams often attempt to brute-force retrieval accuracy by pulling top-30 raw vector chunks and dumping them into a 128k context window: - Every prompt token bloat adds 1,800ms to Time-To-First-Token (TTFT). - \"Lost in the Middle\" syndrome degrades needle-in-a-haystack recall by up to 34%. - API inference bills explode exponentially. ┌──────────────────────────────────────────────────", "line": 36}, {"file": "03_production_rag_failure_modes.md", "section": "3. Silent Failure Mode #3: Downstream Schema Drift", "content": "3. Silent Failure Mode 3: Downstream Schema Drift The Problem When downstream microservices parse unstructured LLM outputs into structured SQL mutations or JSON payloads using basic string parsing or regex, probabilistic variance guarantees a 3% to 5% failure rate at scale. Unhandled parse exceptions at 2:00 AM crash transactional workers. The Architectural Fix: Constrained Decoding & Dead-Letter Circuits 1. Enforce JSON schema validation at the ", "line": 48}, {"file": "03_production_rag_failure_modes.md", "section": "Summary Metrics from Production Migration", "content": "Summary Metrics from Production Migration p99 Retrieval Latency: Dropped from 4.2s to 640ms (84% reduction) Monthly Cloud API Ingestion Spend: Dropped from $14,200 to $4,100 (71% FinOps savings) Downstream Serialization Failures: Reduced from 4.8% to 0.08%", "line": 60}, {"file": "04_finops_ai_unit_economics.md", "section": "FinOps for Autonomous AI Pipelines: The  (Part 1)", "content": "FinOps for Autonomous AI Pipelines: The 3 Financial Gates By Gautam Sethi · AI Enthusiast --- Most engineering teams do not price an AI feature until the end of the month when finance pages engineering leadership. That is the fastest way to get a high-performing project canceled. Three months ago, an engineering director asked me why their flagship customer assistant was paused despite glowing NPS reviews. The root cause was simple unit economics", "line": 12}, {"file": "04_finops_ai_unit_economics.md", "section": "1. The Maximum Branching Cost Ceiling", "content": "1. The Maximum Branching Cost Ceiling An autonomous agent workflow is rarely a single API call. In real systems, agents execute iterative loops: plan -> search -> tool call -> reflect -> answer. If your multi-agent architecture uses recursive branching: $$\\text{Max Cost} = (\\text{Base Prompt Tokens} + \\text{Context Tokens}) \\times (\\text{Max Tree Depth}) \\times (\\text{Cost per 1k Tokens})$$ If your worst-case branching factor exceeds 4x of your h", "line": 24}, {"file": "04_finops_ai_unit_economics.md", "section": "2. The 30% Rework Overhead Buffer", "content": "2. The 30% Rework Overhead Buffer Frontier models fail on unexpected edge cases. When downstream schema validation fails or a tool returns an HTTP 429 rate limit, client libraries automatically retry. Every retry burns tokens. If your cost models assume 100% happy-path execution, your real-world cloud invoice will run 25% to 45% over budget. Mandate a strict 30% Rework Multiplier in all forward financial projections: $$\\text{Budgeted Cost per Act", "line": 36}, {"file": "04_finops_ai_unit_economics.md", "section": "3. The 45% Semantic Cache Hit-Rate Floor", "content": "3. The 45% Semantic Cache Hit-Rate Floor If your production AI pipeline does not achieve at least a 45% cache hit rate within 14 days of launch, your software gross margins will bleed as customer adoption scales. ┌──────────────────────────────────────────────────────────────┐ │ MULTI-TIER FINOPS CACHING TOPOLOGY │ │ │ │ Inbound Query │ │ │ │ │ ▼ │ │ ┌──────────────────────────────────────────────┐ │ │ │ Exact Match Redis Cache (SHA256 Hash) │──►", "line": 48}, {"file": "05_staff_plus_technical_governance.md", "section": "Staff+ Technical Governance: Influence W (Part 1)", "content": "Staff+ Technical Governance: Influence Without Authority & Negative ADRs By Gautam Sethi · AI Enthusiast --- The day you are promoted to Staff Engineer, you lose the power to tell anyone what to do. As a Senior Engineer, your superpower is execution. You receive complex requirements, optimize performance, submit clean PRs, and close tickets. You have direct ownership. As a Staff or Principal Engineer, you do not manage people. You have zero forma", "line": 12}, {"file": "05_staff_plus_technical_governance.md", "section": "1. The Three Operating Shifts into Staff+", "content": "1. The Three Operating Shifts into Staff+ ┌─────────────────────────────────┬─────────────────────────────────┐ │ SENIOR ENGINEER MINDSET │ STAFF+ ARCHITECT MINDSET │ ├─────────────────────────────────┼─────────────────────────────────┤ │ Core Metric: PR velocity & code │ Core Metric: Bad code prevented │ │ written by yourself │ across 40 engineers via ADRs │ ├─────────────────────────────────┼─────────────────────────────────┤ │ Scope: How to bu", "line": 24}, {"file": "05_staff_plus_technical_governance.md", "section": "2. The Power of the Negative ADR", "content": "2. The Power of the Negative ADR The single most impactful document an architect can produce is not an RFC proposing a new microservice framework. It is an Architecture Decision Record that explicitly explains why your organization chose NOT to build something. The 4-Section Negative ADR Structure: 1. Context & Problem Statement: What business problem were we attempting to solve? (e.g., Ingestion throughput scaling to 5,000 events/sec). 2. The Tr", "line": 36}, {"file": "05_staff_plus_technical_governance.md", "section": "3. How to Say No to Product Without Becoming a Bottleneck", "content": "3. How to Say No to Product Without Becoming a Bottleneck When engineering leaders say: \"Our architecture can't support that feature,\" product managers hear: \"Engineering is slow, dogmatic, and insensitive to customer urgency.\" Staff+ leaders never say a flat 'no'. They apply the Trade-Off Triangle: 1. Quantify Technical Debt as Financial Risk: Translate database lockouts or skipped replicas into dollars: \"Shipping without the replica pool risks ", "line": 48}, {"file": "06_safe_semantic_caching_production.md", "section": "Safe Semantic Caching in Production: The (Part 1)", "content": "Safe Semantic Caching in Production: The 500ms Invalidation Trap and Cross-Tenant Leaks By Gautam Sethi · AI Enthusiast --- The most dangerous cost-optimization trick in generative AI today is naive semantic caching. On paper, the business case looks effortless: why query a commercial LLM or an internal reasoning model at $0.03 per invocation when 35% of user queries share nearly identical semantic intent? Teams throw an open-source vector store ", "line": 12}, {"file": "06_safe_semantic_caching_production.md", "section": "1. The 3 Structural Failure Modes of Naive Caching", "content": "1. The 3 Structural Failure Modes of Naive Caching Failure Mode 1: The Single Flat Namespace Most tutorials instruct developers to embed the prompt raw string and store it directly in a global vector collection. When you do this: - Semantic proximity does not understand authorization boundaries. \"What are our enterprise discount guidelines?\" has 0.94 semantic similarity across every tenant, but the underlying data payload is strictly private. - R", "line": 24}, {"file": "06_safe_semantic_caching_production.md", "section": "2. Production Topology: The Partitioned Compound-Key Architecture", "content": "2. Production Topology: The Partitioned Compound-Key Architecture To eliminate cross-tenant contamination while retaining sub-50ms cache retrieval, we partition cache lookups using a Compound Cryptographic & Semantic Key: Lookup Key = SHA256( TenantID + RoleHierarchyHash + ModelRoutingTier ) + VectorEmbedding( NormalizedPrompt ) [Inbound Client Request] │ ▼ ┌─────────────────────────────────────────────────────────────┐ │ 1. AI API Gateway & Norm", "line": 36}, {"file": "06_safe_semantic_caching_production.md", "section": "3. Solving the 500ms Invalidation Race", "content": "3. Solving the 500ms Invalidation Race What happens when a source document is edited in Confluence, Notion, or your transactional database while 50 read queries are in-flight? Naive systems push cache invalidations asynchronously via loose polling, leaving a window where stale answers bypass guardrails. In an enterprise harness: 1. Document Fingerprint Invalidation Vector: Every cached response embeds a dependencygraphhash: json { \"cacheid\": \"cac", "line": 48}, {"file": "06_safe_semantic_caching_production.md", "section": "4. The Production Checklist: Verification Before Going Live", "content": "4. The Production Checklist: Verification Before Going Live Before you enable semantic caching on customer-facing enterprise APIs, verify these criteria: - [ ] Tenant Isolation: Are vector embeddings partitioned by tenant namespace, or are you relying solely on post-query filters? - [ ] Dual Similarity Gates: Do you have separated cosine similarity thresholds for factual retrieval (>= 0.96) versus conversational dialogues (>= 0.85)? - [ ] CDC Eve", "line": 60}, {"file": "edition_02_aem_systems_field_manual.md", "section": "edition_02_aem_systems_field_manual.md (Part 1)", "content": "The AEM & Systems Reliability Field Manual (Issue 2) Architecting Deterministic Content Topologies & In-Browser Intelligence By Gautam Sethi · AEM Tech Lead & Systems Architect · October 28, 2026 --- Executive Overview Over the past five years architecting Adobe Experience Manager platforms across global enterprises, one consistent pattern emerges: over 80% of critical production incidents are not caused by complex Java backend code or database d", "line": 12}, {"file": "01_tuesday_ai.md", "section": "Why most LLM prototypes fail in staging (Part 1)", "content": "Most engineering teams don't have an AI problem. They have a context and evaluation problem. Over the last six months, I've watched three separate teams build LLM prototypes that looked brilliant in internal demos. Two weeks into staging, all three fell apart. The failure mode wasn't subtle: - Nobody measured latency variance under load. 12 seconds per call killed the user experience. - Prompts ballooned into 2,000-word essays trying to patch edg", "line": 12}, {"file": "02_thursday_career.md", "section": "The real difference between Senior and A (Part 1)", "content": "Five years ago, I thought getting promoted to Architect meant writing the most clever code in the building. I was dead wrong. As a Senior Engineer, your superpower is execution. You get handed a messy problem, you close tickets, and you ship clean PRs. As an Architect, your job flips completely upside down: Your value isn't measured by the code you write. It's measured by the bad code 40 other engineers didn't have to write because your Architect", "line": 12}, {"file": "03_friday_ai.md", "section": "The 3 Silent Production RAG Failure Mode (Part 1)", "content": "A benchmark score isn't evidence. An LLM answer isn't proof. Most teams I talk with test their RAG prototype on 20 clean PDFs, run 50 queries, see a 92% retrieval score, and declare victory. Then they push it to production. Within 72 hours, three silent failure modes destroy their p99 latency and inject hallucinated numbers into customer workflows. Here's what actually broke in our systems when we moved from prototype to production: 1. Chunk Boun", "line": 12}, {"file": "04_sunday_career.md", "section": "The $42k Cloud Mistake That Changed How  (Part 1)", "content": "A CFO doesn't care about your Kubernetes pods. They care about risk, burn rate, and gross margin. Four years ago, an unmonitored staging cluster cost my team $42,000 over a single weekend. Someone spun up GPU nodes for a quick load test on Friday afternoon. They forgot to tear them down. It burned. On Monday morning, our Head of Finance walked to my desk with a printed invoice. She asked one question: 'What business revenue did this $42k generate", "line": 12}, {"file": "05_tuesday_ai.md", "section": "The Multi-Agent Swarm Illusion: When Loo (Part 1)", "content": "The multi-agent swarm demo is the most dangerous architecture pattern in AI right now. You've seen the videos: five autonomous agents debate a problem, hand off tasks in an unconstrained loop, and produce a shiny summary. It looks like magic on a 30-second Twitter screen recording. In an enterprise environment with SLA requirements and a real cloud bill, it's an operational disaster. Here's why unconstrained agent swarms fail in production: 1. Pr", "line": 12}, {"file": "06_thursday_career.md", "section": "How to Price an AI Agent Run Before Your (Part 1)", "content": "Most engineering teams don't price an AI feature until the end of the month. That's the fastest way to get your project killed by finance. Three months ago, an engineering director asked me why their new agentic feature was getting paused despite glowing user reviews. The reason was simple: every query cost the company $0.42, while the SaaS seat price was only $29 per month. At 100 queries a day per user, each active customer was generating a $1,", "line": 12}, {"file": "07_friday_ai.md", "section": "Unit Tests Don't Work on Probabilistic S (Part 1)", "content": "You can't test an LLM pipeline with assert output == expected. Yet thousands of engineering teams I talk with still try to jam probabilistic models into traditional deterministic unit test suites. The result? Either flaky tests that break every CI run, or watered-down assertions that let massive semantic hallucinations slip into production. Here's the 3-tier eval architecture we use in our CI/CD pipelines to catch regressions before they hit cust", "line": 12}, {"file": "08_sunday_career.md", "section": "The Technical Debt You Inherited Wasn't  (Part 1)", "content": "The quickest way to destroy your credibility as a new technical leader is to look at the existing codebase and say: 'Who wrote this mess? We need to rewrite the entire system.' I made that mistake six years ago when stepping into my first lead role. I was arrogant. I saw a monolithic service with tangled SQL queries and declared it technical debt. I spent three months pitching a microservices rewrite. It went nowhere. Then our principal architect", "line": 12}, {"file": "09_tuesday_ai.md", "section": "Why Model Context Protocol (MCP) Is Kill (Part 1)", "content": "If your engineering team is still writing custom point-to-point Python wrappers for every API your AI agent touches, you're building massive technical debt. You really are. It compounds fast. It breaks silently. Last year, our team maintained 24 hand-rolled tool-calling scripts for an enterprise workflow agent. Every time we swapped models from Claude 3.5 Sonnet to GPT-4o or Gemini, half of our JSON schema definitions broke. One model expected sn", "line": 12}, {"file": "09b_wednesday_aem.md", "section": "Why Naive AEM Dispatcher Invalidation Ki (Part 1)", "content": "Flushing an entire AEM Dispatcher cache every time someone hits publish is the fastest way I know to kill a website. We learned this the hard way five years back on an enterprise commerce rollout. Every weekday at 2:00 PM sharp, our Time to First Byte jumped from 45ms to 3.8 seconds. Brutal. Our infra leads blamed sudden visitor spikes, while our marketing team blamed our large hero images. They were all looking in the wrong place. The real culpr", "line": 12}, {"file": "10_thursday_career.md", "section": "The First 90 Days as a Staff+ Engineer:  (Part 1)", "content": "The day you become a Staff Engineer, you lose the power to tell anyone what to do. As a Senior Engineer, you had direct ownership. You owned your tickets, built your features, and reviewed PRs. As a Staff or Principal Engineer, you don't manage people. You have zero formal authority. Yet you are held accountable for cross-team technical alignment. If you try to lead by handing down edicts from on high, teams will quietly ignore your Architecture ", "line": 12}, {"file": "11_friday_ai.md", "section": "Why Semantic Caching Fails: High-Recall  (Part 1)", "content": "Semantic caching sounds like an absolute no-brainer for AI systems: 'Embed the incoming prompt, find the nearest vector, and return the cached answer if cosine similarity is above 0.85.' In real production systems, naive semantic caching isn't just flawed. It's a massive security and accuracy risk. Three months ago, an engineer on our extended team implemented vector similarity caching on an enterprise knowledge assistant. Within 48 hours, a cust", "line": 12}, {"file": "12_sunday_career.md", "section": "The Architecture Decision Record (ADR) T (Part 1)", "content": "The most valuable document an architect ever writes isn't an RFC proposing a shiny new framework. It's an Architecture Decision Record (ADR) explaining why you chose NOT to build something. Two years ago, our leadership was enchanted by a trendy distributed streaming architecture. The proposal on the table: rewrite our transactional ingestion pipeline with a multi-region distributed Kafka cluster and a proprietary managed graph database. Estimate", "line": 12}, {"file": "13_wednesday_aem_dispatcher_s.md", "section": "Why statfileslevel 0 Is the Most Dangero (Part 1)", "content": "Flushing an entire AEM Dispatcher cache every time someone hits publish is the fastest way to bring down an enterprise website. Five years ago on an enterprise multi-market rollout, our TTFB spiked from 45ms to 3.8 seconds every weekday at 2:00 PM. Infra blamed sudden traffic spikes. Marketing blamed high-res hero images. Both were wrong. Someone had left /statfileslevel set to 0. When an author edited a single typo on /content/corporate/about-us", "line": 12}, {"file": "14_wednesday_aem_cloud_migrat.md", "section": "Why 70% of Legacy AEM Codebases Fail The (Part 1)", "content": "If your AEM codebase still references foundation/components or writes to /apps at runtime, Cloud Manager will terminate your deployment before it even starts. On Adobe Experience Manager as a Cloud Service (AEMaaCS), the repository is strictly split into Immutable Content (/apps, /libs deployed via read-only git pipelines) and Mutable Content (/content, /conf, /var). In legacy on-prem AEM, developers frequently committed three anti-patterns: 1. C", "line": 12}, {"file": "15_wednesday_aem_offline_loca.md", "section": "Why We Built an Offline-First Technical  (Part 1)", "content": "You don't need a 70-billion parameter cloud model or a $1,200/month OpenAI API bill to give enterprise architects grounded technical answers. Most enterprise AI prototypes fail because of token bloat, cloud API latency, and data privacy anxiety. Corporate security teams won't let proprietary architectural runbooks or dispatcher configs touch multi-tenant cloud APIs. We built our Grounded Architecture Assistant with three non-negotiable rules: 1. ", "line": 12}, {"file": "16_wednesday_aem_dispatcher_g.md", "section": "The Missing 2-Second Rule That Protects  (Part 1)", "content": "Most AEM publisher thread exhaustion spikes aren't caused by sudden visitor traffic. They're caused by the invalidation gap. When an author publishes a high-traffic landing page, the Dispatcher invalidates the cached file. In the next 1.5 seconds, while the AEM publisher JVM is rendering the fresh page from the JCR, 200 concurrent incoming requests arrive. Without /gracePeriod configured: All 200 requests bypass the Dispatcher simultaneously and ", "line": 12}, {"file": "17_wednesday_aem_dispatcher_j.md", "section": "Is Your AEM Dispatcher Leaking Repositor (Part 1)", "content": "A single '/0003 { /type \"allow\" /glob \".json\" }' in your Dispatcher filter section opens your entire JCR repository to data traversal. Default Sling servlets provide rich JSON representations of any node (.1.json, .infinity.json, .tidy.json). When teams leave permissive .json rules open to support SPA frontends or search components, attackers use path traversal to dump /home/users, author metadata, and internal component dialog properties. Enterp", "line": 12}, {"file": "18_wednesday_aem_content_repu.md", "section": "From Architecture Post-Mortem to Multi-C (Part 1)", "content": "The biggest bottleneck in engineering organizations isn't writing technical solutions—it's disseminating architectural knowledge across distributed teams. When senior architects fix a critical caching bug or migrate an enterprise component tree, that knowledge usually stays buried in a Jira ticket or Slack thread. We built our Technical Content Repurposer to automate the architectural knowledge supply chain: 1. Ingests raw markdown engineering no", "line": 12}, {"file": "19_wednesday_aem_zerodrift_de.md", "section": "Why Modern Systems Architecture Needs Fe (Part 1)", "content": "The tech industry spent the last two years wrapping non-deterministic LLM APIs in web dashboards and calling them enterprise solutions. At ZeroDrift Systems Group, we believe enterprise reliability must be proven through deterministic code, automated regression test suites, and transparent metrics. Our AEM & AI Systems Studio is built on rigorous systems engineering: - 57 automated unit tests passing in under 4 seconds. - 100% client-side executi", "line": 12}, {"file": "20_wednesday_aem_productized_.md", "section": "Why Enterprise Clients Prefer ₹35,000 Fi (Part 1)", "content": "Hiring an agency for an open-ended 3-month discovery phase to diagnose slow page speeds is an outdated consulting playbook. When an enterprise AEM site suffers from high TTFB or fails Cloud Manager quality gates, engineering leaders don't need 80-page slide decks. They need: 1. Exact file and line numbers of Dispatcher invalidation bugs. 2. Legacy foundation component debt catalogued and scored. 3. Actionable remediation roadmap with verified bef", "line": 12}];
 
 // ============================================================================
@@ -1733,6 +1842,23 @@ Follow strict SRE standards:
     }
 
     aemRunBtn.addEventListener("click", executeAEMScan);
+    aemInput.addEventListener("input", () => {
+      // Live AST inspection as the user types or pastes
+      executeAEMScan();
+    });
+    // Preset switching
+    document.querySelectorAll("[data-aem-preset]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("[data-aem-preset]").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const key = btn.getAttribute("data-aem-preset");
+        if (AEM_PRESETS[key]) {
+          aemInput.value = AEM_PRESETS[key].code;
+          executeAEMScan();
+        }
+      });
+    });
+
     // Initial run with default preset
     if (AEM_PRESETS.dispatcher_bad) {
       aemInput.value = AEM_PRESETS.dispatcher_bad.code;
