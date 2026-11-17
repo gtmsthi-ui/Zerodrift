@@ -110,3 +110,4 @@ As architects, we never adopt technology based on marketing hype. EDS is excepti
 - **Data-Driven Dynamic Personalization:** While edge-workers can personalize content via edge cookies, complex multi-variant server-side segmentations require Edge Delivery experimentation plugins.
 
 Adopt EDS where Core Web Vitals and authoring agility directly drive revenue. Keep core enterprise transactional engines behind lightweight REST/GraphQL microservices.
+

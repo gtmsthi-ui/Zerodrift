@@ -89,3 +89,4 @@ By adopting standardized MCP endpoints:
 - Your entire tools library becomes reusable across your IDE, your CI/CD pipeline, and your customer-facing AI agents.
 
 Stop writing bespoke JSON tool wrappers. Standardize your execution runtime on MCP.
+

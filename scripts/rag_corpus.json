@@ -270,6 +270,126 @@
     "line": 48
   },
   {
+    "file": "11_multi_agent_state_orchestration.md",
+    "section": "Multi-Agent State Orchestration: Prevent (Part 1)",
+    "content": "Multi-Agent State Orchestration: Preventing Deadlocks, Hallucinated Loops, and Context Drift in Long-Running Workflows By Gautam Sethi · AI Enthusiast --- The most common failure in modern AI prototypes is the belief that connecting four autonomous agents in a conversational loop creates a collaborative software team. On day one, teams deploy a \"Researcher Agent\", a \"Coder Agent\", an \"Architect Agent\", and a \"Tester Agent\". They feed them a loose",
+    "line": 12
+  },
+  {
+    "file": "11_multi_agent_state_orchestration.md",
+    "section": "1. The Core Architectural Shift: Conversational Chat vs. Finite S",
+    "content": "1. The Core Architectural Shift: Conversational Chat vs. Finite State Machines Naive Conversational Swarm (Flawed): [Agent A] <─── Unstructured Chat / Loose Prompt ───> [Agent B] Result: Hallucinated loops, unbounded token spend, zero schema validation. Production State-Machine Topology (Deterministic): [Inbound State Event] ──> [Central Orchestrator (Typed State Ledger)] │ ┌───────────────────────┴───────────────────────┐ ▼ ▼ [State 1: Research ",
+    "line": 24
+  },
+  {
+    "file": "11_multi_agent_state_orchestration.md",
+    "section": "2. Production Checklist Before Merging Multi-Agent Workflows",
+    "content": "2. Production Checklist Before Merging Multi-Agent Workflows - [ ] Is every state transition verified by a deterministic validation gate, or are agents chatting freely? - [ ] Are context windows wiped clean between actor turns to eliminate context drift? - [ ] Is there an immutable transition counter (hops <= 8) preventing circular hallucinated loops? - [ ] Are state mutations recorded in an append-only audit ledger (Postgres/Redis) for post-mort",
+    "line": 36
+  },
+  {
+    "file": "12_death_of_monolithic_clientlibs.md",
+    "section": "The Death of Monolithic Clientlibs: High (Part 1)",
+    "content": "The Death of Monolithic Clientlibs: High-Performance Vanilla Block Architecture for 2027 Web Platforms By Gautam Sethi · AI Enthusiast --- For over a decade, enterprise web teams relied on clientlib managers to solve frontend asset delivery. The pitch was simple: combine 40 disparate CSS files and 80 JavaScript scripts into single aggregated endpoints (/etc.clientlibs/mybrand/clientlibs/site.min.css and site.min.js), minify them with YUI or GCC, ",
+    "line": 12
+  },
+  {
+    "file": "12_death_of_monolithic_clientlibs.md",
+    "section": "1. The Architectural Flaws of Aggregation in HTTP/2 & HTTP/3",
+    "content": "1. The Architectural Flaws of Aggregation in HTTP/2 & HTTP/3 The Legacy Clientlib Trap: [Client] ──> GET site.min.js (1.8MB) ──> Main Thread Blocked (650ms) ──> First Paint Delayed Downside: Any 1-character typo invalidates the entire 1.8MB CDN cache globally. The Vanilla Block Pipeline: [Client] ──> Semantic HTML (Sub-50ms) ──> IntersectionObserver ──> Lazy-load /blocks/cards.js (1.8KB) Benefit: 0KB unused JavaScript, independent file caching, z",
+    "line": 24
+  },
+  {
+    "file": "12_death_of_monolithic_clientlibs.md",
+    "section": "2. The Solution: Decentralized Vanilla Block Modules",
+    "content": "2. The Solution: Decentralized Vanilla Block Modules In modern web platforms (including AEM Edge Delivery Services), clientlib aggregators are eliminated. In their place is Decentralized Block Execution: The Architectural Blueprint: 1. Semantic HTML First: The server delivers pure, semantic HTML without render-blocking script tags in the <head>. 2. IntersectionObserver Dynamic Ingestion: Blocks load their specific .js and .css only when they ente",
+    "line": 36
+  },
+  {
+    "file": "12_death_of_monolithic_clientlibs.md",
+    "section": "3. Production Migration Protocol: The 3-Step Strategy",
+    "content": "3. Production Migration Protocol: The 3-Step Strategy If your organization has 300+ legacy clientlibs, you do not rewrite everything overnight. You apply the Strangler Fig Pattern: - Step 1 (Isolate Global Base): Strip all component-specific CSS/JS from your global clientlib. Keep only design tokens, font definitions, and grid resets. - Step 2 (De-couple High-LCP Components): Extract your Hero and Navigation blocks into standalone vanilla modules",
+    "line": 48
+  },
+  {
+    "file": "13_zero_overhead_jvm_observability_ebpf.md",
+    "section": "Zero-Overhead JVM Observability: Tracing (Part 1)",
+    "content": "Zero-Overhead JVM Observability: Tracing Safepoint Latency and GC Pauses with eBPF and Linux Perf Events By Gautam Sethi · AI Enthusiast --- When an enterprise Java platform suffers a latency spike under peak concurrent traffic, standard debugging protocol often makes the incident worse. An on-call engineer attaches a visual profiler or triggers a thread dump (jstack -l <pid>). Suddenly, response times jump from 800ms to 8,000ms. Why? Because use",
+    "line": 12
+  },
+  {
+    "file": "13_zero_overhead_jvm_observability_ebpf.md",
+    "section": "1. What Really Happens During a JVM Safepoint?",
+    "content": "1. What Really Happens During a JVM Safepoint? In the HotSpot JVM, Garbage Collection (ZGC, G1, or Parallel), class redefinition, and thread dumps cannot occur until all application threads reach a Safepoint. [Safepoint Requested] ──> [Polled Page Protected] │ Thread 1: At safepoint check ──> Halts immediately (12 microseconds) Thread 2: In tight JIT loop ──> Continues executing for 42 milliseconds! │ [Time-to-Safepoint (TTSP): 42ms!] ──> Every c",
+    "line": 24
+  },
+  {
+    "file": "13_zero_overhead_jvm_observability_ebpf.md",
+    "section": "2. Kernel-Level eBPF Probes for Safepoint & Off-CPU Tracing",
+    "content": "2. Kernel-Level eBPF Probes for Safepoint & Off-CPU Tracing Using eBPF kprobes, we measure the true latency between the safepoint request and thread suspension: Probe 1: Tracing Off-CPU Time (Where Are Threads Really Blocked?) Instead of sampling what is running, we trace the Linux scheduler (sched:schedswitch) to measure what is NOT running: bash Tracing off-CPU wait times for JVM PID 4192 bpftrace -e ' tracepoint:sched:schedswitch /args->prevpi",
+    "line": 36
+  },
+  {
+    "file": "13_zero_overhead_jvm_observability_ebpf.md",
+    "section": "3. Production Invariants for High-Scale JVMs",
+    "content": "3. Production Invariants for High-Scale JVMs Before declaring a Java platform production-ready under peak traffic: - [ ] Are Time-to-Safepoint (TTSP) metrics monitored alongside raw GC pause durations? - [ ] Is -XX:+UseCountedLoopSafepoints enabled to eliminate uncounted loop TTSP freezes? - [ ] Are thread pool queues bounded with non-blocking rejection handlers (AbortPolicy or CallerRunsPolicy)? - [ ] Are diagnostics gathered via non-invasive eB",
+    "line": 48
+  },
+  {
+    "file": "14_multi_region_distributed_data_topologies.md",
+    "section": "Multi-Region Distributed Data Topologies (Part 1)",
+    "content": "Multi-Region Distributed Data Topologies: Eliminating Cross-Continent Latency and Split-Brain Partition Risks By Gautam Sethi · AI Enthusiast --- The holy grail of enterprise cloud architecture is the Multi-Region Active-Active deployment: Users in Frankfurt write to EU-Central-1 with sub-20ms latency; users in Oregon write to US-West-2 with sub-20ms latency; both regions stay in continuous, real-time consistency. Then the laws of physics and net",
+    "line": 12
+  },
+  {
+    "file": "14_multi_region_distributed_data_topologies.md",
+    "section": "1. The 3 Architectural Tiers of Global Active-Active Data",
+    "content": "1. The 3 Architectural Tiers of Global Active-Active Data Tier 1: Global Reads, Local Writes (Read-Replicas + Asynchronous Streams) [US Master] ──(Asynchronous WAL Stream / Sub-1s Lag)──> [EU Read Pool] Trade-off: Sub-10ms local reads; all writes must route back to US Master (70ms cross-region latency). Tier 2: Partitioned Master-per-Tenant (Zero Conflict by Design) [US Users] ──> [US Master (Partition 1)] [EU Users] ──> [EU Master (Partition 2)]",
+    "line": 24
+  },
+  {
+    "file": "14_multi_region_distributed_data_topologies.md",
+    "section": "2. Preventing Split-Brain: Quorum Consensus vs. Eventual CRDTs",
+    "content": "2. Preventing Split-Brain: Quorum Consensus vs. Eventual CRDTs When a trans-oceanic network partition occurs (e.g., US loses connectivity with Europe for 9 minutes): The Quorum Strategy (CP Systems - Strong Consistency): In strongly consistent distributed datastores (Spanner, CockroachDB): - A region cannot commit a write unless it secures consensus from a majority of quorum nodes ((N/2) + 1). - If you deploy across 3 regions (US-East, US-West, E",
+    "line": 36
+  },
+  {
+    "file": "14_multi_region_distributed_data_topologies.md",
+    "section": "3. The Multi-Region Production Checklist",
+    "content": "3. The Multi-Region Production Checklist Before signing off on an active-active multi-region architecture: - [ ] Are write paths explicitly partitioned by tenant domicile, or are you attempting cross-region synchronous table locks? - [ ] Is there an odd number of voting quorum nodes across failure domains to break ties during network partitions? - [ ] Is cross-region replication lag monitored with explicit SLA thresholds (<500ms p99)? - [ ] Is au",
+    "line": 48
+  },
+  {
+    "file": "15_architecture_review_board_antipatterns.md",
+    "section": "The Architecture Review Board Anti-Patte (Part 1)",
+    "content": "The Architecture Review Board Anti-Patterns: Moving from Gatekeeping Bureaus to Automated Code Quality Contracts By Gautam Sethi · AI Enthusiast --- In most large enterprise engineering organizations, the Architecture Review Board (ARB) is where velocity goes to die. Every alternate Thursday, six senior architects sit in a conference room. Development teams submit 80-page slide decks detailing their upcoming microservice or schema migration. The ",
+    "line": 12
+  },
+  {
+    "file": "15_architecture_review_board_antipatterns.md",
+    "section": "1. The 3 Systemic Anti-Patterns of Traditional Governance",
+    "content": "1. The 3 Systemic Anti-Patterns of Traditional Governance Anti-Pattern 1: The Ivory Tower Committee Decisions are made by leaders who haven't deployed production code in three years. Result: Theoretical mandates that ignore ground-level framework constraints. Anti-Pattern 2: The PowerPoint Verification Fallacy Reviewing slide decks instead of executable code contracts. Result: Teams present pristine architecture diagrams while deploying un-vetted",
+    "line": 24
+  },
+  {
+    "file": "15_architecture_review_board_antipatterns.md",
+    "section": "2. The Solution: Architectural Fitness Functions & Negative ADRs",
+    "content": "2. The Solution: Architectural Fitness Functions & Negative ADRs Architecture governance must be continuous, automated, and embedded into pull requests: Primitive 1: Automated Architectural Fitness Functions in CI/CD If a rule cannot be evaluated by a linter, a test, or a static analysis script in CI, it is not an architectural standard; it is merely an opinion. - Example 1 (AEM Hygiene): Run our AST scanner (aem-reliability-toolkit) in pull requ",
+    "line": 36
+  },
+  {
+    "file": "15_architecture_review_board_antipatterns.md",
+    "section": "Decision:",
+    "content": "Decision: We are using Debezium CDC + Redis invalidation vectors.",
+    "line": 48
+  },
+  {
+    "file": "15_architecture_review_board_antipatterns.md",
+    "section": "Negative Evaluation (What We Evaluated and Rejected):",
+    "content": "Negative Evaluation (What We Evaluated and Rejected): - Rejected: In-memory LRU cache on application nodes. Reason: In-flight queries across distributed replicas cannot coordinate purges within 50ms, causing cross-tenant stale leaks. - Rejected: Scheduled 5-minute background polling. Reason: Unacceptable 300-second invalidation lag violated our compliance SLA. Documenting why inferior alternatives were rejected eliminates circular architectural d",
+    "line": 60
+  },
+  {
     "file": "edition_02_aem_systems_field_manual.md",
     "section": "edition_02_aem_systems_field_manual.md (Part 1)",
     "content": "The AEM & Systems Reliability Field Manual (Issue 2) Architecting Deterministic Content Topologies & In-Browser Intelligence By Gautam Sethi · AEM Tech Lead & Systems Architect · October 28, 2026 --- Executive Overview Over the past five years architecting Adobe Experience Manager platforms across global enterprises, one consistent pattern emerges: over 80% of critical production incidents are not caused by complex Java backend code or database d",

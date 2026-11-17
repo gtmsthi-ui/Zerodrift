@@ -72,3 +72,4 @@ Before merging multi-region architectures:
 - [ ] Are internal API responses gzipped/brotli-compressed by default?
 
 Architecture is not just about throughput; it is about sustainable unit economics. Design with egress boundaries in mind.
+
