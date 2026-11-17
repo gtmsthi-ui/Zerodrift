@@ -1,0 +1,150 @@
+/* LinkedIn Auto-Reply Assistant Overlay Styling */
+#li-architect-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999999;
+  background: linear-gradient(135deg, #0a66c2 0%, #004182 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 18px;
+  border-radius: 28px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+#li-architect-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.38);
+  background: linear-gradient(135deg, #0b72d9 0%, #004e9c 100%);
+}
+
+#li-architect-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 440px;
+  max-width: calc(100vw - 48px);
+  max-height: 580px;
+  background: #1b1f23;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  border-radius: 14px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45);
+  z-index: 999999;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+#li-architect-panel.open {
+  display: flex;
+}
+
+.li-panel-header {
+  padding: 14px 16px;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.li-panel-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #f0f6fc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.li-panel-close {
+  background: none;
+  border: none;
+  color: #8b949e;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.li-panel-close:hover {
+  color: #f0f6fc;
+  background: #30363d;
+}
+
+.li-panel-body {
+  padding: 16px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.li-panel-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.li-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+
+.li-btn-primary {
+  background: #238636;
+  color: #ffffff;
+}
+.li-btn-primary:hover {
+  background: #2ea043;
+}
+
+.li-btn-secondary {
+  background: #21262d;
+  color: #c9d1d9;
+  border: 1px solid #30363d;
+}
+.li-btn-secondary:hover {
+  background: #30363d;
+}
+
+.li-log-container {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  height: 320px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.li-log-entry {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #21262d;
+}
+.li-log-entry.lead { color: #58a6ff; }
+.li-log-entry.substance { color: #7ee787; }
+.li-log-entry.peer { color: #d2a8ff; }
+.li-log-entry.support { color: #8b949e; }
+.li-log-entry.noise { color: #f85149; }
+.li-log-entry.success { color: #3fb950; font-weight: bold; }
+

@@ -148,67 +148,56 @@ async def run_reply_monitor(dry_run=False, max_replies=4, headless=True):
     li_at_val = cfg.get("linkedin", {}).get("li_at") or os.environ.get("LINKEDIN_LI_AT")
     jsession_val = cfg.get("linkedin", {}).get("jsessionid") or cfg.get("linkedin", {}).get("JSESSIONID") or os.environ.get("LINKEDIN_JSESSIONID")
 
-    os.makedirs(USER_DATA_DIR, exist_ok=True)
     async with async_playwright() as p:
-        browser = await p.chromium.launch_persistent_context(
-            user_data_dir=USER_DATA_DIR,
+        # Use a regular launch (not persistent context) to avoid profile-lock conflicts
+        # when the user's Chrome is already running with the same user-data-dir.
+        browser = await p.chromium.launch(
             headless=headless,
-            args=["--disable-blink-features=AutomationControlled"]
+            args=["--no-sandbox", "--disable-blink-features=AutomationControlled"]
+        )
+        ctx = await browser.new_context(
+            user_agent=(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                "AppleWebKit/537.36 (KHTML, like Gecko) "
+                "Chrome/131.0.0.0 Safari/537.36"
+            )
         )
         cookies_to_add = []
         if li_at_val:
-            cookies_to_add.extend([
-                {
-                    "name": "li_at",
-                    "value": li_at_val.strip(),
-                    "domain": ".linkedin.com",
-                    "path": "/",
-                    "secure": True,
-                    "httpOnly": True
-                },
-                {
-                    "name": "li_at",
-                    "value": li_at_val.strip(),
-                    "domain": ".www.linkedin.com",
-                    "path": "/",
-                    "secure": True,
-                    "httpOnly": True
-                }
-            ])
+            cookies_to_add.append({
+                "name": "li_at",
+                "value": li_at_val.strip(),
+                "domain": ".linkedin.com",
+                "path": "/",
+                "secure": True,
+                "httpOnly": True
+            })
         if jsession_val:
-            cookies_to_add.extend([
-                {
-                    "name": "JSESSIONID",
-                    "value": jsession_val.strip(),
-                    "domain": ".linkedin.com",
-                    "path": "/",
-                    "secure": True
-                },
-                {
-                    "name": "JSESSIONID",
-                    "value": jsession_val.strip(),
-                    "domain": ".www.linkedin.com",
-                    "path": "/",
-                    "secure": True
-                }
-            ])
+            cookies_to_add.append({
+                "name": "JSESSIONID",
+                "value": jsession_val.strip(),
+                "domain": ".linkedin.com",
+                "path": "/",
+                "secure": True
+            })
         if cookies_to_add:
             print("[*] Injecting session authentication cookies from configuration...")
-            await browser.add_cookies(cookies_to_add)
+            await ctx.add_cookies(cookies_to_add)
 
-        page = await browser.new_page()
+        page = await ctx.new_page()
 
         print("[*] Navigating to LinkedIn Notifications...")
-        await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded")
-        await asyncio.sleep(4)
+        try:
+            await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded", timeout=30000)
+            await asyncio.sleep(4)
+        except Exception as e:
+            print(f"[-] Initial navigation notice: {e}")
 
-        cookies = await browser.cookies()
+        cookies = await ctx.cookies()
         has_li_at = any(c.get("name") == "li_at" for c in cookies)
         if not has_li_at or "login" in page.url or "checkpoint" in page.url or "authwall" in page.url:
             print("[-] Not logged in: LinkedIn authentication cookie ('li_at') is missing or expired.")
-            print("[!] Two ways to authenticate:")
-            print("    1. Paste your 'li_at' cookie directly into my_account/config.json under \"linkedin\": {\"li_at\": \"...\"}")
-            print("    2. Or run interactively in your terminal: python scripts/linkedin_engage.py --login")
+            print("[!] Grab your fresh li_at from Chrome DevTools (F12 > Application > Cookies > linkedin.com)")
             await browser.close()
             return
 
@@ -298,8 +287,13 @@ async def run_reply_monitor(dry_run=False, max_replies=4, headless=True):
 
         # --- STEP 2: Scan Notifications for External Mentions / Replies ---
         print("\n[*] Navigating to LinkedIn Notifications for external mentions & thread replies...")
-        await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded")
-        await asyncio.sleep(4)
+        try:
+            await page.goto("https://www.linkedin.com/notifications/", wait_until="domcontentloaded", timeout=30000)
+            await asyncio.sleep(4)
+        except Exception as e:
+            print(f"[-] Notification navigation note: {e}")
+            await browser.close()
+            return
 
         # Scan notifications
         notif_cards = await page.query_selector_all(".nt-card, article.nt-card")

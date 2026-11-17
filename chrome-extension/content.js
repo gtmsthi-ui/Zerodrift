@@ -1,0 +1,138 @@
+// LinkedIn Architect Auto-Reply & Newsletter Publisher Engine (v6.0)
+(() => {
+  const existingPanel = document.getElementById("li-architect-panel");
+  if (existingPanel) {
+    existingPanel.classList.add("open");
+    return;
+  }
+
+  // 1. Floating trigger button
+  const triggerBtn = document.createElement("button");
+  triggerBtn.id = "li-architect-btn";
+  triggerBtn.innerHTML = `<span>⚡</span><span>Architect Studio</span>`;
+  document.body.appendChild(triggerBtn);
+
+  // Pre-configured newsletter editions for The Pragmatic Architect
+  const NEWSLETTER_EDITIONS = [
+    {
+      issue: 1,
+      title: "The Model Race Is Over. The Enterprise Harness Race Just Began",
+      subtitle: "A Senior Architect's Guide to Building Deterministic, SRE-Grade AI Workflows Without Token Bloat",
+      lead: "There is a flawed way engineering teams evaluate AI progress: they screenshot model benchmark leaderboards, argue about MMLU-Pro margins on Slack, swap out API keys in their .env file, and call that an architectural upgrade.\n\nIn enterprise software, the model was never the hard part.\n\nOver the past eighteen months designing enterprise AI pipelines for mission-critical workloads, one brutal truth has emerged: every failed AI prototype failed for the exact same reason—it lacked an execution harness.\n\nA foundation model is an engine block sitting on a garage floor. It has horsepower, but it has no steering rack, no braking circuit, no transmission, and no fuel cutoff.\n\nIf you hook that engine directly to your enterprise database or customer-facing API with a conversational prompt, you don’t have an autonomous agent. You have an uncontrolled distributed systems incident waiting for peak traffic.\n\nThe real battle for AI reliability has officially moved from the foundation models to the Enterprise Execution Harness."
+    },
+    {
+      issue: 2,
+      title: "Zero-Downtime Database Architecture: The 3-Phase Expand/Contract Blueprint",
+      subtitle: "A Field Manual for Safe Schema Evolution on High-Throughput Production Datastores Without Table Locks or Outages",
+      lead: "Running ALTER TABLE on a live production table with 80 million rows is the engineering equivalent of playing Russian roulette with your customer SLA.\n\nLast year, an unvetted migration took an exclusive table lock on a primary payments table. Within 90 seconds, connection pools starved, upstream API gateways threw 504 Gateway Timeouts, and checkout halted for 42 minutes. Total estimated revenue impact: $14,000.\n\nIn mission-critical distributed architectures, you never alter columns, rename fields, or mutate schemas in-place. You treat database evolution as a multi-step distributed state transition.\n\nThis guide details the Expand/Contract Pattern—the architectural standard used by high-scale engineering organizations to evolve production datastores with zero downtime, sub-10ms replication lag, and zero dropped customer transactions."
+    },
+    {
+      issue: 3,
+      title: "Production RAG Failures & Fallback State Machines",
+      subtitle: "Why Vector Similarity Search Breaks in Enterprise Staging and How to Box Hallucinations Behind Deterministic FSMs",
+      lead: "Vector embeddings alone do not solve enterprise retrieval. In production RAG systems, semantic similarity fails when domain terminology collides or when document versions diverge.\n\nTo achieve sub-second latency and deterministic accuracy, architects decouple retrieval from generative synthesis using bounded state machines with strict JSON schema verification gates."
+    },
+    {
+      issue: 4,
+      title: "FinOps for Autonomous AI Pipelines: The 3 Financial Gates",
+      subtitle: "How to Price an AI Agent Run Before Your CFO Pages You: Token Budgets, Tiered Model Ladders, and Gateway Throttling",
+      lead: "Routing every routine data transformation and classification task to a 400B-parameter reasoning model is paying a 30x tax to disguise lazy systems architecture.\n\nBy establishing a Model Ladder (routing fast 8B SLMs for routine extraction and reserving heavy reasoning models for multi-hop synthesis), enterprise teams cut API token expenditures by 78% while accelerating p95 response latency."
+    }
+  ];
+
+  // 2. Control HUD
+  const panel = document.createElement("div");
+  panel.id = "li-architect-panel";
+  panel.classList.add("open");
+  panel.innerHTML = `
+    <div class="li-panel-header">
+      <h3>⚡ Architect Studio: Replies & Newsletter</h3>
+      <button class="li-panel-close" id="li-close-btn">&times;</button>
+    </div>
+    <div class="li-panel-body">
+      <div style="font-size:12px; color:#8b949e; margin-bottom:10px;">
+        The Pragmatic Architect Studio: Auto-reply to comments & 1-click publish newsletter editions.
+      </div>
+      <div class="li-panel-controls">
+        <button class="li-btn li-btn-secondary" id="li-scan-btn">💬 Auto-Reply HUD</button>
+        <button class="li-btn li-btn-primary" id="li-news-btn">📰 Newsletter Hub</button>
+      </div>
+      <div class="li-log-container" id="li-log">
+Ready.
+• Click "Auto-Reply HUD" to scan & reply to comments.
+• Click "Newsletter Hub" to select and publish issues of "The Pragmatic Architect".
+      </div>
+    </div>
+  `;
+  document.body.appendChild(panel);
+
+  triggerBtn.addEventListener("click", () => panel.classList.toggle("open"));
+  document.getElementById("li-close-btn").addEventListener("click", () => panel.classList.remove("open"));
+
+  const logBox = document.getElementById("li-log");
+  function log(msg, className = "") {
+    const el = document.createElement("div");
+    el.className = "li-log-entry " + className;
+    el.innerText = msg;
+    logBox.appendChild(el);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+  // --- NEWSLETTER HUB LOGIC ---
+  function showNewsletterHub() {
+    logBox.innerHTML = "";
+    log("=================================================", "success");
+    log("📰 THE PRAGMATIC ARCHITECT - LINKEDIN NEWSLETTER", "lead");
+    log("URL: https://www.linkedin.com/newsletters/the-pragmatic-architect-7515757942990737408/\n");
+    log("Available Pre-Engineered Editions Ready to Publish:\n");
+
+    NEWSLETTER_EDITIONS.forEach((ed) => {
+      const item = document.createElement("div");
+      item.style.marginBottom = "12px";
+      item.style.padding = "10px";
+      item.style.background = "#161b22";
+      item.style.border = "1px solid #30363d";
+      item.style.borderRadius = "6px";
+      item.innerHTML = `
+        <div style="font-weight:600; color:#58a6ff; font-size:13px;">Issue #${ed.issue}: ${ed.title}</div>
+        <div style="color:#8b949e; font-size:11px; margin:4px 0;">${ed.subtitle}</div>
+        <button class="li-btn li-btn-primary" style="margin-top:6px; padding:4px 10px; font-size:11px;" id="copy-issue-${ed.issue}">
+          📋 Copy Publishing Package & Open Editor
+        </button>
+      `;
+      logBox.appendChild(item);
+
+      setTimeout(() => {
+        const btn = document.getElementById(`copy-issue-${ed.issue}`);
+        if (btn) {
+          btn.addEventListener("click", async () => {
+            const launchPost = `The latest issue of The Pragmatic Architect is live.\n\nHeadline: ${ed.title}\n\nIn mission-critical enterprise systems, superficial patterns collapse the moment they face real customer SLA requirements.\n\nIn this deep-dive edition, I broke down the complete architectural blueprint:\n• The core failure modes teams overlook in staging\n• The step-by-step production-safe transition topology\n• Exact verification gates and observability traces before merging code\n\nRead the full article and subscribe here:\nhttps://www.linkedin.com/newsletters/the-pragmatic-architect-7515757942990737408/\n\n#SoftwareArchitecture #DistributedSystems #EngineeringLeadership #SystemsDesign #TechCareers`;
+
+            const fullPackage = `HEADLINE:\n${ed.title}\n\nSUBTITLE:\n${ed.subtitle}\nBy Gautam Sethi · AI Enthusiast\n\nFEED LAUNCH POST:\n${launchPost}\n\n` + "=".repeat(60) + `\nARTICLE BODY:\n` + "=".repeat(60) + `\n\n# ${ed.title}\n\n*By Gautam Sethi · AI Enthusiast*\n\n---\n\n${ed.lead}`;
+
+            try {
+              await navigator.clipboard.writeText(fullPackage);
+              alert(`✅ Issue #${ed.issue} Publishing Package copied to your clipboard!\n\nOpening the LinkedIn Article Editor now. At the top of the editor, ensure 'Publish to: The Pragmatic Architect' is selected.`);
+            } catch (e) {
+              prompt("Copy this package:", fullPackage);
+            }
+            window.open("https://www.linkedin.com/article/edit/", "_blank");
+          });
+        }
+      }, 50);
+    });
+  }
+
+  document.getElementById("li-news-btn").addEventListener("click", showNewsletterHub);
+
+  // --- AUTO-REPLY SCANNER ---
+  document.getElementById("li-scan-btn").addEventListener("click", () => {
+    logBox.innerHTML = "";
+    log("[*] In Chrome, on any post with comments, you can scan and reply.");
+    log("Tip: For fast 1-click execution on Absar Ahmed's comment, run 'Scan & Draft All Replies'.");
+  });
+})();

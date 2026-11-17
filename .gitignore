@@ -7,3 +7,8 @@ my_account/config.json
 my_account/browser_session/
 .env
 *.db
+*.mp3
+*.mp4
+my_account/videos/
+my_account/assets/test_*
+my_account/assets/scene_*

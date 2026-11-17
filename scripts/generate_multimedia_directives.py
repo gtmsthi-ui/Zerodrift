@@ -127,3 +127,4 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         target = sys.argv[1]
     generate_timed_video_script(target)
+

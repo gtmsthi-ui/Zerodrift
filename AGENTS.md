@@ -24,3 +24,4 @@ All content must cycle deterministically through the 4 core pillars to ensure a 
 - **AST Scanner Standard:** The AEM Inspector must scan on live keystrokes across all 12 SRE rules from `aem-reliability-toolkit`.
 - **Refusal Protocol:** The Grounded RAG engine must refuse consumer and non-technical queries (food, lifestyle) with an explicit refusal directive.
 - **RAG Grounding:** Every technical answer must cite primary file paths and line numbers from the 67-document knowledge corpus.
+
