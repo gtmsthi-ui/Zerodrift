@@ -4326,6 +4326,12 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     <!-- ==========================================================================
          SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
          ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
+    <!-- ==========================================================================
+         SYNCHRONIZED ARCHITECTURAL WHITEPAPERS & TECHNICAL DISPATCHES
+         ========================================================================== -->
     <section class="container lazy-reveal" id="whitepapers">
       <div class="section-title">
         <h3>Architectural Whitepapers & Technical Dispatches</h3>
@@ -4335,10 +4341,10 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
       <!-- Publication Filter Tabs -->
       <div class="pub-filter-bar" style="display: flex; gap: 0.75rem; margin-bottom: 2rem; flex-wrap: wrap; justify-content: center;">
         <button class="tab-btn active" onclick="filterPublications('all', this)" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
-          All Research (27)
+          All Research (37)
         </button>
         <button class="tab-btn" onclick="filterPublications('whitepaper', this)" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
-          Whitepapers (6)
+          Whitepapers (16)
         </button>
         <button class="tab-btn" onclick="filterPublications('dispatch', this)" style="padding: 0.5rem 1.2rem; font-size: 0.85rem;">
           Weekly Dispatches (21)
@@ -4466,9 +4472,239 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
         <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Practical AI & System Architecture">
           <div class="card-top">
             <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #06</span>
+            <span class="card-date">2026-11-12</span>
+          </div>
+          <h4 class="card-title">Safe Semantic Caching in Production: The 500ms Invalidation Trap and Cross-Tenant Leaks</h4>
+          <p class="card-summary">Why Flat Cosine Similarity Fails and How to Build Deterministic, Multi-Tenant Vector Caches for High-Throughput LLM Gateways</p>
+          <div class="tags">
+            <span class="tag">#SemanticCaching</span><span class="tag">#VectorDatabases</span><span class="tag">#AIReliability</span><span class="tag">#SystemsArchitecture</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 07 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Edge & Next-Gen Web Platforms">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #07</span>
+            <span class="card-date">2026-11-19</span>
+          </div>
+          <h4 class="card-title">AEM Edge Delivery Services (EDS): Why Document-Based Authoring Beats JCR for 99+ Core Web Vitals</h4>
+          <p class="card-summary">An Architectural Deep-Dive into Sub-100ms LCP, Block-Based Rendering, and Decoupling Content Supply Chains from Heavy JVMs</p>
+          <div class="tags">
+            <span class="tag">#AEMEdgeDelivery</span><span class="tag">#CoreWebVitals</span><span class="tag">#WebPerformance</span><span class="tag">#DistributedSystems</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 08 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Production AI & Systems Architecture">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #08</span>
+            <span class="card-date">2026-11-26</span>
+          </div>
+          <h4 class="card-title">Model Context Protocol (MCP) in Enterprise: Replacing Flaky Custom Tool Callers with Standardized Endpoints</h4>
+          <p class="card-summary">Architecting Secure, Deterministic AI State Machines with Model-Agnostic Tools and Real-Time Sandboxing</p>
+          <div class="tags">
+            <span class="tag">#ModelContextProtocol</span><span class="tag">#MCP</span><span class="tag">#AIArchitecture</span><span class="tag">#DistributedSystems</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 09 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Kernel-Level Observability & Performance">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #09</span>
+            <span class="card-date">2026-12-03</span>
+          </div>
+          <h4 class="card-title">eBPF Telemetry for JVM Architects: Diagnosing GC Pauses and Dispatcher Socket Exhaustion Without Profiler Overhead</h4>
+          <p class="card-summary">Using Kernel Tracepoints to Isolate Connection Starvation, Epoll Bottlenecks, and Invalidation Tail Latency in Enterprise Web Systems</p>
+          <div class="tags">
+            <span class="tag">#eBPF</span><span class="tag">#LinuxKernel</span><span class="tag">#JavaPerformance</span><span class="tag">#SRE</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 10 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Cloud FinOps & Hybrid Architecture">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #10</span>
+            <span class="card-date">2026-12-10</span>
+          </div>
+          <h4 class="card-title">The $40,000 Cloud Egress Trap: Designing Multi-Region Cache Topologies for 85% Egress Reductions</h4>
+          <p class="card-summary">Architectural Strategies to Eliminate Cross-AZ Transfer Taxes, Origin Churn, and Runaway CDN Invalidation Bills</p>
+          <div class="tags">
+            <span class="tag">#CloudFinOps</span><span class="tag">#AWSArchitecture</span><span class="tag">#CostOptimization</span><span class="tag">#CDN</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 11 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Production AI & Harness Architecture">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #11</span>
+            <span class="card-date">2026-12-17</span>
+          </div>
+          <h4 class="card-title">Multi-Agent State Orchestration: Preventing Deadlocks, Hallucinated Loops, and Context Drift in Long-Running Workflows</h4>
+          <p class="card-summary">An SRE Guide to Designing Deterministic Event-Driven Actor Models with Bounded Test-Time Compute</p>
+          <div class="tags">
+            <span class="tag">#MultiAgentSystems</span><span class="tag">#AIOrchestration</span><span class="tag">#StateMachines</span><span class="tag">#DistributedSystems</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 12 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Edge & Distributed Web Platforms">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #12</span>
+            <span class="card-date">2026-12-24</span>
+          </div>
+          <h4 class="card-title">The Death of Monolithic Clientlibs: High-Performance Vanilla Block Architecture for 2027 Web Platforms</h4>
+          <p class="card-summary">Deconstructing Clientlib Bundling Overhead, Render-Blocking Waterfalls, and the Transition to Native ES6 Block Modules</p>
+          <div class="tags">
+            <span class="tag">#WebPerformance</span><span class="tag">#Clientlibs</span><span class="tag">#VanillaJS</span><span class="tag">#AEMArchitecture</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 13 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Kernel-Level Observability & Performance">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #13</span>
+            <span class="card-date">2026-12-31</span>
+          </div>
+          <h4 class="card-title">Zero-Overhead JVM Observability: Tracing Safepoint Latency and GC Pauses with eBPF and Linux Perf Events</h4>
+          <p class="card-summary">How to Isolate Off-CPU Kernel Descheduling, Stop-the-World Freezes, and Lock Contention in High-Scale Java Platforms Without APM Profiler Overhead</p>
+          <div class="tags">
+            <span class="tag">#JavaPerformance</span><span class="tag">#eBPF</span><span class="tag">#JVMObservability</span><span class="tag">#LinuxKernel</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 14 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Cloud FinOps & Distributed Data">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #14</span>
+            <span class="card-date">2027-01-07</span>
+          </div>
+          <h4 class="card-title">Multi-Region Distributed Data Topologies: Eliminating Cross-Continent Latency and Split-Brain Partition Risks</h4>
+          <p class="card-summary">An Architectural Blueprint for Global Active-Active Replication, Conflict-Free Replicated Data Types (CRDTs), and Quorum Consensus Under Network Partitions</p>
+          <div class="tags">
+            <span class="tag">#DistributedData</span><span class="tag">#ActiveActive</span><span class="tag">#MultiRegion</span><span class="tag">#CRDTs</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 15 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Staff+ Career & Technical Governance">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #15</span>
+            <span class="card-date">2027-01-14</span>
+          </div>
+          <h4 class="card-title">The Architecture Review Board Anti-Patterns: Moving from Gatekeeping Bureaus to Automated Code Quality Contracts</h4>
+          <p class="card-summary">How Staff+ Architects Replace 80-Page Architecture Slides and Rubber-Stamp Committees with Executable CI/CD Architectural Verification</p>
+          <div class="tags">
+            <span class="tag">#ArchitectureGovernance</span><span class="tag">#StaffPlus</span><span class="tag">#EngineeringLeadership</span><span class="tag">#CI_CD</span>
+          </div>
+          <div class="card-actions">
+            <span class="status-badge status-queued" style="display: inline-flex; align-items: center; gap: 0.4rem;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Scheduled Release
+            </span>
+            <span class="locked-indicator" style="font-size: 0.8rem; color: var(--text-muted); display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.4rem 0.8rem; background: rgba(255,255,255,0.03); border-radius: 6px; border: 1px dashed var(--border-subtle);">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              In Editorial Queue
+            </span>
+          </div>
+        </article>
+        
+        <!-- Whitepaper 16 -->
+        <article class="card spotlight-card pub-item pub-whitepaper" data-category="whitepaper" data-pillar="Practical AI & System Architecture">
+          <div class="card-top">
+            <span class="card-num" style="color: var(--cyan-bright);">WHITEPAPER #16</span>
             <span class="card-date">October 2026</span>
           </div>
-          <h4 class="card-title">Whitepaper #6</h4>
+          <h4 class="card-title">Whitepaper #16</h4>
           <p class="card-summary"></p>
           <div class="tags">
             <span class="tag">#SoftwareArchitecture</span>
@@ -5001,6 +5237,8 @@ pub fn calculate_accrued_yield(loan: &LoanRecord) -> YieldResult {
     </div>
   </div>
 
+  
+  
   
   
   
