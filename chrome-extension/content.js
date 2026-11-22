@@ -1,134 +1,109 @@
-// LinkedIn Architect Auto-Reply & Studio Hub (v6.5 Multi-Method Injector)
+// LinkedIn Architect Auto-Reply & Studio Hub (v6.6 Direct DOM Injection)
 (() => {
+  console.log("[Architect Studio] Initializing...");
+
+  // If already open, toggle visibility
   const existingPanel = document.getElementById("li-architect-panel");
   if (existingPanel) {
-    existingPanel.classList.add("open");
+    existingPanel.style.display = (existingPanel.style.display === "none") ? "flex" : "none";
+    showToast(existingPanel.style.display === "flex" ? "⚡ Architect Studio Opened" : "Architect Studio Minimized");
     return;
   }
 
-  // 1. Floating trigger button
+  // Helper: Visual Toast Notification (Confirms instantly on screen)
+  function showToast(msg, bg = "#0a66c2") {
+    let t = document.getElementById("li-architect-toast");
+    if (!t) {
+      t = document.createElement("div");
+      t.id = "li-architect-toast";
+      document.body.appendChild(t);
+    }
+    t.style.cssText = `position:fixed; top:24px; right:24px; background:${bg}; color:#ffffff; padding:12px 22px; border-radius:8px; z-index:2147483647; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-size:13px; font-weight:600; box-shadow:0 6px 20px rgba(0,0,0,0.35); pointer-events:none; transition:opacity 0.3s ease;`;
+    t.innerText = msg;
+    t.style.opacity = "1";
+    setTimeout(() => { if (t) t.style.opacity = "0"; }, 3000);
+  }
+
+  showToast("⚡ Architect Studio Launched!", "#238636");
+
+  // 1. Floating trigger button (Positioned above LinkedIn messaging drawer)
   const triggerBtn = document.createElement("button");
   triggerBtn.id = "li-architect-btn";
-  triggerBtn.innerHTML = `<span>⚡</span><span>Architect Studio</span>`;
+  triggerBtn.innerHTML = `⚡ <span>Architect Studio</span>`;
+  triggerBtn.style.cssText = `position:fixed; bottom:95px; right:24px; z-index:2147483647; background:linear-gradient(135deg, #0a66c2 0%, #004182 100%); color:#ffffff; border:1px solid rgba(255,255,255,0.3); padding:10px 18px; border-radius:28px; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; font-size:13px; font-weight:600; box-shadow:0 6px 22px rgba(0,0,0,0.35); cursor:pointer; display:flex; align-items:center; gap:8px;`;
   document.body.appendChild(triggerBtn);
 
   // 2. Pre-configured newsletter editions (The Pragmatic Architect)
   const NEWSLETTER_EDITIONS = [
-    {
-      issue: 1,
-      title: "The Model Race Is Over. The Enterprise Harness Race Just Began",
-      subtitle: "A Senior Architect's Guide to Building Deterministic, SRE-Grade AI Workflows Without Token Bloat",
-      lead: "In enterprise software, the foundation model was never the hard part. The real battle for AI reliability has officially moved from raw models to the Enterprise Execution Harness."
-    },
-    {
-      issue: 2,
-      title: "Zero-Downtime Database Architecture: The 3-Phase Expand/Contract Blueprint",
-      subtitle: "Safe Schema Evolution on High-Throughput Production Datastores Without Table Locks",
-      lead: "Running ALTER TABLE on a live table with 80M rows is playing Russian roulette with customer SLAs. This guide details the Expand/Contract Pattern for zero-downtime database evolution."
-    },
-    {
-      issue: 3,
-      title: "Production RAG Failures & Fallback State Machines",
-      subtitle: "Why Vector Similarity Breaks in Enterprise Staging and How to Box Hallucinations",
-      lead: "Vector embeddings alone do not solve enterprise retrieval. Architects decouple retrieval from generative synthesis using bounded state machines with strict JSON schema verification."
-    },
-    {
-      issue: 4,
-      title: "FinOps for Autonomous AI Pipelines: The 3 Financial Gates",
-      subtitle: "Token Budgets, Tiered Model Ladders, and Gateway Throttling Before Your CFO Pages You",
-      lead: "Routing routine data extraction to a 400B model is paying a 30x tax to disguise lazy systems architecture. Establish a Model Ladder to cut token expenditures by 78%."
-    },
-    {
-      issue: 5,
-      title: "Staff+ Technical Governance: Influence Without Authority & Negative ADRs",
-      subtitle: "How Principal Engineers Stop $1M Architectural Disasters Before Code Is Written",
-      lead: "The most impactful decisions in an architect's career are not what they chose to build, but what they explicitly killed early with rigorous negative Architecture Decision Records (ADRs)."
-    },
-    {
-      issue: 6,
-      title: "Safe Semantic Caching in Production: The 500ms Invalidation Trap",
-      subtitle: "Preventing Cross-Tenant Leaks and High-Recall Invalidation Failures in LLM Gateways",
-      lead: "Naive semantic caching introduces silent data contamination across tenants. Safe semantic caching requires monotonic epoch tagging inside compound partition keys."
-    },
-    {
-      issue: 11,
-      title: "Multi-Agent State Orchestration: Preventing Deadlocks & Hallucinated Loops",
-      subtitle: "Governing Autonomous Agents as Deterministic Finite State Machines Using the Actor Model",
-      lead: "Connecting multiple agents in an open conversational loop burns thousands of API dollars in recursive hallucination. Reliable multi-agent platforms require typed state ledgers and bounded compute."
-    },
-    {
-      issue: 12,
-      title: "The Death of Monolithic Clientlibs: High-Performance Vanilla Block Architecture",
-      subtitle: "Decentralized Component Loading for Sub-50ms LCP on Modern Edge Web Platforms",
-      lead: "Bundling 1.8MB of JavaScript in legacy clientlib packages kills Core Web Vitals. Modern edge platforms load micro-modules dynamically via IntersectionObserver upon viewport intersection."
-    },
-    {
-      issue: 13,
-      title: "Zero-Overhead JVM Observability: Tracing Safepoint Latency with eBPF",
-      subtitle: "Diagnosing GC Pauses and Socket Contention at the Linux Kernel Boundary Without Profiler Overhead",
-      lead: "Userspace JVM thread dumps (jstack) freeze production workloads at safepoints. Tracing at the Linux kernel boundary with eBPF kprobes provides microsecond-level off-CPU visibility with sub-1% CPU impact."
-    },
-    {
-      issue: 14,
-      title: "Multi-Region Distributed Data Topologies: Eliminating Split-Brain Partition Risks",
-      subtitle: "An Architectural Blueprint for Global Active-Active Replication and Conflict-Free CRDTs",
-      lead: "Synchronous cross-continent consensus guarantees high latency. Designing resilient global systems requires clear consistency boundaries, monotonic epoch tagging, and CRDTs."
-    },
-    {
-      issue: 15,
-      title: "The Architecture Review Board Anti-Patterns: Moving to Automated Code Contracts",
-      subtitle: "How Staff+ Architects Replace 80-Page Slides with Executable CI/CD Architectural Verification",
-      lead: "Gatekeeping review boards provide the illusion of control while technical debt accumulates. High-velocity engineering teams encode architectural fitness functions directly into CI/CD pipelines."
-    }
+    { issue: 1, title: "The Model Race Is Over. The Enterprise Harness Race Just Began", subtitle: "A Senior Architect's Guide to Building Deterministic, SRE-Grade AI Workflows Without Token Bloat", lead: "In enterprise software, the foundation model was never the hard part. The real battle for AI reliability has officially moved from raw models to the Enterprise Execution Harness." },
+    { issue: 2, title: "Zero-Downtime Database Architecture: The 3-Phase Expand/Contract Blueprint", subtitle: "Safe Schema Evolution on High-Throughput Production Datastores Without Table Locks", lead: "Running ALTER TABLE on a live table with 80M rows is playing Russian roulette with customer SLAs. This guide details the Expand/Contract Pattern for zero-downtime database evolution." },
+    { issue: 3, title: "Production RAG Failures & Fallback State Machines", subtitle: "Why Vector Similarity Breaks in Enterprise Staging and How to Box Hallucinations", lead: "Vector embeddings alone do not solve enterprise retrieval. Architects decouple retrieval from generative synthesis using bounded state machines with strict JSON schema verification." },
+    { issue: 4, title: "FinOps for Autonomous AI Pipelines: The 3 Financial Gates", subtitle: "Token Budgets, Tiered Model Ladders, and Gateway Throttling Before Your CFO Pages You", lead: "Routing routine data extraction to a 400B model is paying a 30x tax to disguise lazy systems architecture. Establish a Model Ladder to cut token expenditures by 78%." },
+    { issue: 6, title: "Safe Semantic Caching in Production: The 500ms Invalidation Trap", subtitle: "Preventing Cross-Tenant Leaks and High-Recall Invalidation Failures in LLM Gateways", lead: "Naive semantic caching introduces silent data contamination across tenants. Safe semantic caching requires monotonic epoch tagging inside compound partition keys." },
+    { issue: 11, title: "Multi-Agent State Orchestration: Preventing Deadlocks & Hallucinated Loops", subtitle: "Governing Autonomous Agents as Deterministic Finite State Machines Using the Actor Model", lead: "Connecting multiple agents in an open conversational loop burns thousands of API dollars in recursive hallucination. Reliable multi-agent platforms require typed state ledgers and bounded compute." },
+    { issue: 12, title: "The Death of Monolithic Clientlibs: High-Performance Vanilla Block Architecture", subtitle: "Decentralized Component Loading for Sub-50ms LCP on Modern Edge Web Platforms", lead: "Bundling 1.8MB of JavaScript in legacy clientlib packages kills Core Web Vitals. Modern edge platforms load micro-modules dynamically via IntersectionObserver upon viewport intersection." },
+    { issue: 13, title: "Zero-Overhead JVM Observability: Tracing Safepoint Latency with eBPF", subtitle: "Diagnosing GC Pauses and Socket Contention at the Linux Kernel Boundary Without Profiler Overhead", lead: "Userspace JVM thread dumps (jstack) freeze production workloads at safepoints. Tracing at the Linux kernel boundary with eBPF kprobes provides microsecond-level off-CPU visibility with sub-1% CPU impact." },
+    { issue: 14, title: "Multi-Region Distributed Data Topologies: Eliminating Split-Brain Partition Risks", subtitle: "An Architectural Blueprint for Global Active-Active Replication and Conflict-Free CRDTs", lead: "Synchronous cross-continent consensus guarantees high latency. Designing resilient global systems requires clear consistency boundaries, monotonic epoch tagging, and CRDTs." },
+    { issue: 15, title: "The Architecture Review Board Anti-Patterns: Moving to Automated Code Contracts", subtitle: "How Staff+ Architects Replace 80-Page Slides with Executable CI/CD Architectural Verification", lead: "Gatekeeping review boards provide the illusion of control while technical debt accumulates. High-velocity engineering teams encode architectural fitness functions directly into CI/CD pipelines." }
   ];
 
-  // 3. Control HUD
+  // 3. Control HUD Panel (Inline styling for 100% guaranteed rendering)
   const panel = document.createElement("div");
   panel.id = "li-architect-panel";
-  panel.classList.add("open");
+  panel.style.cssText = `position:fixed; bottom:155px; right:24px; width:450px; max-width:calc(100vw - 48px); max-height:560px; background:#1b1f23; color:#e6edf3; border:1px solid #30363d; border-radius:12px; box-shadow:0 14px 40px rgba(0,0,0,0.5); z-index:2147483647; display:flex; flex-direction:column; overflow:hidden; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;`;
+
   panel.innerHTML = `
-    <div class="li-panel-header">
-      <h3>⚡ Architect Auto-Reply (v5.4 Multi-Method Injector)</h3>
-      <button class="li-panel-close" id="li-close-btn">&times;</button>
+    <div style="padding:12px 16px; background:#161b22; border-bottom:1px solid #30363d; display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin:0; font-size:14px; font-weight:600; color:#f0f6fc; display:flex; align-items:center; gap:8px;">
+        ⚡ Architect Studio (Replies & Newsletter)
+      </h3>
+      <button id="li-close-btn" style="background:none; border:none; color:#8b949e; font-size:20px; cursor:pointer; line-height:1; padding:2px 6px;">&times;</button>
     </div>
-    <div class="li-panel-body">
-      <div style="font-size:12px; color:#8b949e; margin-bottom:10px;">
+    <div style="padding:14px; overflow-y:auto; flex:1;">
+      <div style="font-size:11px; color:#8b949e; margin-bottom:10px;">
         Senior Systems Architect Assistant: Automated Comment Triage, Live Window Replies & 1-Click Publishing.
       </div>
-      <div class="li-panel-controls">
-        <button class="li-btn li-btn-secondary" id="li-tab-replies">💬 Auto-Reply HUD</button>
-        <button class="li-btn li-btn-secondary" id="li-tab-news">📰 Newsletter Hub</button>
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button id="li-tab-replies" style="flex:1; padding:8px 10px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:none; background:#238636; color:#ffffff;">💬 Auto-Reply HUD</button>
+        <button id="li-tab-news" style="flex:1; padding:8px 10px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid #30363d; background:#21262d; color:#c9d1d9;">📰 Newsletter Hub</button>
       </div>
 
       <div id="li-replies-view">
         <div style="display:flex; gap:8px; margin-bottom:10px;">
-          <button class="li-btn li-btn-primary" id="li-scan-btn">🔍 Scan & Draft All Replies</button>
-          <button class="li-btn li-btn-secondary" id="li-sample-btn">🧪 Test / Sample Replies</button>
+          <button id="li-scan-btn" style="flex:1; padding:8px 10px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:none; background:#0a66c2; color:#ffffff;">🔍 Scan & Draft All Replies</button>
+          <button id="li-sample-btn" style="flex:1; padding:8px 10px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:1px solid #30363d; background:#21262d; color:#c9d1d9;">🧪 Test / Sample Replies</button>
         </div>
       </div>
 
       <div id="li-news-view" style="display:none;"></div>
 
-      <div class="li-log-container" id="li-log">
+      <div id="li-log" style="background:#0d1117; border:1px solid #30363d; border-radius:8px; padding:12px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.5; min-height:220px; max-height:300px; overflow-y:auto; white-space:pre-wrap; word-break:break-word;">
 Ready.
-• Click "🔍 Scan & Draft All Replies" to scan comments on this post.
-• If comments are not currently visible or you are testing, click "🧪 Test / Sample Replies" to generate immediate responses on window!
-• Click "📰 Newsletter Hub" to access and publish newsletter editions.
+• Click "🔍 Scan & Draft All Replies" on any post with comments.
+• Click "🧪 Test / Sample Replies" to view immediate pre-generated replies in this window!
+• Click "📰 Newsletter Hub" to access editions of The Pragmatic Architect.
       </div>
     </div>
   `;
   document.body.appendChild(panel);
 
-  triggerBtn.addEventListener("click", () => panel.classList.toggle("open"));
-  document.getElementById("li-close-btn").addEventListener("click", () => panel.classList.remove("open"));
+  triggerBtn.addEventListener("click", () => {
+    panel.style.display = (panel.style.display === "none") ? "flex" : "none";
+  });
+  document.getElementById("li-close-btn").addEventListener("click", () => {
+    panel.style.display = "none";
+  });
 
   const logBox = document.getElementById("li-log");
   const repliesView = document.getElementById("li-replies-view");
   const newsView = document.getElementById("li-news-view");
+  const tabReplies = document.getElementById("li-tab-replies");
+  const tabNews = document.getElementById("li-tab-news");
 
-  function log(msg, className = "") {
+  function log(msg, color = "") {
     const el = document.createElement("div");
-    el.className = "li-log-entry " + className;
+    el.style.marginBottom = "6px";
+    if (color) el.style.color = color;
     el.innerText = msg;
     logBox.appendChild(el);
     logBox.scrollTop = logBox.scrollHeight;
@@ -138,29 +113,25 @@ Ready.
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  // --- TAB SWITCHING ---
-  document.getElementById("li-tab-replies").addEventListener("click", () => {
+  // --- TAB TOGGLE ---
+  tabReplies.addEventListener("click", () => {
     repliesView.style.display = "block";
     newsView.style.display = "none";
-    document.getElementById("li-tab-replies").classList.add("li-btn-primary");
-    document.getElementById("li-tab-replies").classList.remove("li-btn-secondary");
-    document.getElementById("li-tab-news").classList.remove("li-btn-primary");
-    document.getElementById("li-tab-news").classList.add("li-btn-secondary");
+    tabReplies.style.background = "#238636";
+    tabReplies.style.color = "#ffffff";
+    tabNews.style.background = "#21262d";
+    tabNews.style.color = "#c9d1d9";
   });
 
-  document.getElementById("li-tab-news").addEventListener("click", () => {
+  tabNews.addEventListener("click", () => {
     repliesView.style.display = "none";
     newsView.style.display = "block";
-    document.getElementById("li-tab-news").classList.add("li-btn-primary");
-    document.getElementById("li-tab-news").classList.remove("li-btn-secondary");
-    document.getElementById("li-tab-replies").classList.remove("li-btn-primary");
-    document.getElementById("li-tab-replies").classList.add("li-btn-secondary");
+    tabNews.style.background = "#238636";
+    tabNews.style.color = "#ffffff";
+    tabReplies.style.background = "#21262d";
+    tabReplies.style.color = "#c9d1d9";
     showNewsletterHub();
   });
-
-  // Set active tab styling
-  document.getElementById("li-tab-replies").classList.add("li-btn-primary");
-  document.getElementById("li-tab-replies").classList.remove("li-btn-secondary");
 
   // --- ARCHITECTURAL TRIAGE & GENERATOR ---
   function triage(text) {
@@ -207,7 +178,7 @@ Ready.
       );
     }
 
-    // 4. Topic: LEAD / Asking how / Templates
+    // 4. Topic: LEAD / Templates
     if (bucket === "LEAD") {
       if (/template|share|send|guide/i.test(lower)) {
         return `${sal}happy to share the structure. The part that made the biggest difference for us was decoupling schema validation from the ingestion layer — payload errors dropped significantly. Send a connection request and I'll pass it across.`;
@@ -217,18 +188,12 @@ Ready.
 
     // 5. Topic: Technical Pushback / Substance
     if (bucket === "SUBSTANCE") {
-      return (
-        `${sal}fair point — that holds true at lower scale. The calculus shifts under sustained enterprise load; ` +
-        `at that point serialization overhead and variance become the dominant costs, not the logic layer. Appreciate the pushback.`
-      );
+      return `${sal}fair point — that holds true at lower scale. The calculus shifts under sustained enterprise load; at that point serialization overhead and variance become the dominant costs, not the logic layer. Appreciate the pushback.`;
     }
 
     // 6. Topic: Peer Experience
     if (bucket === "PEER") {
-      return (
-        `${sal}that matches what we've seen across multiple migrations. Teams that move fastest have already internalized the infra cost ` +
-        `before writing the first line of orchestration code. Good to know it's consistent across orgs.`
-      );
+      return `${sal}that matches what we've seen across multiple migrations. Teams that move fastest have already internalized the infra cost before writing the first line of orchestration code. Good to know it's consistent across orgs.`;
     }
 
     const options = [
@@ -239,12 +204,12 @@ Ready.
     return options[Math.floor(Math.random() * options.length)];
   }
 
-  // Multi-method text injector for ProseMirror / React contenteditable
+  // Multi-method text injector for ProseMirror
   async function injectTextIntoProseMirror(editor, text) {
     editor.focus();
     await sleep(150);
 
-    // Method 1: DataTransfer Clipboard Event (ProseMirror handler)
+    // Technique 1: ClipboardEvent paste
     try {
       const dt = new DataTransfer();
       dt.setData("text/plain", text);
@@ -253,7 +218,7 @@ Ready.
 
     await sleep(150);
 
-    // Method 2: InputEvent with insertText & execCommand
+    // Technique 2: InputEvent with insertText & execCommand
     let curText = (editor.innerText || "").trim();
     if (!curText || curText.length < 5) {
       try {
@@ -264,12 +229,7 @@ Ready.
         sel.removeAllRanges();
         sel.addRange(range);
 
-        editor.dispatchEvent(new InputEvent("beforeinput", {
-          bubbles: true,
-          cancelable: true,
-          inputType: "insertText",
-          data: text
-        }));
+        editor.dispatchEvent(new InputEvent("beforeinput", { bubbles: true, cancelable: true, inputType: "insertText", data: text }));
         document.execCommand("insertText", false, text);
         editor.dispatchEvent(new InputEvent("input", { bubbles: true, inputType: "insertText", data: text }));
       } catch (e) {}
@@ -277,7 +237,7 @@ Ready.
 
     await sleep(150);
 
-    // Method 3: Direct Paragraph Population fallback
+    // Technique 3: Direct Paragraph insertion fallback
     curText = (editor.innerText || "").trim();
     if (!curText || curText.length < 5) {
       try {
@@ -292,7 +252,7 @@ Ready.
       } catch (e) {}
     }
 
-    // Always copy to system clipboard as safety guarantee
+    // Always copy to system clipboard
     try {
       await navigator.clipboard.writeText(text);
     } catch (e) {}
@@ -301,43 +261,31 @@ Ready.
   // --- RENDER REPLIES DIRECTLY IN THE HUD WINDOW ---
   function renderRepliesInWindow(items) {
     logBox.innerHTML = "";
-    log(`=================================================`, "success");
-    log(`⚡ ARCHITECT AUTO-REPLY DRAFTS (${items.length} FOUND)`, "lead");
-    log(`All replies generated below with 1-click Copy & Live Auto-Inject:\n`);
+    log(`⚡ ARCHITECT AUTO-REPLY DRAFTS (${items.length} FOUND)`, "#58a6ff");
+    log(`Replies generated below with 1-click Copy & Live Auto-Inject:\n`, "#8b949e");
 
     items.forEach((item, idx) => {
       const card = document.createElement("div");
-      card.style.background = "#161b22";
-      card.style.border = "1px solid #30363d";
-      card.style.borderRadius = "8px";
-      card.style.padding = "12px";
-      card.style.marginBottom = "14px";
+      card.style.cssText = "background:#161b22; border:1px solid #30363d; border-radius:8px; padding:12px; margin-bottom:14px;";
 
       card.innerHTML = `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <span style="font-weight:600; color:#58a6ff; font-size:13px;">#${idx + 1} @${item.author}</span>
-          <span style="background:#21262d; border:1px solid #30363d; border-radius:4px; padding:2px 6px; font-size:10px; color:#7ee787;">
-            ${item.bucket}
-          </span>
+          <span style="font-weight:600; color:#58a6ff; font-size:12px;">#${idx + 1} @${item.author}</span>
+          <span style="background:#21262d; border:1px solid #30363d; border-radius:4px; padding:2px 6px; font-size:10px; color:#7ee787;">${item.bucket}</span>
         </div>
         <div style="font-size:11px; color:#8b949e; background:#0d1117; padding:8px; border-radius:4px; margin-bottom:8px; font-style:italic;">
           "${item.text.slice(0, 140)}${item.text.length > 140 ? "..." : ""}"
         </div>
-        <div style="font-size:11px; font-weight:600; color:#c9d1d9; margin-bottom:4px;">Proposed Architect Reply:</div>
-        <textarea id="reply-box-${idx}" style="width:100%; height:90px; background:#0d1117; color:#e6edf3; border:1px solid #30363d; border-radius:6px; padding:8px; font-size:11px; font-family:sans-serif; resize:vertical; box-sizing:border-box;">${item.reply}</textarea>
+        <div style="font-size:11px; font-weight:600; color:#c9d1d9; margin-bottom:4px;">Proposed Senior Architect Reply:</div>
+        <textarea id="reply-box-${idx}" style="width:100%; height:85px; background:#0d1117; color:#e6edf3; border:1px solid #30363d; border-radius:6px; padding:8px; font-size:11px; font-family:sans-serif; resize:vertical; box-sizing:border-box;">${item.reply}</textarea>
         <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="li-btn li-btn-secondary" style="font-size:11px; padding:6px 10px;" id="copy-btn-${idx}">
-            📋 Copy Reply
-          </button>
-          <button class="li-btn li-btn-primary" style="font-size:11px; padding:6px 10px;" id="inject-btn-${idx}">
-            🚀 Auto-Inject & Post
-          </button>
+          <button id="copy-btn-${idx}" style="flex:1; padding:6px 10px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; border:1px solid #30363d; background:#21262d; color:#c9d1d9;">📋 Copy Reply</button>
+          <button id="inject-btn-${idx}" style="flex:1; padding:6px 10px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; border:none; background:#238636; color:#ffffff;">🚀 Auto-Inject & Post</button>
         </div>
         <div id="status-${idx}" style="font-size:11px; margin-top:4px; color:#8b949e;"></div>
       `;
       logBox.appendChild(card);
 
-      // Event Listeners for Card
       setTimeout(() => {
         const copyBtn = document.getElementById(`copy-btn-${idx}`);
         const injectBtn = document.getElementById(`inject-btn-${idx}`);
@@ -370,7 +318,6 @@ Ready.
                 await sleep(800);
               }
 
-              // Locate editor
               const editor = (item.cBox && item.cBox.querySelector("div[role='textbox'], [contenteditable='true'], .comments-comment-box__editor p, .editor-content p")) ||
                              document.querySelector(".comments-comment-box div[role='textbox'], [contenteditable='true']:focus, div[role='textbox']:focus") ||
                              Array.from(document.querySelectorAll("[contenteditable='true']")).pop();
@@ -441,7 +388,7 @@ Ready.
   // --- LIVE SCANNER ---
   document.getElementById("li-scan-btn").addEventListener("click", async () => {
     logBox.innerHTML = "";
-    log("[⚡] Scanning active page for LinkedIn comments...");
+    log("[⚡] Scanning active page for LinkedIn comments...", "#58a6ff");
 
     // 1. Expand collapsed replies
     const expandButtons = Array.from(document.querySelectorAll(
@@ -449,10 +396,7 @@ Ready.
     ));
 
     for (const eb of expandButtons) {
-      try {
-        eb.click();
-        await sleep(300);
-      } catch (e) {}
+      try { eb.click(); await sleep(250); } catch (e) {}
     }
 
     // 2. Locate comment containers
@@ -467,7 +411,6 @@ Ready.
       const authLink = item.querySelector("a[href*='/in/'], [class*='actor__name'], .comments-post-meta__name-text");
       const authorName = authLink ? authLink.innerText.split("\n")[0].trim() : "Colleague";
 
-      // Ignore user's own comments
       if (/gautam|sethi/i.test(authorName)) continue;
 
       const textEl = item.querySelector("span[dir='ltr'], div[dir='ltr'], .comments-comment-item__main-content, .update-components-text, p");
@@ -487,18 +430,10 @@ Ready.
                          return al.includes("reply") || al.includes("répondre");
                        });
 
-      parsed.push({
-        cBox: item,
-        replyBtn,
-        author: authorName,
-        text,
-        bucket,
-        reply
-      });
+      parsed.push({ cBox: item, replyBtn, author: authorName, text, bucket, reply });
     }
 
     if (parsed.length === 0) {
-      // Fallback: search profile links
       const allProfileLinks = Array.from(document.querySelectorAll("a[href*='/in/']"));
       const otherAuthorLinks = allProfileLinks.filter(a => {
         const href = a.href.toLowerCase();
@@ -520,14 +455,7 @@ Ready.
         const reply = generateReply(commentText, authorName, bucket);
         const replyBtn = cBox.querySelector("button[aria-label*='Reply' i], button");
 
-        parsed.push({
-          cBox,
-          replyBtn,
-          author: authorName,
-          text: commentText,
-          bucket,
-          reply
-        });
+        parsed.push({ cBox, replyBtn, author: authorName, text: commentText, bucket, reply });
       }
     }
 
@@ -535,15 +463,14 @@ Ready.
       renderRepliesInWindow(parsed);
     } else {
       logBox.innerHTML = "";
-      log(`[-] No comments detected in the currently visible viewport.`, "noise");
-      log(`\nHow to fix:`, "lead");
+      log(`[-] No comments detected in the currently visible viewport.`, "#f85149");
+      log(`\nHow to fix:`, "#58a6ff");
       log(`1. Scroll down to a post on LinkedIn that has comments visible.`);
       log(`2. Click '🔍 Scan & Draft All Replies' again.`);
-      log(`3. Or click '🧪 Test / Sample Replies' below to view instant pre-generated replies on this window!`);
+      log(`3. Or click '🧪 Test / Sample Replies' below to view instant pre-generated replies in this window!`, "#8b949e");
 
       const testBtn = document.createElement("button");
-      testBtn.className = "li-btn li-btn-primary";
-      testBtn.style.marginTop = "12px";
+      testBtn.style.cssText = "margin-top:12px; padding:8px 12px; border-radius:6px; font-size:12px; font-weight:600; cursor:pointer; border:none; background:#238636; color:#ffffff;";
       testBtn.innerText = "🧪 Load Pre-Engineered Replies Now";
       testBtn.addEventListener("click", () => document.getElementById("li-sample-btn").click());
       logBox.appendChild(testBtn);
@@ -557,21 +484,17 @@ Ready.
         📰 The Pragmatic Architect — 1-Click Publishing Hub
       </div>
       <div style="font-size:11px; color:#8b949e; margin-bottom:12px;">
-        Select any edition below to copy its complete publishing package (Headline, Subtitle, Feed Launch Post, and Formatted Article Body) and launch the LinkedIn Article Editor.
+        Select any edition below to copy its complete publishing package and launch the LinkedIn Article Editor.
       </div>
     `;
 
     NEWSLETTER_EDITIONS.forEach((ed) => {
       const item = document.createElement("div");
-      item.style.marginBottom = "10px";
-      item.style.padding = "10px";
-      item.style.background = "#161b22";
-      item.style.border = "1px solid #30363d";
-      item.style.borderRadius = "6px";
+      item.style.cssText = "margin-bottom:10px; padding:10px; background:#161b22; border:1px solid #30363d; border-radius:6px;";
       item.innerHTML = `
         <div style="font-weight:600; color:#58a6ff; font-size:12px;">Issue #${ed.issue}: ${ed.title}</div>
         <div style="color:#8b949e; font-size:11px; margin:3px 0;">${ed.subtitle}</div>
-        <button class="li-btn li-btn-primary" style="margin-top:6px; padding:4px 10px; font-size:11px;" id="copy-issue-${ed.issue}">
+        <button id="copy-issue-${ed.issue}" style="margin-top:6px; padding:4px 10px; font-size:11px; font-weight:600; border-radius:4px; cursor:pointer; border:none; background:#238636; color:#ffffff;">
           📋 Copy Package & Open Editor
         </button>
       `;
@@ -587,7 +510,7 @@ Ready.
 
             try {
               await navigator.clipboard.writeText(fullPackage);
-              alert(`✅ Issue #${ed.issue} Publishing Package copied to your clipboard!\n\nOpening the LinkedIn Article Editor now. At the top of the editor, ensure 'Publish to: The Pragmatic Architect' is selected.`);
+              alert(`✅ Issue #${ed.issue} Publishing Package copied to your clipboard!\n\nOpening the LinkedIn Article Editor now.`);
             } catch (e) {
               prompt("Copy this package:", fullPackage);
             }
