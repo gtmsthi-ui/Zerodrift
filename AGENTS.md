@@ -25,3 +25,9 @@ All content must cycle deterministically through the 4 core pillars to ensure a 
 - **Refusal Protocol:** The Grounded RAG engine must refuse consumer and non-technical queries (food, lifestyle) with an explicit refusal directive.
 - **RAG Grounding:** Every technical answer must cite primary file paths and line numbers from the 67-document knowledge corpus.
 
+## 5. Strict Workspace Boundary & File Access Isolation
+- **Local Scope Invariant:** This workspace is strictly bound to `d:\Visual-studio-project\linkedin-skill`.
+- **Zero Cross-Workspace Contamination:** The agent must never read, write, scan, or execute commands in sibling directories (such as `opencode`, `aem-reliability-toolkit`, or other D:\ projects).
+- **Prompt Routing:** If a prompt refers to another project or channel (e.g., Dhun Mandir devotional content, external Next.js code), explicitly notify the user to switch to that project's dedicated workspace window.
+
+
