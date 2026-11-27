@@ -90,17 +90,17 @@ class HandwrittenHandbookBuilder:
         self.current_draw = ImageDraw.Draw(self.current_img, "RGBA")
         self._draw_notebook_background(self.current_img, self.current_draw)
 
-        # Header running line
-        self.current_draw.text((MARGIN_LEFT, 42), f"Gautam Sethi • {self.series_title.upper()}", font=FONT_SMALL, fill=BLUE_MUTED)
+        # Professional Header running line
+        self.current_draw.text((MARGIN_LEFT, 42), f"SYSTEMS ARCHITECTURE & SRE FIELD SPECIFICATION • {self.series_title.upper()}", font=FONT_SMALL, fill=BLUE_MUTED)
         page_str = f"Page {self.page_number:02d}"
         p_bbox = self.current_draw.textbbox((0, 0), page_str, font=FONT_SMALL)
         self.current_draw.text((WIDTH - MARGIN_RIGHT - (p_bbox[2] - p_bbox[0]), 42), page_str, font=FONT_SMALL, fill=BLUE_MUTED)
         self.current_draw.line([(MARGIN_LEFT, 68), (WIDTH - MARGIN_RIGHT, 68)], fill=RULE_BLUE, width=1)
 
-        # Footer
+        # Professional Footer (No personal undersigned references)
         self.current_draw.line([(MARGIN_LEFT, HEIGHT - 55), (WIDTH - MARGIN_RIGHT, HEIGHT - 55)], fill=RULE_BLUE, width=1)
-        self.current_draw.text((MARGIN_LEFT, HEIGHT - 45), "AI Engineer & Systems Architect • Rehearse & Practice", font=FONT_SMALL, fill=BLUE_MUTED)
-        self.current_draw.text((WIDTH - MARGIN_RIGHT - 140, HEIGHT - 45), "Save & Repost", font=FONT_SMALL, fill=BLUE_INK)
+        self.current_draw.text((MARGIN_LEFT, HEIGHT - 45), "ENGINEERING SPECIFICATION • PRODUCTION REFERENCE RUNBOOK", font=FONT_SMALL, fill=BLUE_MUTED)
+        self.current_draw.text((WIDTH - MARGIN_RIGHT - 140, HEIGHT - 45), "CONFIDENTIAL", font=FONT_SMALL, fill=BLUE_INK)
 
         self.current_y = 90
         if chapter_title:
@@ -181,9 +181,9 @@ class HandwrittenHandbookBuilder:
             draw.text((MARGIN_LEFT + 24, c_y), f"{idx:02d}. {item}", font=FONT_BODY_BOLD, fill=BLUE_DARK)
             c_y += 44
 
-        # 5. Sign-off Footer
-        draw.text((MARGIN_LEFT, HEIGHT - 95), "Handwritten Field Notes by Gautam Sethi", font=FONT_BODY_BOLD, fill=BLUE_DARK)
-        draw.text((MARGIN_LEFT, HEIGHT - 70), "Senior Systems Architect • Autonomous AI & Distributed Platforms", font=FONT_SMALL, fill=BLUE_MUTED)
+        # 5. Professional Footer (No personal undersigned references)
+        draw.text((MARGIN_LEFT, HEIGHT - 95), "SYSTEMS ARCHITECTURE & SRE FIELD MANUAL", font=FONT_BODY_BOLD, fill=BLUE_DARK)
+        draw.text((MARGIN_LEFT, HEIGHT - 70), "DISTRIBUTED SYSTEMS • HARNESS DESIGN • KERNEL TELEMETRY • PRODUCTION INVARIANTS", font=FONT_SMALL, fill=BLUE_MUTED)
         draw.text((WIDTH - MARGIN_RIGHT - 160, HEIGHT - 85), "SWIPE >>", font=FONT_CHAPTER, fill=BLUE_INK)
 
         self.pages.append(img)
