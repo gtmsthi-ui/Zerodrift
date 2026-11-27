@@ -236,5 +236,23 @@ def main():
     print("✅ All tailored concept handbooks processed and scheduled!")
     print("=" * 70)
 
+def schedule_single_handbook(index):
+    item = HANDBOOK_SCHEDULE[index]
+    doc_url = f"{RAW_BASE}/{item['pdf_name']}"
+    thumb_url = f"{RAW_BASE}/{item['cover_name']}"
+    res = schedule_buffer_post(
+        post_text=item["text"],
+        as_draft=False,
+        document_url=doc_url,
+        document_title=item["doc_title"],
+        thumbnail_url=thumb_url,
+        due_at=item["due_at"]
+    )
+    print(f"Scheduled single handbook {item['title']}: {res}")
+    return res
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1 and sys.argv[1].isdigit():
+        schedule_single_handbook(int(sys.argv[1]))
+    else:
+        main()
