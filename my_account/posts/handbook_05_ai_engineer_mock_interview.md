@@ -1,46 +1,72 @@
 ---
-title: "The AI Engineer Mock Interview Questions & Field Manual"
+title: "The AI Engineer Mock Interview Questions I'd Rehearse Before Any Interview"
 pillar: "Production AI & Harness Architecture"
 slot: "Saturday 4:30 PM IST"
-scheduled_at: "2027-01-02T11:00:00.000Z"
-status: "queued"
-document_pdf: "AI_Engineer_Mock_Interview_Handbook.pdf"
-document_cover: "AI_Engineer_Mock_Interview_Handbook_cover.png"
+status: "draft"
+document_pdf: "AI_Engineer_Mock_Interview_Handwritten_Handbook.pdf"
+document_cover: "AI_Engineer_Mock_Interview_Handwritten_Handbook_cover.png"
 ---
 
-Reading AI interview questions isn't practice. 
+Reading questions isn't practice. 
 
-Practice is answering them with a 2-minute timer running, a friend across the table, or a recording you will cringe at later.
+Practice is answering them with a timer running, a friend across from you, or a recording you'll cringe at later. 
 
-Most AI interview guides focus on superficial prompt engineering tricks or junior textbook definitions. But when interviewing for Senior, Staff, or Principal AI Engineer roles, the questions evaluate how your architectures behave under production failure:
+These are the mock questions I'd rehearse before any Staff+ AI Engineer or Systems Architecture interview, grouped the way a real interview loop moves so you can run them as a full timed simulation:
 
-• What happens to a prompt from the moment it is sent to the first token back?
-• Why do BPE tokenizers cause catastrophic arithmetic and non-English failures?
-• Why is fine-tuning the wrong choice for dynamic corporate knowledge?
-• Your autonomous agent calls the same tool 5 times in a row. What do you inspect?
+⏱️ Warm-Up (Two Minutes Each):
+• Tell me about yourself and the AI work you've actually shipped
+• Explain RAG to a product manager who has never heard of it
+• What's the difference between prompting, RAG, and fine-tuning, and when is each the wrong choice?
+• Why do models hallucinate, and what would you do about it?
+
+⚡ Fundamentals Under Pressure:
+• What happens to a prompt from the moment it's sent to the moment a token comes back?
+• Why does tokenization cause problems with numbers, code, and non-English text?
+• What do temperature, top-k, and top-p each change?
+• When would you use a reasoning model, and when is it wasted cost?
+
+🔍 RAG Deep Dive:
+• Walk me through a RAG pipeline for a 500-page policy document
+• How would you choose a chunk size, and how would you know it was wrong?
+• Retrieval returns the right chunk but the answer is still wrong. What do you check?
+• When would hybrid search hurt you compared to vector-only?
+
+🤖 Agent Scenarios:
+• Your agent calls the same tool five times in a row. What do you investigate?
 • A tool call fails halfway through and gets retried. How do you prevent duplicate side effects?
-• When your LLM-as-a-judge and live human users disagree, whose signal do you trust?
-• How do you architect a document Q&A system with strict per-user ACL permissions without empty retrieval results?
+• When would you choose multi-agent over a single agent, and what does it cost you?
+• How would you keep an agent reliable over a long session with growing memory?
 
-To help engineers prepare for real production loops, I put together the complete 12-Page Handwritten Field Manual attached below, organized exactly the way an elite technical interview progresses:
+📊 Evaluation Challenges:
+• How would you measure quality for a customer support assistant?
+• Your LLM judge and your users disagree. Whose signal do you trust?
+• Offline eval passed but production quality dropped. What did you miss?
+• How many samples do you need before you trust an eval result?
 
-1️⃣ Warm-Up Drills (2 Minutes Each): Shipped production work & explaining RAG to PMs
-2️⃣ Fundamentals Under Pressure: Prompting vs RAG vs Tuning, TTFT & prefill compute
-3️⃣ Tokenization Traps & Sampling: Temperature, Top-P, Top-K & arithmetic failure modes
-4️⃣ Production RAG Deep Dive: 500-page policy parsing, chunking & cross-encoder rerankers
-5️⃣ Hybrid Search Hazards: Lexical noise, domain jargon & when reasoning models are wasted cost
-6️⃣ Agent Failure Modes: State loop detectors, parameter validation & idempotency keys
-7️⃣ Multi-Agent Topologies: Token bloat, cascading latency & long-session typed state ledgers
-8️⃣ Enterprise Evaluations: Offline-to-online drift & calibrating LLM judges with Cohen's Kappa
-9️⃣ Safety & Trust: Indirect prompt injection defense, dual-context boundaries & log hygiene
-🔟 System Design Round (30-Minute Whiteboard):
-   • Multi-Tenant Permissioned Document Q&A (Pre-Filtered ACL Partitions)
-   • Support Agent with Guardrailed Refunds (Deterministic Policy Gates)
-1️⃣1️⃣ The Architect's Rehearsal Protocol: 2-minute timer drills & the 3-Tier Scoring Rubric (Clear, Shaky, Lost)
+📐 System Design Round (Thirty Minutes, Whiteboard):
+• Design a document Q&A system for a company with strict data permissions
+• Design a support agent that can issue refunds, with safeguards
 
-📌 Swipe through the attached 12-page PDF document carousel and save it for your next interview loop!
-♻️ Repost to share with engineers preparing for AI and Systems Architect interviews.
+🛡️ Safety and Trust:
+• Show me how a prompt injection could get through your system
+• Where would you require human approval, and why there?
+• What's sitting in your logs right now that shouldn't be?
 
-Which of these questions is the hardest to answer under pressure without notes?
+💡 Behavioral and Own-Work Questions:
+• Walk me through your best project, including what broke
+• Tell me about a decision you got wrong and how you found out
 
-#AIEngineering #SystemDesign #SoftwareArchitecture #MachineLearning #GenerativeAI #TechInterviews #SRE #CloudEngineering
+🎯 How I'd Run the Rehearsal Session:
+1. Set a timer: two minutes for concept questions, thirty for system design.
+2. Record yourself and listen back for filler, vague claims, and missing numbers.
+3. Rate each answer: Clear (ready), Shaky (knows concept, missed metrics), or Lost (blanked).
+4. Redo every shaky and lost answer until it holds up without notes.
+
+📖 I compiled the complete 12-Page Handwritten Field Manual attached below containing my exact answers, system design diagrams, failure modes, and code contracts for every question!
+
+📌 Save this field manual to rehearse before your next technical loop.
+♻️ Repost to help engineers preparing for Staff/Principal AI interviews.
+
+Which category do you find hardest under interview pressure?
+
+#AIEngineering #SystemDesign #SoftwareEngineering #TechInterviews #MachineLearning #LLMOps #RAG #AIArchitecture #StaffEngineer #SRE
