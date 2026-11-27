@@ -1,0 +1,32 @@
+---
+title: "Why Tokenization Breaks Numbers, Code, and Non-English Text"
+pillar: "Production AI & Harness Architecture"
+slot: "2026-12-04T03:00:00.000Z"
+status: "scheduled"
+buffer_post_id: "6b096a0d062ed764a80db5af"
+---
+
+Why can a 400B parameter model write poetry and pass the bar exam, but fail to reverse a 5-digit number or compare 9.11 and 9.9?
+
+The root cause is almost never the model's weights. It is the tokenizer.
+
+Modern LLMs do not read characters or numbers. They use Byte-Pair Encoding (BPE) trained on frequency statistics of natural English prose. This introduces three massive production hazards:
+
+1️⃣ The Numerical Blind Spot:
+In BPE, '12345' is not parsed as a single mathematical quantity. Depending on token frequency, it might be split into ['12', '345'] or ['1', '23', '45'].
+When asked to perform addition or reverse digits, the model is manipulating arbitrary sub-word token IDs with no mathematical relationship. '9.11' might be tokenized as ['9', '.', '11'] (where '11' is a token) and '9.9' as ['9', '.', '9']. To the model, 11 > 9, causing it to confidently declare 9.11 is greater than 9.9.
+
+2️⃣ Code Variable Fragmentation:
+Idiomatic camelCase or snake_case identifiers (e.g. `processUserAccountTransactionId`) get shredded into 4 to 6 separate tokens. This consumes 4x more context window and increases the probability of hallucinated variable spelling in generated code.
+
+3️⃣ The Non-Latin Tax:
+Because tokenizers are trained on corpora that are 85%+ English, common words in Hindi, Japanese, Arabic, or German are not allocated unique tokens. A single word in Hindi can consume 6 to 9 byte-level tokens compared to 1 token for its English translation.
+• 3x to 5x higher inference latency
+• 3x to 5x higher token cost
+• Context window effective capacity reduced by 70%
+
+The SRE Invariant: Never allow an LLM to perform raw mathematical arithmetic or currency conversions in text. Offload numerical computation to deterministic Python tool calls via strict JSON schema execution.
+
+How does your architecture handle multilingual token inflation and numerical calculations?
+
+#AIEngineering #MachineLearning #LLM #Tokenization #SoftwareEngineering #Python #DataScience #SRE
