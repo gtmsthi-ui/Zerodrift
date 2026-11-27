@@ -181,10 +181,15 @@ class HandwrittenHandbookBuilder:
             draw.text((MARGIN_LEFT + 24, c_y), f"{idx:02d}. {item}", font=FONT_BODY_BOLD, fill=BLUE_DARK)
             c_y += 44
 
-        # 5. Professional Footer (No personal undersigned references)
-        draw.text((MARGIN_LEFT, HEIGHT - 95), "SYSTEMS ARCHITECTURE & SRE FIELD MANUAL", font=FONT_BODY_BOLD, fill=BLUE_DARK)
-        draw.text((MARGIN_LEFT, HEIGHT - 70), "DISTRIBUTED SYSTEMS • HARNESS DESIGN • KERNEL TELEMETRY • PRODUCTION INVARIANTS", font=FONT_SMALL, fill=BLUE_MUTED)
-        draw.text((WIDTH - MARGIN_RIGHT - 160, HEIGHT - 85), "SWIPE >>", font=FONT_CHAPTER, fill=BLUE_INK)
+        # 5. Professional Footer (Strictly separated to prevent horizontal collision)
+        draw.text((MARGIN_LEFT, HEIGHT - 92), "SYSTEMS ARCHITECTURE & SRE FIELD MANUAL", font=FONT_BODY_BOLD, fill=BLUE_DARK)
+        draw.text((MARGIN_LEFT, HEIGHT - 68), "PRODUCTION RUNBOOK • HIGH-AVAILABILITY ARCHITECTURE SPECIFICATION", font=FONT_SMALL, fill=BLUE_MUTED)
+        
+        # Swipe prompt anchored safely to right edge
+        swipe_str = "SWIPE >>"
+        s_bbox = draw.textbbox((0, 0), swipe_str, font=FONT_CHAPTER)
+        s_w = s_bbox[2] - s_bbox[0]
+        draw.text((WIDTH - MARGIN_RIGHT - s_w, HEIGHT - 82), swipe_str, font=FONT_CHAPTER, fill=BLUE_INK)
 
         self.pages.append(img)
         self.page_number += 1
