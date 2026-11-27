@@ -2,8 +2,8 @@ name: LinkedIn Cloud Autopilot & Queue Replenisher
 
 on:
   schedule:
-    # Runs once daily at 02:00 UTC (7:30 AM IST) - checks and replenishes Buffer queue
-    - cron: '0 2 * * *'
+    # Runs once weekly on Sunday at 02:00 UTC (7:30 AM IST) - replenishes Buffer queue for the upcoming week
+    - cron: '0 2 * * 0'
   workflow_dispatch:
     inputs:
       min_threshold:
@@ -27,15 +27,14 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set up Python
+      - name: Set up Python & Pip Cache
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: 'pip'
 
-      - name: Install System Fonts & Dependencies
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-dejavu-core fonts-liberation
           python -m pip install --upgrade pip
           pip install pillow requests reportlab
 
